@@ -1,0 +1,66 @@
+// =========================================================== //
+
+// INSERT - UPDATE
+public void OnEntry(Database db, DBResultSet results, const char[] error, any data)
+{
+	if (strlen(error) > 0)
+	{
+		LogError("Uh oh! Encountered a SQL error! - \"%s\"", error);
+		return;
+	}
+}
+
+// SELECT - ONLY
+public void OnCache(Database db, DBResultSet results, const char[] error, DataPack data)
+{
+	data.Reset();
+	char ipAddress[24];
+	data.ReadString(ipAddress, sizeof(ipAddress));
+	delete data;
+
+	if (!results.HasResults || strlen(error) > 0)
+	{
+		LogError("Uh oh! Encountered a SQL error! - \"%s\"", error);
+		return;
+	}
+
+	// Brand new entry - We haven't seen this IP before
+	if (results.RowCount <= 0)
+	{
+		QueryServices(ipAddress);
+	}
+
+	// I swear we've seen this before.... Check timestamp
+	else
+	{
+		if (results.FetchRow())
+		{
+			int timestamp = results.FetchInt(1);
+			bool shouldBlock = results.FetchInt(0) == 1;
+			int cacheLifetime = gCV_CacheLifetime.IntValue;
+			
+			char dateTime[32];
+			FormatTime(dateTime, sizeof(dateTime), NULL_STRING, (timestamp + cacheLifetime));
+
+			if ((GetTime() - timestamp) >= cacheLifetime)
+			{
+				QueryServices(ipAddress);
+				// Should be debug only log
+				//g_Logger.LogLine("Cache expired! - Key %s - Expired: %s", ipAddress, dateTime);
+			}
+			else
+			{
+				// Should be debug only log
+				//g_Logger.LogLine("Cache hit! - Key %s - Expires: %s", ipAddress, dateTime);
+
+				if (shouldBlock)
+				{
+					KickClientsByIp(ipAddress);
+					g_Logger.LogLine("Kicked IP %s due to proxy! (Cache hit)", ipAddress);
+				}
+			}
+		}
+	}
+}
+
+// =========================================================== //

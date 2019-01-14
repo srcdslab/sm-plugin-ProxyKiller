@@ -1,0 +1,49 @@
+image: i386/alpine:3.8
+
+definitions:
+  steps:
+    - step: &compile
+        name: Compile Plugin
+        artifacts:
+          - smdir/addons/sourcemod/plugins/ProxyKiller.smx
+        script:
+          - apk update
+          - apk add wget libc6-compat libstdc++
+          - mkdir smdir
+          - wget -q -O - "http://sourcemod.net/latest.php?os=linux&version=1.9" | tar x -C ./smdir -vzf -
+          - for file in *.sp; do ./smdir/addons/sourcemod/scripting/spcomp $file -i ./include; done;
+          - mv ./*.smx ./smdir/addons/sourcemod/plugins/
+
+    - step: &build
+        name: Build Release
+        trigger: manual
+        artifacts:
+          - builds/*
+        script:
+          - apk update
+          - mkdir builds
+          - cp smdir/addons/sourcemod/plugins/ProxyKiller.smx builds/ProxyKiller-latest.smx
+          - cp smdir/addons/sourcemod/plugins/ProxyKiller.smx builds/ProxyKiller-v${BITBUCKET_TAG}.smx
+
+    - step: &deploy
+        name: Deploy Release
+        script:
+          - apk update
+          - apk add curl
+          - curl -X POST --user "${BB_AUTH_STRING}" "https://api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" --form files=@"builds/ProxyKiller-v${BITBUCKET_TAG}.smx"
+          - curl -X POST --user "${BB_AUTH_STRING}" "https://api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" --form files=@"builds/ProxyKiller-latest.smx"
+
+pipelines:
+  custom:
+    compile:
+      - step: *compile
+
+  pull-requests:
+    '*':
+      - step: *compile
+
+  tags:
+    '*':
+      - step: *compile
+      - step: *build
+      - step: *deploy
