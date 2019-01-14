@@ -81,7 +81,7 @@ public void OnClientPostAdminCheck(int client)
 
 		for (int i = 0; i < appCount; i++)
 		{
-			// Client is ignored as soon as he has at least ONE (any) of the appids!
+			// Client is ignored as soon as he has at least ONE (any) of the appids
 			if (HasApp(client, StringToInt(appIds[i])))
 			{
 				shouldCheck = false;
