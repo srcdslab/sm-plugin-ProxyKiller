@@ -11,7 +11,23 @@ See [CONVARS.md](https://bitbucket.org/Sikarii/proxykiller/src/master/docs/CONVA
 
 ---
 
+## **Features**
+* Caching of IP Addresses
+* Any proxy service is supported
+* Any **JSON** response value is supported
+
+---
+
+## **Requirements**
+* [SteamWorks](https://forums.alliedmods.net/showthread.php?t=229556)
+* A working MySQL database
+
+---
+
+
 ## **Installation**
+
+* **Make sure requirements are met**
 
 * Download [ProxyKiller-latest.smx](https://bitbucket.org/Sikarii/proxykiller/downloads/ProxyKiller-latest.smx) and drop it to `/csgo/addons/sourcemod/plugins/`
 
