@@ -19,8 +19,8 @@
 #define PROXYKILLER_NAME "ProxyKiller"
 #define PROXYKILLER_AUTHOR "Sikari"
 #define PROXYKILLER_DESCRIPTION "Kill them proxies!"
-#define PROXYKILLER_VERSION "1.0.0"
-#define PROXYKILLER_URL ""
+#define PROXYKILLER_VERSION "1.1.0-f7e04e1"
+#define PROXYKILLER_URL "https://bitbucket.org/Sikarii/proxykiller"
 
 #define MAX_URL_LENGTH 256
 #define MAX_TOKEN_NAME_LENGTH 128
