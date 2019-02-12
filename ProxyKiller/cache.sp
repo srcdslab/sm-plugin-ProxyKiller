@@ -24,13 +24,10 @@ public void OnCache(Database db, DBResultSet results, const char[] error, DataPa
 		return;
 	}
 
-	// Brand new entry - We haven't seen this IP before
 	if (results.RowCount <= 0)
 	{
 		QueryServices(ipAddress);
 	}
-
-	// I swear we've seen this before.... Check timestamp
 	else
 	{
 		if (results.FetchRow())
@@ -38,9 +35,6 @@ public void OnCache(Database db, DBResultSet results, const char[] error, DataPa
 			int timestamp = results.FetchInt(1);
 			bool shouldBlock = results.FetchInt(0) == 1;
 			int cacheLifetime = gCV_CacheLifetime.IntValue;
-			
-			char dateTime[32];
-			FormatTime(dateTime, sizeof(dateTime), NULL_STRING, (timestamp + cacheLifetime));
 
 			if ((GetTime() - timestamp) >= cacheLifetime)
 			{

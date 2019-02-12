@@ -89,7 +89,6 @@ public int OnRequest_Data(const char[] response, DataPack data)
 
 	char responseValue[MAX_TOKEN_VALUE_LENGTH];
 	JSON_Object currentObj = json_decode(response);
-
 	JSON_Object originalPtr = currentObj;
 
 	for (int i = 0; i < objCount; i++)
@@ -121,7 +120,9 @@ public int OnRequest_Data(const char[] response, DataPack data)
 		else
 		{
 			if (currentObj != null)
+			{
 				currentObj.GetString(objs[i], responseValue, sizeof(responseValue));
+			}
 		}
 	}
 
