@@ -13,6 +13,7 @@
 
 ConVar gCV_Enable = null;
 ConVar gCV_KickMsg = null;
+ConVar gCV_LogSteamId = null;
 ConVar gCV_CacheLifetime = null;
 ConVar gCV_IgnoreAppOwners = null;
 
@@ -44,6 +45,7 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 {
 	gCV_Enable = CreateConVar("ProxyKiller_Enable", "1", "Enable/disable ProxyKiller\n0 = Disable - 1 = Enable", _, true, 0.0, true, 1.0);
 	gCV_KickMsg = CreateConVar("ProxyKiller_KickMessage", "Kicked due to proxy usage!", "Message to be sent to clients when they're kicked");
+	gCV_LogSteamId = CreateConVar("ProxyKiller_LogSteamId", "0", "Logs steamid in addition of ip for a punished client", _, true, 0.0, true, 1.0);
 	gCV_CacheLifetime = CreateConVar("ProxyKiller_CacheLifetime", "43200", "Time in second(s) when to invalidate cache entries and re-query ip addresses\nIt is recommended that you set this to at least 1 hour (3600 seconds)", _, true, 0.0, false);
 	gCV_IgnoreAppOwners = CreateConVar("ProxyKiller_IgnoreAppOwners", "624820", "Ignore owners of these appids when checking for proxies\nChecking will occur if a client does not have any of these appids\nSeparate appids by a comma ex: \"123, 4444\"");
 
@@ -89,14 +91,24 @@ public void OnClientPostAdminCheck(int client)
 			}
 		}
 	}
-	
+
 	if (shouldCheck)
 	{
 		char clientIpAddress[24];
+		char clientSteamId[32] = "Undefined";
 		GetClientIP(client, clientIpAddress, sizeof(clientIpAddress));
+
+		if (gCV_LogSteamId.BoolValue)
+		{
+			if (!GetClientAuthId(client, AuthId_Steam2, clientSteamId, sizeof(clientSteamId)))
+			{
+				clientSteamId = "Unknown";
+			}
+		}
 
 		DataPack data = new DataPack();
 		data.WriteString(clientIpAddress);
+		data.WriteString(clientSteamId);
 		g_cacheLayer.TryGetCache(clientIpAddress, OnCache, data);
 	}
 }

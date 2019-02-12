@@ -14,8 +14,12 @@ public void OnEntry(Database db, DBResultSet results, const char[] error, any da
 public void OnCache(Database db, DBResultSet results, const char[] error, DataPack data)
 {
 	data.Reset();
+
 	char ipAddress[24];
 	data.ReadString(ipAddress, sizeof(ipAddress));
+
+	char steamId[32];
+	data.ReadString(steamId, sizeof(steamId));
 	delete data;
 
 	if (!results.HasResults || strlen(error) > 0)
@@ -26,7 +30,7 @@ public void OnCache(Database db, DBResultSet results, const char[] error, DataPa
 
 	if (results.RowCount <= 0)
 	{
-		QueryServices(ipAddress);
+		QueryServices(ipAddress, steamId);
 	}
 	else
 	{
@@ -38,7 +42,7 @@ public void OnCache(Database db, DBResultSet results, const char[] error, DataPa
 
 			if ((GetTime() - timestamp) >= cacheLifetime)
 			{
-				QueryServices(ipAddress);
+				QueryServices(ipAddress, steamId);
 				// Should be debug only log
 				//g_Logger.LogLine("Cache expired! - Key %s - Expired: %s", ipAddress, dateTime);
 			}
@@ -50,7 +54,7 @@ public void OnCache(Database db, DBResultSet results, const char[] error, DataPa
 				if (shouldBlock)
 				{
 					KickClientsByIp(ipAddress);
-					g_Logger.LogLine("Kicked IP %s due to proxy! (Cache hit)", ipAddress);
+					g_Logger.LogLine("Kicked IP %s [%s] due to proxy! (Cache hit)", ipAddress, steamId);
 				}
 			}
 		}

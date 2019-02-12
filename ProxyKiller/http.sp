@@ -1,6 +1,6 @@
 // =========================================================== //
 
-void QueryServices(char[] ipAddress)
+void QueryServices(char[] ipAddress, char[] steamId)
 {
 	for (int i = 0; i < g_Services.Length; i++)
 	{
@@ -36,8 +36,9 @@ void QueryServices(char[] ipAddress)
 		}
 
 		DataPack data = new DataPack();
-		data.WriteString(ipAddress);
 		data.WriteCell(service);
+		data.WriteString(ipAddress);
+		data.WriteString(steamId);
 
 		SteamWorks_SetHTTPCallbacks(request, OnRequest_Completed, _, OnRequest_DataReceived);
 		SteamWorks_SetHTTPRequestContextValue(request, data);
@@ -53,15 +54,19 @@ public int OnRequest_Completed(Handle request, bool failure, bool requestSuccess
 	if (failure || !requestSuccessful)
 	{
 		data.Reset();
+		ProxyService service = data.ReadCell();
+
 		char ipAddress[24];
 		data.ReadString(ipAddress, sizeof(ipAddress));
-		ProxyService service = data.ReadCell();
+		
+		char steamId[32];
+		data.ReadString(steamId, sizeof(steamId));
 		delete data;
 		
 		char serviceName[MAX_SERVICE_NAME_LENGTH];
 		service.GetName(serviceName, sizeof(serviceName));
 		
-		g_Logger.LogLine("HTTP failure %d! - IP: %s - Service: %s", statusCode, ipAddress, serviceName);
+		g_Logger.LogLine("HTTP failure %d! - IP: %s - SteamId: %s - Service: %s", statusCode, ipAddress, steamId, serviceName);
 		delete request;
 		return;
 	}
@@ -76,9 +81,13 @@ public int OnRequest_DataReceived(Handle request, bool failure, int offset, int 
 public int OnRequest_Data(const char[] response, DataPack data)
 {
 	data.Reset();
+	ProxyService service = data.ReadCell();
+
 	char ipAddress[24];
 	data.ReadString(ipAddress, sizeof(ipAddress));
-	ProxyService service = data.ReadCell();
+
+	char steamId[32];
+	data.ReadString(steamId, sizeof(steamId));
 	delete data;
 
 	char token[MAX_TOKEN_NAME_LENGTH];
@@ -135,7 +144,7 @@ public int OnRequest_Data(const char[] response, DataPack data)
 	if (shouldBlock)
 	{
 		KickClientsByIp(ipAddress);
-		g_Logger.LogLine("Kicked IP %s due to proxy! (Fresh)", ipAddress);
+		g_Logger.LogLine("Kicked IP %s [%s] due to proxy! (Fresh)", ipAddress, steamId);
 	}
 
 	if (originalPtr != null)
