@@ -67,14 +67,16 @@ public int OnRequest_Completed(Handle request, bool failure, bool requestSuccess
 		service.GetName(serviceName, sizeof(serviceName));
 		
 		g_Logger.LogLine("HTTP failure %d! - IP: %s - SteamId: %s - Service: %s", statusCode, ipAddress, steamId, serviceName);
-		delete request;
-		return;
 	}
 }
 
 public int OnRequest_DataReceived(Handle request, bool failure, int offset, int bytesReceived, DataPack data)
 {
-	SteamWorks_GetHTTPResponseBodyCallback(request, OnRequest_Data, data);
+	if (!failure && request != null)
+	{
+		SteamWorks_GetHTTPResponseBodyCallback(request, OnRequest_Data, data);
+	}
+
 	delete request;
 }
 
