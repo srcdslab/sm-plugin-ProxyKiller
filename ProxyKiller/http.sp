@@ -1,6 +1,6 @@
 // =========================================================== //
 
-void QueryServices(char[] ipAddress)
+void QueryServices(char[] ipAddress, char[] steamId)
 {
 	for (int i = 0; i < g_Services.Length; i++)
 	{
@@ -36,8 +36,9 @@ void QueryServices(char[] ipAddress)
 		}
 
 		DataPack data = new DataPack();
-		data.WriteString(ipAddress);
 		data.WriteCell(service);
+		data.WriteString(ipAddress);
+		data.WriteString(steamId);
 
 		SteamWorks_SetHTTPCallbacks(request, OnRequest_Completed, _, OnRequest_DataReceived);
 		SteamWorks_SetHTTPRequestContextValue(request, data);
@@ -53,32 +54,42 @@ public int OnRequest_Completed(Handle request, bool failure, bool requestSuccess
 	if (failure || !requestSuccessful)
 	{
 		data.Reset();
+		ProxyService service = data.ReadCell();
+
 		char ipAddress[24];
 		data.ReadString(ipAddress, sizeof(ipAddress));
-		ProxyService service = data.ReadCell();
+		
+		char steamId[32];
+		data.ReadString(steamId, sizeof(steamId));
 		delete data;
 		
 		char serviceName[MAX_SERVICE_NAME_LENGTH];
 		service.GetName(serviceName, sizeof(serviceName));
 		
-		g_Logger.LogLine("HTTP failure %d! - IP: %s - Service: %s", statusCode, ipAddress, serviceName);
-		delete request;
-		return;
+		g_Logger.LogLine("HTTP failure %d! - IP: %s - SteamId: %s - Service: %s", statusCode, ipAddress, steamId, serviceName);
 	}
 }
 
 public int OnRequest_DataReceived(Handle request, bool failure, int offset, int bytesReceived, DataPack data)
 {
-	SteamWorks_GetHTTPResponseBodyCallback(request, OnRequest_Data, data);
+	if (!failure && request != null)
+	{
+		SteamWorks_GetHTTPResponseBodyCallback(request, OnRequest_Data, data);
+	}
+
 	delete request;
 }
 
 public int OnRequest_Data(const char[] response, DataPack data)
 {
 	data.Reset();
+	ProxyService service = data.ReadCell();
+
 	char ipAddress[24];
 	data.ReadString(ipAddress, sizeof(ipAddress));
-	ProxyService service = data.ReadCell();
+
+	char steamId[32];
+	data.ReadString(steamId, sizeof(steamId));
 	delete data;
 
 	char token[MAX_TOKEN_NAME_LENGTH];
@@ -86,46 +97,43 @@ public int OnRequest_Data(const char[] response, DataPack data)
 	
 	char objs[32][MAX_TOKEN_NAME_LENGTH];
 	int objCount = ExplodeString(token, ".", objs, sizeof(objs), sizeof(objs[]));
-	
+
 	char responseValue[MAX_TOKEN_VALUE_LENGTH];
 	JSON_Object currentObj = json_decode(response);
+	JSON_Object originalPtr = currentObj;
 
 	for (int i = 0; i < objCount; i++)
 	{
 		ReplaceIP(ipAddress, objs[i], sizeof(objs[]));
-		
+
 		if (i < objCount - 1)
 		{
 			int arrayStart = FindCharInString(objs[i], '[', true);
 			int arrayEnding = FindCharInString(objs[i], ']', true);
 
-			// Is an array - with atleast 1 thing inside
 			if (arrayEnding > arrayStart + 1)
 			{
-				// Our content is in between these...
 				int maxlength = arrayEnding - arrayStart;
 				char[] indexString = new char[maxlength];
 				
 				char[] objArrayless = new char[arrayStart + 1];
 				Format(objArrayless, arrayStart + 1, "%s", objs[i]);
 				Format(indexString, maxlength, "%s", objs[i][arrayStart + 1]);
-
-				if (currentObj != null)
-					currentObj = currentObj.GetObject(objArrayless);
-
-				if (currentObj != null)
-					currentObj = currentObj.GetObjectIndexed(StringToInt(indexString));
+				
+				currentObj = GetObjectSafe(currentObj, objArrayless);
+				currentObj = GetObjectSafe(currentObj, _, StringToInt(indexString));
 			}
 			else
 			{
-				if (currentObj != null)
-					currentObj = currentObj.GetObject(objs[i]);
+				currentObj = GetObjectSafe(currentObj, objs[i]);
 			}
 		}
 		else
 		{
 			if (currentObj != null)
+			{
 				currentObj.GetString(objs[i], responseValue, sizeof(responseValue));
+			}
 		}
 	}
 
@@ -138,13 +146,29 @@ public int OnRequest_Data(const char[] response, DataPack data)
 	if (shouldBlock)
 	{
 		KickClientsByIp(ipAddress);
-		g_Logger.LogLine("Kicked IP %s due to proxy! (Fresh)", ipAddress);
+		g_Logger.LogLine("Kicked IP %s [%s] due to proxy! (Fresh)", ipAddress, steamId);
 	}
 
-	if (currentObj != null)
+	if (originalPtr != null)
 	{
-		currentObj.Cleanup();
-		delete currentObj;
+		originalPtr.Cleanup();
+		delete originalPtr;
+	}
+}
+
+JSON_Object GetObjectSafe(JSON_Object obj, char[] key = "", int index = -1)
+{
+	if (obj == null || (key[0] == '\0' && index == -1))
+	{
+		return null;
+	}
+	else if (index == -1)
+	{
+		return obj.GetObject(key);
+	}
+	else
+	{
+		return obj.GetObjectIndexed(index);
 	}
 }
 
