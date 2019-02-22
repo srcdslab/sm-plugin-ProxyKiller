@@ -19,6 +19,13 @@
 
 ---
 
+### ProxyKiller_LogSteamId
+* Default value of "**0**"
+* Value of "**0**" will disable this feature
+* Value of "**1**" will enable logging steamids when a client is punished
+
+---
+
 ### ProxyKiller_CacheLifetime
 * Default value of "**43200**"
 * Time in second(s) when to invalidate cache entries
@@ -30,7 +37,7 @@
 * Default value of "**[624820](https://steamdb.info/app/624820/)**"
 * Leave empty to disable this feature
 * Ignore owners of these appids when checking for proxies
-  * Checking will occur if a client does not have ANY of these
-  * Separate each appid by a comma ex: \"12345, 4444, 624820\"
+* Checking will occur if a client does not have ANY of these
+* Separate each appid by a comma ex: \"12345, 4444, 624820\"
 
 ---
