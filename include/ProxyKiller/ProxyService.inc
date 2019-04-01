@@ -7,11 +7,15 @@
 
 // =========================================================== //
 
+#define MAX_SERVICE_NAME_LENGTH 128
+
+// =========================================================== //
+
 methodmap ProxyService < JSON_Object
 {
 	public ProxyService()
 	{
-		return view_as<ProxyService>(new JSON_Object());
+		return view_as<ProxyService>(new JSON_Object(false));
 	}
 	
 	public void SetUrl(char[] url)
@@ -58,6 +62,18 @@ methodmap ProxyService < JSON_Object
 	{
 		public get() { return view_as<ProxyServiceParams>(this.GetObject("params")); }
 		public set(ProxyServiceParams params) { this.SetObject("params", view_as<ProxyServiceParams>(params)); }
+	}
+	
+	property ProxyServiceHeaders Headers
+	{
+		public get() { return view_as<ProxyServiceHeaders>(this.GetObject("headers")); }
+		public set(ProxyServiceHeaders headers) { this.SetObject("headers", view_as<ProxyServiceHeaders>(headers)); }
+	}
+	
+	property ProxyServiceResponse Response
+	{
+		public get() { return view_as<ProxyServiceResponse>(this.GetObject("response")); }
+		public set(ProxyServiceResponse response) { this.SetObject("response", view_as<ProxyServiceResponse>(response)); }
 	}
 }
 

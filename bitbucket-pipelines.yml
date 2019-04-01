@@ -2,8 +2,8 @@ image: i386/alpine:3.8
 
 definitions:
   steps:
-    - step: &compile
-        name: Compile Plugin
+    - step: &compileDev
+        name: Compile plugin for development environment
         artifacts:
           - smdir/addons/sourcemod/plugins/ProxyKiller.smx
         script:
@@ -11,6 +11,22 @@ definitions:
           - apk add wget libc6-compat libstdc++
           - mkdir smdir
           - wget -q -O - "http://sourcemod.net/latest.php?os=linux&version=1.9" | tar x -C ./smdir -vzf -
+          - echo -e "#define PROXYKILLER_VERSION \"dev-${BITBUCKET_COMMIT:0:7}\"" >> ./include/ProxyKiller_Version.inc
+          - echo -e "#define PROXYKILLER_URL \"Built from ${BITBUCKET_GIT_HTTP_ORIGIN}/commits/${BITBUCKET_COMMIT}\"" >> ./include/ProxyKiller_Version.inc
+          - for file in *.sp; do ./smdir/addons/sourcemod/scripting/spcomp $file -i ./include; done;
+          - mv ./*.smx ./smdir/addons/sourcemod/plugins/
+
+    - step: &compileProd
+        name: Compile plugin for production environment
+        artifacts:
+          - smdir/addons/sourcemod/plugins/ProxyKiller.smx
+        script:
+          - apk update
+          - apk add wget libc6-compat libstdc++
+          - mkdir smdir
+          - wget -q -O - "http://sourcemod.net/latest.php?os=linux&version=1.9" | tar x -C ./smdir -vzf -
+          - echo -e "#define PROXYKILLER_VERSION \"V.${BITBUCKET_TAG}"" >> ./include/ProxyKiller_Version.inc
+          - echo -e "#define PROXYKILLER_URL \"Built from ${BITBUCKET_GIT_HTTP_ORIGIN}/commits/${BITBUCKET_COMMIT}\"" >> ./include/ProxyKiller_Version.inc
           - for file in *.sp; do ./smdir/addons/sourcemod/scripting/spcomp $file -i ./include; done;
           - mv ./*.smx ./smdir/addons/sourcemod/plugins/
 
@@ -36,14 +52,14 @@ definitions:
 pipelines:
   custom:
     compile:
-      - step: *compile
+      - step: *compileDev
 
   pull-requests:
     '*':
-      - step: *compile
+      - step: *compileDev
 
   tags:
     '*':
-      - step: *compile
+      - step: *compileProd
       - step: *build
       - step: *deploy

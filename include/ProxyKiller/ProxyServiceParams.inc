@@ -11,7 +11,7 @@ methodmap ProxyServiceParams < JSON_Object
 {
 	public ProxyServiceParams()
 	{
-		return view_as<ProxyServiceParams>(new JSON_Object());
+		return view_as<ProxyServiceParams>(new JSON_Object(false));
 	}
 	
 	public void AddParam(char[] key, char[] value)

@@ -7,30 +7,44 @@
 
 // =========================================================== //
 
-#include <ProxyKiller/ProxyLogger>
 #include <ProxyKiller/ProxyServiceParams>
+#include <ProxyKiller/ProxyServiceHeaders>
+#include <ProxyKiller/ProxyServiceResponse>
+
 #include <ProxyKiller/ProxyService>
-#include <ProxyKiller/ProxyServices>
-#include <ProxyKiller/ProxyDatabase>
-#include <ProxyKiller/ProxyCacheLayer>
+
+#include <ProxyKiller/ProxyUser>
+#include <ProxyKiller/ProxyLogger>
+#include <ProxyKiller/ProxyContext>
+#include <ProxyKiller/ProxyCache>
+
+// =========================================================== //
+
+#tryinclude <ProxyKiller_Version>
+
+#if !defined PROXYKILLER_VERSION
+#define PROXYKILLER_VERSION "Unknown Version"
+#endif
+
+#if !defined PROXYKILLER_URL
+#define PROXYKILLER_URL "Built from <Unknown>"
+#endif
 
 // =========================================================== //
 
 #define PROXYKILLER_NAME "ProxyKiller"
 #define PROXYKILLER_AUTHOR "Sikari"
 #define PROXYKILLER_DESCRIPTION "Kill them proxies!"
-#define PROXYKILLER_VERSION "1.1.0"
-#define PROXYKILLER_URL "https://bitbucket.org/Sikarii/ProxyKiller"
 
 #define MAX_URL_LENGTH 256
-#define MAX_TOKEN_NAME_LENGTH 128
-#define MAX_TOKEN_VALUE_LENGTH 128
-
-#define MAX_PARAM_NAME_LENGTH 128
-#define MAX_PARAM_VALUE_LENGTH 128
-#define MAX_SERVICE_NAME_LENGTH 128
-
 #define KICK_MESSAGE_LENGTH 256
-#define IP_CONF_TOKEN "{client_ip}"
+
+#define MAX_RESPONSE_TYPE_LENGTH 32
+#define MAX_RESPONSE_NAME_LENGTH 128
+#define MAX_RESPONSE_VALUE_LENGTH 128
+
+// =========================================================== //
+
+native void ProxyKiller_CheckClient(int client);
 
 // =========================================================== //

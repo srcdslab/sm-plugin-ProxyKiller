@@ -4,10 +4,8 @@
 
 // =========================================================== //
 
-void ParseConfig(char[] configFile, ProxyServices destList)
+ProxyService ParseConfig(char[] configFile)
 {
-	destList.Clear();
-
 	if (!FileExists(configFile))
 	{
 		SetFailState("%s does not exist!", configFile);
@@ -20,51 +18,98 @@ void ParseConfig(char[] configFile, ProxyServices destList)
 		SetFailState("Failed parsing %s!", configFile);
 	}
 
-	do
+	char name[MAX_SERVICE_NAME_LENGTH];
+	config.GetSectionName(name, sizeof(name));
+		
+	char url[MAX_URL_LENGTH];
+	config.GetString("url", url, sizeof(url));
+		
+	ProxyService service = new ProxyService();
+	service.SetUrl(url);
+	service.SetName(name);
+		
+	if (config.JumpToKey("params"))
 	{
-		char name[MAX_SERVICE_NAME_LENGTH];
-		config.GetSectionName(name, sizeof(name));
-		
-		char url[MAX_URL_LENGTH];
-		config.GetString("url", url, sizeof(url));
-		
-		char token[MAX_TOKEN_NAME_LENGTH];
-		config.GetString("token", token, sizeof(token), "__undefined");
-		
-		char tokenValue[MAX_TOKEN_VALUE_LENGTH];
-		config.GetString("tokenValue", tokenValue, sizeof(tokenValue), "__undefined");
-		
-		ProxyService service = new ProxyService();
-		service.SetUrl(url);
-		service.SetName(name);
-		service.SetToken(token);
-		service.SetTokenValue(tokenValue);
-		
-		if (config.JumpToKey("params"))
+		ProxyServiceParams params = new ProxyServiceParams();
+			
+		while (config.GotoFirstSubKey(false) || config.GotoNextKey(false))
 		{
-			ProxyServiceParams params = new ProxyServiceParams();
-			
-			while (config.GotoFirstSubKey(false) || config.GotoNextKey(false))
-			{
-				char paramName[MAX_PARAM_NAME_LENGTH];
-				config.GetSectionName(paramName, sizeof(paramName));
+			char paramName[MAX_PARAM_NAME_LENGTH];
+			config.GetSectionName(paramName, sizeof(paramName));
 				
-				char paramValue[MAX_PARAM_VALUE_LENGTH];
-				config.GetString(NULL_STRING, paramValue, sizeof(paramValue));
+			char paramValue[MAX_PARAM_VALUE_LENGTH];
+			config.GetString(NULL_STRING, paramValue, sizeof(paramValue));
 				
-				params.AddParam(paramName, paramValue);
-			}
+			params.AddParam(paramName, paramValue);
+		}
 			
-			config.Rewind();
-			config.JumpToKey(name);
-			service.Params = params;
+		config.Rewind();
+		config.JumpToKey(name);
+		service.Params = params;
+	}
+		
+	if (config.JumpToKey("headers"))
+	{
+		ProxyServiceHeaders headers = new ProxyServiceHeaders();
+			
+		while (config.GotoFirstSubKey(false) || config.GotoNextKey(false))
+		{
+			char headerName[MAX_HEADER_NAME_LENGTH];
+			config.GetSectionName(headerName, sizeof(headerName));
+				
+			char headerValue[MAX_HEADER_VALUE_LENGTH];
+			config.GetString(NULL_STRING, headerValue, sizeof(headerValue));
+				
+			headers.AddHeader(headerName, headerValue);
+		}
+			
+		config.Rewind();
+		config.JumpToKey(name);
+		service.Headers = headers;
+	}
+		
+	if (config.JumpToKey("response"))
+	{
+		ProxyServiceResponse response = new ProxyServiceResponse();
+			
+		char responseType[MAX_RESPONSE_TYPE_LENGTH];
+		config.GetString("type", responseType, sizeof(responseType));
+			
+		char responseStr[MAX_RESPONSE_NAME_LENGTH + MAX_RESPONSE_VALUE_LENGTH];
+		config.GetString("expect", responseStr, sizeof(responseStr));
+			
+		response.SetType(responseType);
+		
+		char tokens[2][MAX_RESPONSE_VALUE_LENGTH];
+		if (ExplodeString(responseStr, "==", tokens, sizeof(tokens), sizeof(tokens[])) >= 2)
+		{
+			response.Compare = RC_EQUAL;
+		}
+		else if (ExplodeString(responseStr, "!=", tokens, sizeof(tokens), sizeof(tokens[])) >= 2)
+		{
+			response.Compare = RC_NOTEQUAL;
 		}
 		
-		destList.AddService(service);
-		
-	} while (config.GotoNextKey());
-	
+		TrimString(tokens[0]);
+			
+		if (response.Type == RT_JSON)
+		{
+			TrimString(tokens[1]);
+			response.SetValue(tokens[1]);
+			response.SetObject(tokens[0]);
+		}
+		else
+		{
+			response.SetValue(tokens[0]); 
+		}
+			
+		config.Rewind();
+		config.JumpToKey(name);
+		service.Response = response;
+	}
+
 	delete config;
+	return service;
 }
 
 // =========================================================== //

@@ -11,22 +11,28 @@
 
 // ====================== VARIABLES ========================== //
 
-ConVar gCV_Enable = null;
-ConVar gCV_KickMsg = null;
-ConVar gCV_LogSteamId = null;
-ConVar gCV_CacheLifetime = null;
-ConVar gCV_IgnoreAppOwners = null;
-
+ProxyCache g_Cache = null;
 ProxyLogger g_Logger = null;
-ProxyDatabase g_Database = null;
-ProxyServices g_Services = null;
-ProxyCacheLayer g_cacheLayer = null;
+ProxyService g_Service = null;
 
 // ======================= INCLUDES ========================== //
+
+#include "ProxyKiller/api/natives.sp"
+#include "ProxyKiller/api/convars.sp"
+#include "ProxyKiller/api/forwards.sp"
+
+#include "ProxyKiller/http/params.sp"
+#include "ProxyKiller/http/headers.sp"
+#include "ProxyKiller/http/response.sp"
+
+#include "ProxyKiller/cache/mysql.sp"
+#include "ProxyKiller/cache/sqlite.sp"
 
 #include "ProxyKiller/http.sp"
 #include "ProxyKiller/cache.sp"
 #include "ProxyKiller/config.sp"
+#include "ProxyKiller/helpers.sp"
+#include "ProxyKiller/tokenizer.sp"
 
 // ====================== PLUGIN INFO ======================== //
 
@@ -43,24 +49,22 @@ public Plugin myinfo =
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
 {
-	gCV_Enable = CreateConVar("ProxyKiller_Enable", "1", "Enable/disable ProxyKiller\n0 = Disable - 1 = Enable", _, true, 0.0, true, 1.0);
-	gCV_KickMsg = CreateConVar("ProxyKiller_KickMessage", "Kicked due to proxy usage!", "Message to be sent to clients when they're kicked");
-	gCV_LogSteamId = CreateConVar("ProxyKiller_LogSteamId", "0", "Logs steamid in addition of ip for a punished client", _, true, 0.0, true, 1.0);
-	gCV_CacheLifetime = CreateConVar("ProxyKiller_CacheLifetime", "43200", "Time in second(s) when to invalidate cache entries and re-query ip addresses\nIt is recommended that you set this to at least 1 hour (3600 seconds)", _, true, 0.0, false);
-	gCV_IgnoreAppOwners = CreateConVar("ProxyKiller_IgnoreAppOwners", "624820", "Ignore owners of these appids when checking for proxies\nChecking will occur if a client does not have any of these appids\nSeparate appids by a comma ex: \"123, 4444\"");
-
+	CreateNatives();
+	CreateConVars();
+	CreateForwards();
 	AutoExecConfig(true, PROXYKILLER_NAME);
 }
 
 public void OnPluginStart()
 {
 	g_Logger = new ProxyLogger();
-	g_Database = new ProxyDatabase();
-	g_Services = new ProxyServices();
-	ParseConfig(DEFAULT_CONFIG, g_Services);
-	
-	g_Database.Initialize();
-	g_cacheLayer = new ProxyCacheLayer(g_Database);
+	g_Service = ParseConfig(DEFAULT_CONFIG);
+}
+
+public void OnConfigsExecuted()
+{
+	// TODO: Hook gCV_cacheMode and re-create this handle
+	g_Cache = new ProxyCache(GetCachingMethod());
 }
 
 public void OnClientPostAdminCheck(int client)
@@ -83,7 +87,6 @@ public void OnClientPostAdminCheck(int client)
 
 		for (int i = 0; i < appCount; i++)
 		{
-			// Client is ignored as soon as he has at least ONE (any) of the appids
 			if (HasApp(client, StringToInt(appIds[i])))
 			{
 				shouldCheck = false;
@@ -94,56 +97,13 @@ public void OnClientPostAdminCheck(int client)
 
 	if (shouldCheck)
 	{
-		char clientIpAddress[24];
-		char clientSteamId[32] = "Undefined";
-		GetClientIP(client, clientIpAddress, sizeof(clientIpAddress));
-
-		if (gCV_LogSteamId.BoolValue)
-		{
-			if (!GetClientAuthId(client, AuthId_Steam2, clientSteamId, sizeof(clientSteamId)))
-			{
-				clientSteamId = "Unknown";
-			}
-		}
-
-		DataPack data = new DataPack();
-		data.WriteString(clientIpAddress);
-		data.WriteString(clientSteamId);
-		g_cacheLayer.TryGetCache(clientIpAddress, OnCache, data);
+		ProxyKiller_CheckClient(client);
 	}
-}
-
-void ReplaceIP(char[] ipAddress, char[] buffer, int maxlength)
-{
-	ReplaceString(buffer, maxlength, IP_CONF_TOKEN, ipAddress);
 }
 
 bool HasApp(int client, int appid)
 {
 	return (SteamWorks_HasLicenseForApp(client, appid) == k_EUserHasLicenseResultHasLicense);
-}
-
-void KickClientsByIp(char[] ipAddress)
-{
-	for (int i = 1; i < MaxClients; i++)
-	{
-		if (!IsClientConnected(i))
-			continue;
-		
-		if (IsFakeClient(i))
-			continue;
-
-		char clientIp[24];
-		GetClientIP(i, clientIp, sizeof(clientIp));
-
-		if (StrEqual(ipAddress, clientIp))
-		{
-			char kickMsg[KICK_MESSAGE_LENGTH];
-			gCV_KickMsg.GetString(kickMsg, sizeof(kickMsg));
-			
-			KickClient(i, "%s", kickMsg);
-		}
-	}
 }
 
 // =========================================================== //
