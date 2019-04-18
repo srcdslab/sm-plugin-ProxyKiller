@@ -7,12 +7,12 @@
 
 // =========================================================== //
 
-methodmap ProxyUser < JSON_Object
+methodmap ProxyUser < StringMapEx
 {
 	public ProxyUser(int userid)
 	{
-		JSON_Object proxyUser = new JSON_Object(false);
-		proxyUser.SetInt("userid", userid);
+		StringMapEx proxyUser = new StringMapEx();
+		proxyUser.SetValue("userid", userid);
 		return view_as<ProxyUser>(proxyUser);
 	}
 	

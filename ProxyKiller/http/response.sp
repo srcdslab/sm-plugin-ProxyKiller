@@ -1,6 +1,6 @@
 // =========================================================== //
 
-bool HandleResponse(const char[] response, ProxyContext ctx)
+bool HandleResponse(const char[] response, ProxyServiceContext ctx)
 {
 	char expectValue[MAX_RESPONSE_VALUE_LENGTH];
 	ctx.Service.Response.GetValue(expectValue, sizeof(expectValue));
@@ -27,7 +27,7 @@ bool HandleResponse(const char[] response, ProxyContext ctx)
 
 // =========================================================== //
 
-static void Internal_Handle_JSON(const char[] response, ProxyContext ctx, char[] buffer, int maxlength)
+static void Internal_Handle_JSON(const char[] response, ProxyServiceContext ctx, char[] buffer, int maxlength)
 {
 	char obj[MAX_RESPONSE_NAME_LENGTH];
 	ctx.Service.Response.GetObject(obj, sizeof(obj));

@@ -5,7 +5,7 @@
 
 // =========================================================== //
 
-void HandleParameters(Handle request, ProxyUser pUser, ProxyServiceParams params)
+void HandleParameters(Handle request, ProxyHTTPParams params, ProxyUser pUser = null)
 {
 	if (params != null)
 	{
@@ -21,8 +21,12 @@ void HandleParameters(Handle request, ProxyUser pUser, ProxyServiceParams params
 				char paramValue[MAX_PARAM_VALUE_LENGTH];
 				params.GetString(paramName, paramValue, sizeof(paramValue));
 				
-				TokenizeAll(pUser, paramName, sizeof(paramName));
-				TokenizeAll(pUser, paramValue, sizeof(paramValue));
+				if (pUser != null)
+				{
+					TokenizeAll(pUser, paramName, sizeof(paramName));
+					TokenizeAll(pUser, paramValue, sizeof(paramValue));
+				}
+
 				SteamWorks_SetHTTPRequestGetOrPostParameter(request, paramName, paramValue);
 			}
 		}

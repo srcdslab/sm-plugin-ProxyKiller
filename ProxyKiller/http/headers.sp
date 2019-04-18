@@ -5,7 +5,7 @@
 
 // =========================================================== //
 
-void HandleHeaders(Handle request, ProxyUser pUser, ProxyServiceHeaders headers)
+void HandleHeaders(Handle request, ProxyHTTPHeaders headers, ProxyUser pUser = null)
 {
 	if (headers != null)
 	{
@@ -21,8 +21,12 @@ void HandleHeaders(Handle request, ProxyUser pUser, ProxyServiceHeaders headers)
 				char headerValue[MAX_HEADER_VALUE_LENGTH];
 				headers.GetString(headerName, headerValue, sizeof(headerValue));
 				
-				TokenizeAll(pUser, headerName, sizeof(headerName));
-				TokenizeAll(pUser, headerValue, sizeof(headerValue));
+				if (pUser != null)
+				{
+					TokenizeAll(pUser, headerName, sizeof(headerName));
+					TokenizeAll(pUser, headerValue, sizeof(headerValue));
+				}
+
 				SteamWorks_SetHTTPRequestHeaderValue(request, headerName, headerValue);
 			}
 		}

@@ -24,6 +24,7 @@ ProxyService g_Service = null;
 #include "ProxyKiller/http/params.sp"
 #include "ProxyKiller/http/headers.sp"
 #include "ProxyKiller/http/response.sp"
+#include "ProxyKiller/http/internal.sp"
 
 #include "ProxyKiller/cache/mysql.sp"
 #include "ProxyKiller/cache/sqlite.sp"
@@ -76,23 +77,13 @@ public void OnClientPostAdminCheck(int client)
 
 	char ignoreApps[256];
 	gCV_IgnoreAppOwners.GetString(ignoreApps, sizeof(ignoreApps));
-	
+
 	TrimString(ignoreApps);
 	bool shouldCheck = true;
-
+	
 	if (strlen(ignoreApps) > 0)
 	{
-		char appIds[16][16];
-		int appCount = ExplodeString(ignoreApps, ",", appIds, sizeof(appIds), sizeof(appIds[]));
-
-		for (int i = 0; i < appCount; i++)
-		{
-			if (HasApp(client, StringToInt(appIds[i])))
-			{
-				shouldCheck = false;
-				break;
-			}
-		}
+		shouldCheck = HasAppFrom(client, ignoreApps);
 	}
 
 	if (shouldCheck)
@@ -101,9 +92,9 @@ public void OnClientPostAdminCheck(int client)
 	}
 }
 
-bool HasApp(int client, int appid)
+void InfoMessage(char[] message)
 {
-	return (SteamWorks_HasLicenseForApp(client, appid) == k_EUserHasLicenseResultHasLicense);
+	LogMessage("- [I] %s", message);
 }
 
 // =========================================================== //

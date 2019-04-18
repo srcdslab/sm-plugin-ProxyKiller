@@ -11,31 +11,11 @@
 
 // =========================================================== //
 
-methodmap ProxyService < JSON_Object
+methodmap ProxyService < ProxyHTTP
 {
 	public ProxyService()
 	{
-		return view_as<ProxyService>(new JSON_Object(false));
-	}
-	
-	public void SetUrl(char[] url)
-	{
-		this.SetString("url", url);
-	}
-	
-	public void GetUrl(char[] buffer, int maxlength)
-	{
-		this.GetString("url", buffer, maxlength);
-	}
-	
-	public void SetName(char[] name)
-	{
-		this.SetString("name", name);
-	}
-	
-	public void GetName(char[] buffer, int maxlength)
-	{
-		this.GetString("name", buffer, maxlength);
+		return view_as<ProxyService>(new StringMapEx());
 	}
 	
 	public void SetToken(char[] token)
@@ -57,23 +37,11 @@ methodmap ProxyService < JSON_Object
 	{
 		this.GetString("token_value", buffer, maxlength);
 	}
-	
-	property ProxyServiceParams Params
-	{
-		public get() { return view_as<ProxyServiceParams>(this.GetObject("params")); }
-		public set(ProxyServiceParams params) { this.SetObject("params", view_as<ProxyServiceParams>(params)); }
-	}
-	
-	property ProxyServiceHeaders Headers
-	{
-		public get() { return view_as<ProxyServiceHeaders>(this.GetObject("headers")); }
-		public set(ProxyServiceHeaders headers) { this.SetObject("headers", view_as<ProxyServiceHeaders>(headers)); }
-	}
-	
+
 	property ProxyServiceResponse Response
 	{
-		public get() { return view_as<ProxyServiceResponse>(this.GetObject("response")); }
-		public set(ProxyServiceResponse response) { this.SetObject("response", view_as<ProxyServiceResponse>(response)); }
+		public get() { return this.GetAny("response"); }
+		public set(ProxyServiceResponse response) { this.SetValue("response", response); }
 	}
 }
 

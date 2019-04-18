@@ -1,17 +1,17 @@
 // ================== DOUBLE INCLUDE ========================= //
 
-#if defined _ProxyServiceParams_included_
+#if defined _ProxyHTTPParams_included_
 #endinput
 #endif
-#define _ProxyServiceParams_included_
+#define _ProxyHTTPParams_included_
 
 // =========================================================== //
 
-methodmap ProxyServiceParams < JSON_Object
+methodmap ProxyHTTPParams < StringMapEx
 {
-	public ProxyServiceParams()
+	public ProxyHTTPParams()
 	{
-		return view_as<ProxyServiceParams>(new JSON_Object(false));
+		return view_as<ProxyHTTPParams>(new StringMapEx());
 	}
 	
 	public void AddParam(char[] key, char[] value)

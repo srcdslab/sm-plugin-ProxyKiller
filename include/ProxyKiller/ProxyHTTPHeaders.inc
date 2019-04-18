@@ -1,17 +1,17 @@
 // ================== DOUBLE INCLUDE ========================= //
 
-#if defined _ProxyServiceHeaders_included_
+#if defined _ProxyHTTPHeaders_included_
 #endinput
 #endif
-#define _ProxyServiceHeaders_included_
+#define _ProxyHTTPHeaders_included_
 
 // =========================================================== //
 
-methodmap ProxyServiceHeaders < JSON_Object
+methodmap ProxyHTTPHeaders < StringMapEx
 {
-	public ProxyServiceHeaders()
+	public ProxyHTTPHeaders()
 	{
-		return view_as<ProxyServiceHeaders>(new JSON_Object(false));
+		return view_as<ProxyHTTPHeaders>(new StringMapEx());
 	}
 	
 	public void AddHeader(char[] header, char[] value)

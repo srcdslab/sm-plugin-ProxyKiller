@@ -16,6 +16,39 @@ bool KickClientSafe(int client)
 	}
 }
 
+bool HasApp(int client, int appid)
+{
+	return (SteamWorks_HasLicenseForApp(client, appid) == k_EUserHasLicenseResultHasLicense);
+}
+
+bool HasAppFrom(int client, char[] appString)
+{
+	char appIds[16][16];
+	int appCount = ExplodeString(appString, ",", appIds, sizeof(appIds), sizeof(appIds[]));
+	
+	for (int i = 0; i < appCount; i++)
+	{
+		if (HasApp(client, StringToInt(appIds[i])))
+		{
+			return true;
+		}
+	}
+	
+	return false;
+}
+
+void DoCallback(Handle fwd, bool failure, const char[] response, any data = 0)
+{
+	if (fwd != null)
+	{
+		Call_StartForward(fwd);
+		Call_PushCell(failure);
+		Call_PushString(response);
+		Call_PushCell(data);
+		Call_Finish();
+	}
+}
+
 JSON_Object GetObjectSafe(JSON_Object obj, char[] key = "", int index = -1)
 {
 	if (obj == null || (key[0] == '\0' && index == -1))

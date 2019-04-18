@@ -30,7 +30,7 @@ ProxyService ParseConfig(char[] configFile)
 		
 	if (config.JumpToKey("params"))
 	{
-		ProxyServiceParams params = new ProxyServiceParams();
+		ProxyHTTPParams params = new ProxyHTTPParams();
 			
 		while (config.GotoFirstSubKey(false) || config.GotoNextKey(false))
 		{
@@ -50,7 +50,7 @@ ProxyService ParseConfig(char[] configFile)
 		
 	if (config.JumpToKey("headers"))
 	{
-		ProxyServiceHeaders headers = new ProxyServiceHeaders();
+		ProxyHTTPHeaders headers = new ProxyHTTPHeaders();
 			
 		while (config.GotoFirstSubKey(false) || config.GotoNextKey(false))
 		{

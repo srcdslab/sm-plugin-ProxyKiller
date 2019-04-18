@@ -31,11 +31,11 @@ char TypePhrases[RT_COUNT][] =
 
 // =========================================================== //
 
-methodmap ProxyServiceResponse < JSON_Object
+methodmap ProxyServiceResponse < StringMapEx
 {
 	public ProxyServiceResponse()
 	{
-		return view_as<ProxyServiceResponse>(new JSON_Object(false));
+		return view_as<ProxyServiceResponse>(new StringMapEx());
 	}
 	
 	public void SetType(char[] type)
@@ -44,7 +44,7 @@ methodmap ProxyServiceResponse < JSON_Object
 		{
 			if (StrEqual(TypePhrases[i], type))
 			{
-				this.SetInt("type", i);
+				this.SetValue("type", i);
 			}
 		}
 	}
@@ -57,7 +57,7 @@ methodmap ProxyServiceResponse < JSON_Object
 	property ResponseCompare Compare
 	{
 		public get() { return view_as<ResponseCompare>(this.GetInt("compare")); }
-		public set(ResponseCompare compare) { this.SetInt("compare", view_as<int>(compare)); }
+		public set(ResponseCompare compare) { this.SetValue("compare", compare); }
 	}
 
 	public void GetObject(char[] buffer, int maxlength)

@@ -20,13 +20,13 @@ enum CacheMode
 
 // =========================================================== //
 
-methodmap ProxyCache < JSON_Object
+methodmap ProxyCache < StringMapEx
 {
 	public ProxyCache(CacheMode mode)
 	{
-		JSON_Object cacheObj = new JSON_Object(false);
-		cacheObj.SetHandle("cache", null);
-		cacheObj.SetInt("mode", view_as<int>(mode));
+		StringMapEx cacheObj = new StringMapEx();
+		cacheObj.SetValue("cache", 0);
+		cacheObj.SetValue("mode", mode);
 		
 		switch (mode)
 		{
@@ -35,7 +35,7 @@ methodmap ProxyCache < JSON_Object
 				ProxyCacheMySQL cache = new ProxyCacheMySQL();
 				cache.Initialize();
 
-				cacheObj.SetHandle("cache", cache);
+				cacheObj.SetValue("cache", cache);
 				return view_as<ProxyCache>(cacheObj);
 			}
 			case CM_SQLite:
@@ -43,7 +43,7 @@ methodmap ProxyCache < JSON_Object
 				ProxyCacheSQLite cache = new ProxyCacheSQLite();
 				cache.Initialize();
 				
-				cacheObj.SetHandle("cache", cache);
+				cacheObj.SetValue("cache", cache);
 				return view_as<ProxyCache>(cacheObj);
 			}
 		}
@@ -53,7 +53,7 @@ methodmap ProxyCache < JSON_Object
 	
 	property any Cache 
 	{
-		public get() { return this.GetHandle("cache"); }
+		public get() { return this.GetAny("cache"); }
 	}
 
 	property CacheMode Mode

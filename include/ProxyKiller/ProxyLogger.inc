@@ -12,14 +12,14 @@
 
 // =========================================================== //
 
-methodmap ProxyLogger < JSON_Object
+methodmap ProxyLogger < StringMapEx
 {
 	public ProxyLogger()
 	{
 		char loggerPath[PLATFORM_MAX_PATH];
 		BuildPath(Path_SM, loggerPath, sizeof(loggerPath), DEFAULT_LOGGER_PATH);
 		
-		JSON_Object loggerObj = new JSON_Object();
+		StringMapEx loggerObj = new StringMapEx();
 		loggerObj.SetString("file", loggerPath);
 
 		return view_as<ProxyLogger>(loggerObj);

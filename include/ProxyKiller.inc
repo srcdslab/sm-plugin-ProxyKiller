@@ -7,16 +7,21 @@
 
 // =========================================================== //
 
-#include <ProxyKiller/ProxyServiceParams>
-#include <ProxyKiller/ProxyServiceHeaders>
+#include <StringMapEx>
+
+#include <ProxyKiller/ProxyHTTPParams>
+#include <ProxyKiller/ProxyHTTPHeaders>
 #include <ProxyKiller/ProxyServiceResponse>
+
+#include <ProxyKiller/ProxyHTTP>
+#include <ProxyKiller/ProxyHTTPContext>
 
 #include <ProxyKiller/ProxyService>
 
 #include <ProxyKiller/ProxyUser>
 #include <ProxyKiller/ProxyLogger>
-#include <ProxyKiller/ProxyContext>
 #include <ProxyKiller/ProxyCache>
+#include <ProxyKiller/ProxyServiceContext>
 
 // =========================================================== //
 
@@ -46,5 +51,6 @@
 // =========================================================== //
 
 native void ProxyKiller_CheckClient(int client);
+native void ProxyKiller_SendRequest(ProxyHTTP http, Function callback = INVALID_FUNCTION, any data = 0);
 
 // =========================================================== //

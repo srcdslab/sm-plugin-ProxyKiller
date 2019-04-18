@@ -2,7 +2,7 @@
 
 public void MySQL_OnCache(Database db, DBResultSet results, const char[] error, ProxyUser pUser)
 {
-	PrintToServer("MYSQL: Cache hit");
+	InfoMessage("MYSQL::OnCache");
 
 	if (strlen(error) > 0 || !results.HasResults)
 	{
@@ -26,11 +26,6 @@ public void MySQL_OnCache(Database db, DBResultSet results, const char[] error, 
 			
 			char serviceName[MAX_SERVICE_NAME_LENGTH];
 			results.FetchString(1, serviceName, sizeof(serviceName));
-			
-			PrintToServer("> IP: %s", ipAddress);
-			PrintToServer("> Service: %s", serviceName);
-			PrintToServer("> Result: %d", result);
-			PrintToServer("> Timestamp: %d\n", timestamp);
 
 			if ((GetTime() - timestamp) >= gCV_CacheLifetime.IntValue)
 			{
@@ -51,7 +46,7 @@ public void MySQL_OnCache(Database db, DBResultSet results, const char[] error, 
 
 public void MySQL_OnCached(Database db, DBResultSet results, const char[] error, any data)
 {
-	PrintToServer("MYSQL: Cached");
+	InfoMessage("MYSQL::OnCached");
 	
 	if (strlen(error) > 0)
 	{
