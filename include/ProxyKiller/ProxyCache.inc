@@ -25,7 +25,6 @@ methodmap ProxyCache < StringMapEx
 	public ProxyCache(CacheMode mode)
 	{
 		StringMapEx cacheObj = new StringMapEx();
-		cacheObj.SetValue("cache", 0);
 		cacheObj.SetValue("mode", mode);
 		
 		switch (mode)
@@ -47,7 +46,7 @@ methodmap ProxyCache < StringMapEx
 				return view_as<ProxyCache>(cacheObj);
 			}
 		}
-		
+
 		return null;
 	}
 	

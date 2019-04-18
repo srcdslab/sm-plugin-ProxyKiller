@@ -7,10 +7,11 @@ void QueryHTTP(ProxyHTTP http, any data)
 	char url[MAX_URL_LENGTH];
 	http.GetUrl(url, sizeof(url));
 
-	Handle request = SteamWorks_CreateHTTPRequest(k_EHTTPMethodGET, url);
+	Handle request = SteamWorks_CreateHTTPRequest(http.Method, url);
 	
 	if (request == null)
 	{
+		// TODO: ProxyHTTP has headers & params which also need to be deleted
 		delete http;
 		delete request;
 		return;
@@ -51,6 +52,7 @@ public int OnRequest_DataReceived(Handle request, bool failure, int offset, int 
 		SteamWorks_GetHTTPResponseBodyCallback(request, OnRequest_Data, ctx);
 	}
 
+	delete ctx.HTTP.Callback;
 	delete ctx;
 	delete request;
 }

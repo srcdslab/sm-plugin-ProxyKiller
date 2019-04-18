@@ -7,6 +7,10 @@
 
 // =========================================================== //
 
+#include <SteamWorks>
+
+// =========================================================== //
+
 methodmap ProxyHTTP < StringMapEx
 {
 	public ProxyHTTP()
@@ -50,6 +54,12 @@ methodmap ProxyHTTP < StringMapEx
 	{
 		public get() { return this.GetAny("headers"); }
 		public set(ProxyHTTPHeaders headers) { this.SetValue("headers", headers); }
+	}
+	
+	property EHTTPMethod Method
+	{
+		public get() { return this.GetAny("method"); }
+		public set(EHTTPMethod method) { this.SetValue("method", method); }
 	}
 }
 

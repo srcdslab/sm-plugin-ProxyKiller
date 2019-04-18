@@ -11,17 +11,17 @@
 
 #include <ProxyKiller/ProxyHTTPParams>
 #include <ProxyKiller/ProxyHTTPHeaders>
-#include <ProxyKiller/ProxyServiceResponse>
 
 #include <ProxyKiller/ProxyHTTP>
 #include <ProxyKiller/ProxyHTTPContext>
 
-#include <ProxyKiller/ProxyService>
-
 #include <ProxyKiller/ProxyUser>
-#include <ProxyKiller/ProxyLogger>
-#include <ProxyKiller/ProxyCache>
+#include <ProxyKiller/ProxyServiceResponse>
+
+#include <ProxyKiller/ProxyService>
 #include <ProxyKiller/ProxyServiceContext>
+
+#include <ProxyKiller/ProxyCache>
 
 // =========================================================== //
 
@@ -52,5 +52,18 @@
 
 native void ProxyKiller_CheckClient(int client);
 native void ProxyKiller_SendRequest(ProxyHTTP http, Function callback = INVALID_FUNCTION, any data = 0);
+
+// =========================================================== //
+
+forward Action ProxyKiller_DoCheckClient(int client);
+forward void ProxyKiller_OnCheckClient(int client);
+
+forward void ProxyKiller_OnClientResult(ProxyUser pUser, bool result, bool fromCache);
+
+forward Action ProxyKiller_DoClientResultCache(ProxyUser pUser, bool result);
+forward void ProxyKiller_OnClientResultCache(ProxyUser pUser, bool result);
+
+forward Action ProxyKiller_DoClientPunishment(ProxyUser pUser, bool fromCache);
+forward void ProxyKiller_OnClientPunishment(ProxyUser pUser, bool fromCache);
 
 // =========================================================== //

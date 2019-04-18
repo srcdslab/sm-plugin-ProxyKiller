@@ -24,15 +24,28 @@ public void OnService(bool failure, char[] response, ProxyServiceContext ctx)
 	InfoMessage("HTTP::OnService");
 	
 	bool result = HandleResponse(response, ctx);
-	g_Cache.TryCache(ctx.User, ctx.Service, result);
+	Call_ProxyKiller_OnClientResult(ctx.User, result, false);
 	
+	bool blockCacheExec = Call_ProxyKiller_DoClientResultCache(ctx.User, result) != Plugin_Continue;
+	
+	if (!blockCacheExec)
+	{
+		g_Cache.TryCache(ctx.User, ctx.Service, result);
+		Call_ProxyKiller_OnClientResultCache(ctx.User, result);
+	}
+
 	if (result)
 	{
-		KickClientSafe(ctx.User.Client);
+		bool blockPunishmentExec = Call_ProxyKiller_DoClientPunishment(ctx.User, false) != Plugin_Continue;
+		
+		if (!blockPunishmentExec)
+		{
+			KickClientSafe(ctx.User.Client);
+			Call_ProxyKiller_OnClientPunishment(ctx.User, false);
+		}
 	}
 
 	delete ctx.User;
-	delete ctx.Service;
 	delete ctx;
 }
 

@@ -7,6 +7,8 @@
 
 void HandleParameters(Handle request, ProxyHTTPParams params, ProxyUser pUser = null)
 {
+	InfoMessage("HTTP::HandleParams");
+	
 	if (params != null)
 	{
 		StringMapSnapshot paramMap = params.Snapshot();

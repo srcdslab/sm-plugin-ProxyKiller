@@ -88,7 +88,12 @@ public void OnClientPostAdminCheck(int client)
 
 	if (shouldCheck)
 	{
-		ProxyKiller_CheckClient(client);
+		bool blockExec = Call_ProxyKiller_DoCheckClient(client) != Plugin_Continue;
+		if (!blockExec)
+		{
+			ProxyKiller_CheckClient(client);
+			Call_ProxyKiller_OnCheckClient(client);
+		}
 	}
 }
 

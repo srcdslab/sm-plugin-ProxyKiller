@@ -2,6 +2,8 @@
 
 bool HandleResponse(const char[] response, ProxyServiceContext ctx)
 {
+	InfoMessage("HTTP::HandleResponse");
+	
 	char expectValue[MAX_RESPONSE_VALUE_LENGTH];
 	ctx.Service.Response.GetValue(expectValue, sizeof(expectValue));
 	

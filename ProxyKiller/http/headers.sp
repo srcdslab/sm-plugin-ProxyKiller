@@ -7,6 +7,8 @@
 
 void HandleHeaders(Handle request, ProxyHTTPHeaders headers, ProxyUser pUser = null)
 {
+	InfoMessage("HTTP::HandleHeaders");
+	
 	if (headers != null)
 	{
 		StringMapSnapshot headerMap = headers.Snapshot();

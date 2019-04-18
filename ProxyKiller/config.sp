@@ -23,10 +23,22 @@ ProxyService ParseConfig(char[] configFile)
 		
 	char url[MAX_URL_LENGTH];
 	config.GetString("url", url, sizeof(url));
+	
+	char method[12];
+	config.GetString("method", method, sizeof(method));
 		
 	ProxyService service = new ProxyService();
 	service.SetUrl(url);
 	service.SetName(name);
+
+	if (StrEqual(method, "GET", false))
+	{
+		service.Method = k_EHTTPMethodGET;
+	}
+	else if (StrEqual(method, "POST", false))
+	{
+		service.Method = k_EHTTPMethodPOST;
+	}
 		
 	if (config.JumpToKey("params"))
 	{
