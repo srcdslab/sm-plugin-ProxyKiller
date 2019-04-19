@@ -11,8 +11,12 @@ void QueryHTTP(ProxyHTTP http, any data)
 	
 	if (request == null)
 	{
-		// TODO: ProxyHTTP has headers & params which also need to be deleted
-		delete http;
+		if (http != null)
+		{
+			http.Cleanup();
+			delete http;
+		}
+
 		delete request;
 		return;
 	}

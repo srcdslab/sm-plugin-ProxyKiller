@@ -27,7 +27,7 @@ ProxyService ParseConfig(char[] configFile)
 	char method[12];
 	config.GetString("method", method, sizeof(method));
 		
-	ProxyService service = new ProxyService(true);
+	ProxyService service = new ProxyService();
 	service.SetUrl(url);
 	service.SetName(name);
 
