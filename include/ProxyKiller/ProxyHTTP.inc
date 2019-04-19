@@ -7,6 +7,7 @@
 
 // =========================================================== //
 
+// TODO: Make this and ProxyKiller.inc not require SteamWorks include
 #include <SteamWorks>
 
 // =========================================================== //
