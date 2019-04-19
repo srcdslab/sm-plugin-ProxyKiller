@@ -2,6 +2,7 @@
 
 void CreateNatives()
 {
+	CreateNative("ProxyKiller_CreateHTTP", Native_CreateHTTP);
 	CreateNative("ProxyKiller_CheckClient", Native_CheckClient);
 	CreateNative("ProxyKiller_SendRequest", Native_SendRequest);
 }
@@ -30,6 +31,21 @@ public int Native_SendRequest(Handle plugin, int numParams)
 	
 	http.Callback = fwd;
 	QueryHTTP(http, data);
+}
+
+public int Native_CreateHTTP(Handle plugin, int numParams)
+{
+	char url[256];
+	GetNativeString(1, url, sizeof(url));
+	
+	EHTTPMethod method = GetNativeCell(2);
+	bool isPersistent = GetNativeCell(3);
+	
+	ProxyHTTP http = new ProxyHTTP(isPersistent);
+	http.Method = method;
+	http.SetUrl(url);
+	
+	return view_as<int>(http);
 }
 
 // =========================================================== //

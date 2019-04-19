@@ -13,9 +13,14 @@
 
 methodmap ProxyService < ProxyHTTP
 {
-	public ProxyService()
+	public ProxyService(bool isPersistent = false)
 	{
-		return view_as<ProxyService>(new StringMapEx());
+		StringMapEx service = new StringMapEx();
+		service.SetValue("isPersistent", isPersistent);
+		service.SetValue("params", new ProxyHTTPParams());
+		service.SetValue("headers", new ProxyHTTPHeaders());
+		
+		return view_as<ProxyService>(service);
 	}
 	
 	public void SetToken(char[] token)

@@ -27,7 +27,7 @@ ProxyService ParseConfig(char[] configFile)
 	char method[12];
 	config.GetString("method", method, sizeof(method));
 		
-	ProxyService service = new ProxyService();
+	ProxyService service = new ProxyService(true);
 	service.SetUrl(url);
 	service.SetName(name);
 
@@ -42,8 +42,6 @@ ProxyService ParseConfig(char[] configFile)
 		
 	if (config.JumpToKey("params"))
 	{
-		ProxyHTTPParams params = new ProxyHTTPParams();
-			
 		while (config.GotoFirstSubKey(false) || config.GotoNextKey(false))
 		{
 			char paramName[MAX_PARAM_NAME_LENGTH];
@@ -52,18 +50,15 @@ ProxyService ParseConfig(char[] configFile)
 			char paramValue[MAX_PARAM_VALUE_LENGTH];
 			config.GetString(NULL_STRING, paramValue, sizeof(paramValue));
 				
-			params.AddParam(paramName, paramValue);
+			service.Params.AddParam(paramName, paramValue);
 		}
 			
 		config.Rewind();
 		config.JumpToKey(name);
-		service.Params = params;
 	}
 		
 	if (config.JumpToKey("headers"))
 	{
-		ProxyHTTPHeaders headers = new ProxyHTTPHeaders();
-			
 		while (config.GotoFirstSubKey(false) || config.GotoNextKey(false))
 		{
 			char headerName[MAX_HEADER_NAME_LENGTH];
@@ -72,12 +67,11 @@ ProxyService ParseConfig(char[] configFile)
 			char headerValue[MAX_HEADER_VALUE_LENGTH];
 			config.GetString(NULL_STRING, headerValue, sizeof(headerValue));
 				
-			headers.AddHeader(headerName, headerValue);
+			service.Headers.AddHeader(headerName, headerValue);
 		}
 			
 		config.Rewind();
 		config.JumpToKey(name);
-		service.Headers = headers;
 	}
 		
 	if (config.JumpToKey("response"))

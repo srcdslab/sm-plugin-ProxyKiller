@@ -45,8 +45,11 @@ public void OnService(bool failure, char[] response, ProxyServiceContext ctx)
 		}
 	}
 
-	delete ctx.User;
-	delete ctx;
+	if (ctx != null)
+	{
+		ctx.Cleanup();
+		delete ctx;
+	}
 }
 
 // =========================================================== //

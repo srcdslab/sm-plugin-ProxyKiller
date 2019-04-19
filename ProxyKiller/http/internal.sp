@@ -52,8 +52,12 @@ public int OnRequest_DataReceived(Handle request, bool failure, int offset, int 
 		SteamWorks_GetHTTPResponseBodyCallback(request, OnRequest_Data, ctx);
 	}
 
-	delete ctx.HTTP.Callback;
-	delete ctx;
+	if (ctx != null)
+	{
+		ctx.Cleanup();
+		delete ctx;
+	}
+
 	delete request;
 }
 

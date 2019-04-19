@@ -7,6 +7,7 @@
 
 // =========================================================== //
 
+#include <SteamWorks>
 #include <StringMapEx>
 
 #include <ProxyKiller/ProxyHTTPParams>
@@ -50,8 +51,18 @@
 
 // =========================================================== //
 
+typeset ProxyHTTPCallback
+{
+	function void (bool failure, const char[] response);
+	function void (bool failure, const char[] response, any data);
+}
+
+// =========================================================== //
+
+native ProxyHTTP ProxyKiller_CreateHTTP(const char[] url, EHTTPMethod method = k_EHTTPMethodGET, isPersistent = false);
+
 native void ProxyKiller_CheckClient(int client);
-native void ProxyKiller_SendRequest(ProxyHTTP http, Function callback = INVALID_FUNCTION, any data = 0);
+native void ProxyKiller_SendRequest(ProxyHTTP http, ProxyHTTPCallback callback = INVALID_FUNCTION, any data = 0);
 
 // =========================================================== //
 

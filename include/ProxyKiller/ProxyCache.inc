@@ -20,6 +20,7 @@ enum CacheMode
 
 // =========================================================== //
 
+// TODO: Figure out a good way to pass SQL callbacks etc...
 methodmap ProxyCache < StringMapEx
 {
 	public ProxyCache(CacheMode mode)
@@ -60,23 +61,6 @@ methodmap ProxyCache < StringMapEx
 		public get() { return view_as<CacheMode>(this.GetInt("mode")); }
 	}
 
-	public void TryCache(ProxyUser pUser, ProxyService service, any result)
-	{
-		switch (this.Mode)
-		{
-			case CM_MySQL:
-			{
-				ProxyCacheMySQL cache = this.Cache;
-				cache.TryCache(pUser, service, result, MySQL_OnCached);
-			}
-			case CM_SQLite:
-			{
-				ProxyCacheSQLite cache = this.Cache;
-				cache.TryCache(pUser, service, result, SQLite_OnCached);
-			}
-		}
-	}
-	
 	public void TryGet(ProxyUser pUser, ProxyService service)
 	{
 		switch (this.Mode)
@@ -84,12 +68,37 @@ methodmap ProxyCache < StringMapEx
 			case CM_MySQL:
 			{
 				ProxyCacheMySQL cache = this.Cache;
-				cache.TryGet(pUser, service, MySQL_OnCache);
+
+				Function callback = GetFunctionByName(INVALID_HANDLE, "MySQL_OnCache");
+				cache.TryGet(pUser, service, view_as<SQLQueryCallback>(callback));
 			}
 			case CM_SQLite:
 			{
 				ProxyCacheSQLite cache = this.Cache;
-				cache.TryGet(pUser, service, SQLite_OnCache);
+
+				Function callback = GetFunctionByName(INVALID_HANDLE, "SQLite_OnCache");
+				cache.TryGet(pUser, service, view_as<SQLQueryCallback>(callback));
+			}
+		}
+	}
+
+	public void TryCache(ProxyUser pUser, ProxyService service, any result)
+	{
+		switch (this.Mode)
+		{
+			case CM_MySQL:
+			{
+				ProxyCacheMySQL cache = this.Cache;
+				
+				Function callback = GetFunctionByName(INVALID_HANDLE, "MySQL_OnCached");
+				cache.TryCache(pUser, service, result, view_as<SQLQueryCallback>(callback));
+			}
+			case CM_SQLite:
+			{
+				ProxyCacheSQLite cache = this.Cache;
+				
+				Function callback = GetFunctionByName(INVALID_HANDLE, "SQLite_OnCached");
+				cache.TryCache(pUser, service, result, view_as<SQLQueryCallback>(callback));
 			}
 		}
 	}

@@ -13,9 +13,14 @@
 
 methodmap ProxyHTTP < StringMapEx
 {
-	public ProxyHTTP()
+	public ProxyHTTP(bool isPersistent = false)
 	{
-		return view_as<ProxyHTTP>(new StringMapEx());
+		StringMapEx http = new StringMapEx();
+		http.SetValue("isPersistent", isPersistent);
+		http.SetValue("params", new ProxyHTTPParams());
+		http.SetValue("headers", new ProxyHTTPHeaders());
+		
+		return view_as<ProxyHTTP>(http);
 	}
 	
 	public void SetUrl(char[] url)
@@ -38,6 +43,11 @@ methodmap ProxyHTTP < StringMapEx
 		this.GetString("name", buffer, maxlength);
 	}
 	
+	property bool IsPersistent
+	{
+		public get() { return this.GetBool("isPersistent"); }
+	}
+	
 	property Handle Callback
 	{
 		public get() { return this.GetAny("callback"); }
@@ -47,19 +57,37 @@ methodmap ProxyHTTP < StringMapEx
 	property ProxyHTTPParams Params
 	{
 		public get() { return this.GetAny("params"); }
-		public set(ProxyHTTPParams params) { this.SetValue("params", params); }
 	}
 	
 	property ProxyHTTPHeaders Headers
 	{
 		public get() { return this.GetAny("headers"); }
-		public set(ProxyHTTPHeaders headers) { this.SetValue("headers", headers); }
 	}
 	
 	property EHTTPMethod Method
 	{
 		public get() { return this.GetAny("method"); }
 		public set(EHTTPMethod method) { this.SetValue("method", method); }
+	}
+	
+	public void Cleanup()
+	{
+		if (!this.IsPersistent)
+		{
+			if (this.Params != null)
+			{
+				delete this.Params;
+			}
+			if (this.Headers != null)
+			{
+				delete this.Headers;
+			}
+		}
+		
+		if (this.Callback != null)
+		{
+			delete this.Callback;
+		}
 	}
 }
 

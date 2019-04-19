@@ -25,6 +25,14 @@ methodmap ProxyHTTPContext < StringMapEx
 		public get() { return this.GetAny("data"); }
 		public set(any data) { this.SetValue("data", data); }
 	}
+	
+	public void Cleanup()
+	{
+		if (this.HTTP != null)
+		{
+			this.HTTP.Cleanup();
+		}
+	}
 }
 
 // =========================================================== //
