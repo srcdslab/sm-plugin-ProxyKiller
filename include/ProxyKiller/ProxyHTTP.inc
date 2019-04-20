@@ -73,6 +73,11 @@ methodmap ProxyHTTP < StringMapEx
 	
 	public void Cleanup()
 	{
+		if (this.Callback != null)
+		{
+			delete this.Callback;
+		}
+		
 		if (!this.IsPersistent)
 		{
 			if (this.Params != null)
@@ -85,11 +90,6 @@ methodmap ProxyHTTP < StringMapEx
 			}
 
 			delete this;
-		}
-		
-		if (this.Callback != null)
-		{
-			delete this.Callback;
 		}
 	}
 }

@@ -16,12 +16,12 @@ methodmap ProxyConfig < StringMapEx
 		config.SetValue("service", service);
 		return view_as<ProxyConfig>(config);
 	}
-	
+
 	property StringMap Keys
 	{
 		public get() { return this.GetAny("keys"); }
 	}
-	
+
 	property ProxyService Service
 	{
 		public get() { return this.GetAny("service"); }
