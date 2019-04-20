@@ -53,17 +53,13 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 	CreateConVars();
 	CreateForwards();
 	AutoExecConfig(true, PROXYKILLER_NAME);
-}
-
-public void OnPluginStart()
-{
+	
+	// Is this ideal? Maybe a forward when config is loaded
 	g_Config = ParseConfig(PROXYKILLER_CONFIG);
-}
 }
 
 public void OnConfigsExecuted()
 {
-	// TODO: Hook gCV_cacheMode and re-create this handle
 	g_Cache = new ProxyCache(GetCachingMethod());
 }
 
