@@ -1,7 +1,6 @@
 // =========================================================== //
 
 #include <json>
-#include <SteamWorks>
 #include <ProxyKiller>
 
 // ====================== FORMATTING ========================= //
@@ -53,9 +52,12 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 	CreateConVars();
 	CreateForwards();
 	AutoExecConfig(true, PROXYKILLER_NAME);
+}
 	
-	// Is this ideal? Maybe a forward when config is loaded
+public void OnPluginStart()
+{
 	g_Config = ParseConfig(PROXYKILLER_CONFIG);
+	Call_ProxyKiller_OnConfig(g_Config);
 }
 
 public void OnConfigsExecuted()

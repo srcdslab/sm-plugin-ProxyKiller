@@ -1,5 +1,7 @@
 // =========================================================== //
 
+static Handle H_OnConfig = null;
+
 static Handle H_DoCheckClient = null;
 static Handle H_OnCheckClient = null;
 
@@ -15,6 +17,8 @@ static Handle H_OnClientPunishment = null;
 
 void CreateForwards()
 {
+	H_OnConfig = CreateGlobalForward("ProxyKiller_OnConfig", ET_Ignore, Param_Cell);
+	
 	H_DoCheckClient = CreateGlobalForward("ProxyKiller_OnCheckClient", ET_Hook, Param_Cell);
 	H_OnCheckClient = CreateGlobalForward("ProxyKiller_OnCheckClient", ET_Ignore, Param_Cell);
 	
@@ -28,6 +32,13 @@ void CreateForwards()
 }
 
 // =========================================================== //
+
+void Call_ProxyKiller_OnConfig(ProxyConfig config)
+{
+	Call_StartForward(H_OnConfig);
+	Call_PushCell(config);
+	Call_Finish();
+}
 
 Action Call_ProxyKiller_DoCheckClient(int client)
 {

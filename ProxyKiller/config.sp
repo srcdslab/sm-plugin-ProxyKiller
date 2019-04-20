@@ -15,7 +15,7 @@ ProxyConfig ParseConfig(char[] configFile)
 	}
 
 	// Get values inside the root node
-	StringMap cachedKeys = new StringMap();
+	StringMap cachedVars = new StringMap();
 	while (config.GotoFirstSubKey(false) || config.GotoFirstSubKey(false))
 	{
 		char key[64];
@@ -24,7 +24,7 @@ ProxyConfig ParseConfig(char[] configFile)
 		char value[256];
 		config.GetString(NULL_STRING, value, sizeof(value));
 
-		cachedKeys.SetString(key, value);
+		cachedVars.SetString(key, value);
 	}
 
 	// Go back!
@@ -72,7 +72,7 @@ ProxyConfig ParseConfig(char[] configFile)
 			char tokenName[MAX_PARAM_VALUE_LENGTH];
 			if (GetTokenFromInput(paramValue, tokenName, sizeof(tokenName)))
 			{
-				if (!cachedKeys.GetString(tokenName, paramValue, sizeof(paramValue)))
+				if (!cachedVars.GetString(tokenName, paramValue, sizeof(paramValue)))
 				{
 					LogError("Token \"%s\" does not exist in the root node!", tokenName);
 				}
@@ -98,7 +98,7 @@ ProxyConfig ParseConfig(char[] configFile)
 			char tokenName[MAX_HEADER_VALUE_LENGTH];
 			if (GetTokenFromInput(headerValue, tokenName, sizeof(tokenName)))
 			{
-				if (!cachedKeys.GetString(tokenName, headerValue, sizeof(headerValue)))
+				if (!cachedVars.GetString(tokenName, headerValue, sizeof(headerValue)))
 				{
 					LogError("Token \"%s\" does not exist in the root node!", tokenName);
 				}
@@ -151,7 +151,7 @@ ProxyConfig ParseConfig(char[] configFile)
 	}
 	
 	delete config;
-	return new ProxyConfig(cachedKeys, service);
+	return new ProxyConfig(cachedVars, service);
 }
 
 // TODO: not really good way of doing this

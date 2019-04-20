@@ -66,10 +66,9 @@ native ProxyHTTP ProxyKiller_CreateHTTP(const char[] url, EHTTPMethod method = k
 native void ProxyKiller_CheckClient(int client);
 native void ProxyKiller_SendRequest(ProxyHTTP http, ProxyHTTPCallback callback = INVALID_FUNCTION, any data = 0);
 
-native bool ProxyKiller_Config_HasVal(char[] value);
-native void ProxyKiller_Config_GetVal(char[] value, char[] buffer, int maxlength);
-
 // =========================================================== //
+
+forward void ProxyKiller_OnConfig(ProxyConfig config);
 
 forward Action ProxyKiller_DoCheckClient(int client);
 forward void ProxyKiller_OnCheckClient(int client);

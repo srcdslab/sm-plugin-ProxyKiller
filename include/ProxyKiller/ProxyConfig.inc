@@ -9,17 +9,17 @@
 
 methodmap ProxyConfig < StringMapEx
 {
-	public ProxyConfig(StringMap keys, ProxyService service)
+	public ProxyConfig(StringMap vars, ProxyService service)
 	{
 		StringMapEx config = new StringMapEx();
-		config.SetValue("keys", keys);
+		config.SetValue("vars", vars);
 		config.SetValue("service", service);
 		return view_as<ProxyConfig>(config);
 	}
 
-	property StringMap Keys
+	property StringMap Vars
 	{
-		public get() { return this.GetAny("keys"); }
+		public get() { return this.GetAny("vars"); }
 	}
 
 	property ProxyService Service

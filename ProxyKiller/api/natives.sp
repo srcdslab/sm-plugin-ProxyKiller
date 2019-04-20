@@ -5,9 +5,6 @@ void CreateNatives()
 	CreateNative("ProxyKiller_CreateHTTP", Native_CreateHTTP);
 	CreateNative("ProxyKiller_CheckClient", Native_CheckClient);
 	CreateNative("ProxyKiller_SendRequest", Native_SendRequest);
-
-	CreateNative("ProxyKiller_Config_HasVal", Native_Config_HasVal);
-	CreateNative("ProxyKiller_Config_GetVal", Native_Config_GetVal);
 }
 
 // =========================================================== //
@@ -49,26 +46,6 @@ public int Native_CreateHTTP(Handle plugin, int numParams)
 	http.SetUrl(url);
 	
 	return view_as<int>(http);
-}
-
-public int Native_Config_HasVal(Handle plugin, int numParams)
-{
-	char key[64];
-	GetNativeString(1, key, sizeof(key));
-	
-	char dummy[1];
-	return g_Config.Keys.GetString(key, dummy, sizeof(dummy));
-}
-
-public int Native_Config_GetVal(Handle plugin, int numParams)
-{
-	char key[64];
-	GetNativeString(1, key, sizeof(key));
-	
-	char value[256];
-	g_Config.Keys.GetString(key, value, sizeof(value));
-
-	SetNativeString(2, value, GetNativeCell(3));
 }
 
 // =========================================================== //
