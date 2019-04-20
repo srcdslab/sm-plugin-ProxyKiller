@@ -29,9 +29,9 @@ ProxyService g_Service = null;
 #include "ProxyKiller/cache/mysql.sp"
 #include "ProxyKiller/cache/sqlite.sp"
 
-#include "ProxyKiller/http.sp"
 #include "ProxyKiller/cache.sp"
 #include "ProxyKiller/config.sp"
+#include "ProxyKiller/service.sp"
 #include "ProxyKiller/helpers.sp"
 #include "ProxyKiller/tokenizer.sp"
 

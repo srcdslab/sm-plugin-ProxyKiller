@@ -1,7 +1,7 @@
 // =========================================================== //
 
 #define MAX_PARAM_NAME_LENGTH 64
-#define MAX_PARAM_VALUE_LENGTH 128
+#define MAX_PARAM_VALUE_LENGTH 256
 
 // =========================================================== //
 
