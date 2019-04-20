@@ -31,8 +31,9 @@ methodmap ProxyHTTPContext < StringMapEx
 		if (this.HTTP != null)
 		{
 			this.HTTP.Cleanup();
-			delete this.HTTP;
 		}
+		
+		delete this;
 	}
 }
 

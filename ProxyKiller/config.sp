@@ -1,6 +1,6 @@
 // =========================================================== //
 
-ProxyService ParseConfig(char[] configFile)
+ProxyConfig ParseConfig(char[] configFile)
 {
 	if (!FileExists(configFile))
 	{
@@ -59,7 +59,7 @@ ProxyService ParseConfig(char[] configFile)
 		service.Method = k_EHTTPMethodPOST;
 	}
 
-	if (config.JumpToKey("params") && config.SavePosition())
+	if (config.JumpToKey("params"))
 	{
 		while (config.GotoFirstSubKey(false) || config.GotoNextKey(false))
 		{
@@ -81,10 +81,11 @@ ProxyService ParseConfig(char[] configFile)
 			service.Params.AddParam(paramName, paramValue);
 		}
 
-		config.GoBack();
+		config.Rewind();
+		config.JumpToKey(name);
 	}
-		
-	if (config.JumpToKey("headers") && config.SavePosition())
+
+	if (config.JumpToKey("headers"))
 	{
 		while (config.GotoFirstSubKey(false) || config.GotoNextKey(false))
 		{
@@ -106,10 +107,11 @@ ProxyService ParseConfig(char[] configFile)
 			service.Headers.AddHeader(headerName, headerValue);
 		}
 
-		config.GoBack();
+		config.Rewind();
+		config.JumpToKey(name);
 	}
 
-	if (config.JumpToKey("response") && config.SavePosition())
+	if (config.JumpToKey("response"))
 	{
 		ProxyServiceResponse response = new ProxyServiceResponse();
 
@@ -144,14 +146,12 @@ ProxyService ParseConfig(char[] configFile)
 			response.SetValue(tokens[0]); 
 		}
 
-		config.GoBack();
+		config.Rewind();
 		service.Response = response;
 	}
 	
 	delete config;
-	delete cachedKeys;
-
-	return service;
+	return new ProxyConfig(cachedKeys, service);
 }
 
 // TODO: not really good way of doing this

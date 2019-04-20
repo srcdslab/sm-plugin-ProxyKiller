@@ -12,7 +12,7 @@ public void MySQL_OnCache(Database db, DBResultSet results, const char[] error, 
 
 	if (results.RowCount <= 0)
 	{
-		QueryService(pUser, g_Service);
+		QueryService(pUser, g_Config.Service);
 	}
 	else
 	{
@@ -29,7 +29,7 @@ public void MySQL_OnCache(Database db, DBResultSet results, const char[] error, 
 
 			if ((GetTime() - timestamp) >= gCV_CacheLifetime.IntValue)
 			{
-				QueryService(pUser, g_Service);
+				QueryService(pUser, g_Config.Service);
 			}
 			else
 			{
@@ -37,7 +37,6 @@ public void MySQL_OnCache(Database db, DBResultSet results, const char[] error, 
 				{
 					KickClientSafe(pUser.Client);
 				}
-				
 				delete pUser;
 			}
 		}

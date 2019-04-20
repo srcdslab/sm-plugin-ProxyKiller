@@ -48,7 +48,6 @@ public void OnService(bool failure, char[] response, ProxyServiceContext ctx)
 	if (ctx != null)
 	{
 		ctx.Cleanup();
-		delete ctx;
 	}
 }
 

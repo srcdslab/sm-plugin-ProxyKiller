@@ -14,7 +14,6 @@ void QueryHTTP(ProxyHTTP http, any data)
 		if (http != null)
 		{
 			http.Cleanup();
-			delete http;
 		}
 
 		delete request;
@@ -59,7 +58,6 @@ public int OnRequest_DataReceived(Handle request, bool failure, int offset, int 
 	if (ctx != null)
 	{
 		ctx.Cleanup();
-		delete ctx;
 	}
 
 	delete request;

@@ -23,6 +23,7 @@
 #include <ProxyKiller/ProxyServiceContext>
 
 #include <ProxyKiller/ProxyCache>
+#include <ProxyKiller/ProxyConfig>
 
 // =========================================================== //
 

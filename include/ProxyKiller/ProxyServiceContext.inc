@@ -32,6 +32,8 @@ methodmap ProxyServiceContext < StringMapEx
 		{
 			delete this.User;
 		}
+		
+		delete this;
 	}
 }
 

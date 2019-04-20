@@ -12,8 +12,7 @@
 // ====================== VARIABLES ========================== //
 
 ProxyCache g_Cache = null;
-ProxyLogger g_Logger = null;
-ProxyService g_Service = null;
+ProxyConfig g_Config = null;
 
 // ======================= INCLUDES ========================== //
 
@@ -58,8 +57,8 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 
 public void OnPluginStart()
 {
-	g_Logger = new ProxyLogger();
-	g_Service = ParseConfig(DEFAULT_CONFIG);
+	g_Config = ParseConfig(PROXYKILLER_CONFIG);
+}
 }
 
 public void OnConfigsExecuted()

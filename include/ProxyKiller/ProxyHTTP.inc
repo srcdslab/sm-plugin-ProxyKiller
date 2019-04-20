@@ -38,7 +38,7 @@ methodmap ProxyHTTP < StringMapEx
 	{
 		this.SetString("name", name);
 	}
-	
+
 	public void GetName(char[] buffer, int maxlength)
 	{
 		this.GetString("name", buffer, maxlength);
@@ -83,6 +83,8 @@ methodmap ProxyHTTP < StringMapEx
 			{
 				delete this.Headers;
 			}
+
+			delete this;
 		}
 		
 		if (this.Callback != null)
