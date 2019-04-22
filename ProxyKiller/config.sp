@@ -147,7 +147,7 @@ ProxyConfig ParseConfig(char[] configFile)
 		}
 
 		config.Rewind();
-		service.Response = response;
+		service.ExpectedResponse = response;
 	}
 	
 	delete config;

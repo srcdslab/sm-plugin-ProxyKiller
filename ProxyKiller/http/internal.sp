@@ -1,5 +1,6 @@
 // =========================================================== //
 
+// TODO: Make this return a boolean
 void QueryHTTP(ProxyHTTP http, any data)
 {
 	InfoMessage("HTTP::QueryHTTP");
@@ -41,7 +42,7 @@ public int OnRequest_Completed(Handle request, bool failure, bool requestSuccess
 	int status = view_as<int>(statusCode);
 	bool fail = failure || !requestSuccessful;
 
-	ctx.Response = new ProxyHTTPResponse(fail, status);
+	ctx.HTTP.Response = new ProxyHTTPResponse(fail, status);
 	
 	if (fail)
 	{
@@ -74,7 +75,7 @@ public int OnRequest_DataReceived(Handle request, bool failure, int offset, int 
 public int OnRequest_Data(const char[] responseData, ProxyHTTPContext ctx)
 {
 	InfoMessage("HTTP::OnRequestData");
-	DoCallback(ctx.HTTP.Callback, ctx.Response, responseData, ctx.Data);
+	DoCallback(ctx.HTTP.Callback, ctx.HTTP.Response, responseData, ctx.Data);
 }
 
 // =========================================================== //

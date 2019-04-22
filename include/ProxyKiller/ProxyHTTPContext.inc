@@ -20,12 +20,6 @@ methodmap ProxyHTTPContext < StringMapEx
 		public set(ProxyHTTP http) { this.SetValue("http", http); }
 	}
 
-	property ProxyHTTPResponse Response
-	{
-		public get() { return this.GetAny("response"); }
-		public set(ProxyHTTPResponse response) { this.SetValue("response", response); }
-	}
-
 	property any Data
 	{
 		public get() { return this.GetAny("data"); }
@@ -37,10 +31,6 @@ methodmap ProxyHTTPContext < StringMapEx
 		if (this.HTTP != null)
 		{
 			this.HTTP.Cleanup();
-		}
-		if (this.Response != null)
-		{
-			delete this.Response;
 		}
 		
 		delete this;

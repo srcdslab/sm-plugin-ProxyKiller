@@ -5,19 +5,19 @@ bool HandleResponse(const char[] response, ProxyServiceContext ctx)
 	InfoMessage("HTTP::HandleResponse");
 	
 	char expectValue[MAX_RESPONSE_VALUE_LENGTH];
-	ctx.Service.Response.GetValue(expectValue, sizeof(expectValue));
+	ctx.Service.ExpectedResponse.GetValue(expectValue, sizeof(expectValue));
 	
 	char responseValue[MAX_RESPONSE_VALUE_LENGTH];
 	TokenizeAll(ctx.User, expectValue, sizeof(expectValue));
 	
-	switch (ctx.Service.Response.Type)
+	switch (ctx.Service.ExpectedResponse.Type)
 	{
 		case RT_JSON: Internal_Handle_JSON(response, ctx, responseValue, sizeof(responseValue));
 		case RT_PLAINTEXT: Internal_Handle_PlainText(response, responseValue, sizeof(responseValue));
-		case RT_STATUSCODE: Internal_Handle_StatusCode(response, responseValue, sizeof(responseValue));
+		case RT_STATUSCODE: Internal_Handle_StatusCode(ctx, responseValue, sizeof(responseValue));
 	}
 	
-	if (ctx.Service.Response.Compare == RC_EQUAL)
+	if (ctx.Service.ExpectedResponse.Compare == RC_EQUAL)
 	{
 		return StrEqual(responseValue, expectValue);
 	}
@@ -32,7 +32,7 @@ bool HandleResponse(const char[] response, ProxyServiceContext ctx)
 static void Internal_Handle_JSON(const char[] response, ProxyServiceContext ctx, char[] buffer, int maxlength)
 {
 	char obj[MAX_RESPONSE_NAME_LENGTH];
-	ctx.Service.Response.GetObject(obj, sizeof(obj));
+	ctx.Service.ExpectedResponse.GetObject(obj, sizeof(obj));
 	
 	char objs[16][MAX_RESPONSE_NAME_LENGTH];
 	int objCount = ExplodeString(obj, ".", objs, sizeof(objs), sizeof(objs[]));
@@ -90,9 +90,12 @@ static void Internal_Handle_PlainText(const char[] response, char[] buffer, int 
 	strcopy(buffer, maxlength, response);
 }
 
-static void Internal_Handle_StatusCode(const char[] response, char[] buffer, int maxlength)
+static void Internal_Handle_StatusCode(ProxyServiceContext ctx, char[] buffer, int maxlength)
 {
-	strcopy(buffer, maxlength, response);
+	char statusCode[12];
+	IntToString(ctx.Service.Response.Status, statusCode, sizeof(statusCode));
+	
+	strcopy(buffer, maxlength, statusCode);
 }
 
 // =========================================================== //

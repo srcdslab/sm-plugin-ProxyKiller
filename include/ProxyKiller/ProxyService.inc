@@ -38,7 +38,7 @@ methodmap ProxyService < ProxyHTTP
 		this.GetString("token_value", buffer, maxlength);
 	}
 
-	property ProxyServiceResponse Response
+	property ProxyServiceResponse ExpectedResponse
 	{
 		public get() { return this.GetAny("response"); }
 		public set(ProxyServiceResponse response) { this.SetValue("response", response); }

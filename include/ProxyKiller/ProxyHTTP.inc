@@ -20,7 +20,6 @@ methodmap ProxyHTTP < StringMapEx
 		http.SetValue("isPersistent", isPersistent);
 		http.SetValue("params", new ProxyHTTPParams());
 		http.SetValue("headers", new ProxyHTTPHeaders());
-		
 		return view_as<ProxyHTTP>(http);
 	}
 	
@@ -65,6 +64,12 @@ methodmap ProxyHTTP < StringMapEx
 		public get() { return this.GetAny("headers"); }
 	}
 
+	property ProxyHTTPResponse Response
+	{
+		public get() { return this.GetAny("response"); }
+		public set(ProxyHTTPResponse response) { this.SetValue("response", response); }
+	}
+
 	property EHTTPMethod Method
 	{
 		public get() { return this.GetAny("method"); }
@@ -76,6 +81,11 @@ methodmap ProxyHTTP < StringMapEx
 		if (this.Callback != null)
 		{
 			delete this.Callback;
+		}
+
+		if (this.Response != null)
+		{
+			delete this.Response;
 		}
 
 		if (!this.IsPersistent)
