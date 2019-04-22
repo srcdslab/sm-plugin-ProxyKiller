@@ -12,6 +12,7 @@
 
 #include <ProxyKiller/ProxyHTTPParams>
 #include <ProxyKiller/ProxyHTTPHeaders>
+#include <ProxyKiller/ProxyHTTPResponse>
 
 #include <ProxyKiller/ProxyHTTP>
 #include <ProxyKiller/ProxyHTTPContext>
@@ -55,8 +56,8 @@
 
 typeset ProxyHTTPCallback
 {
-	function void (bool failure, const char[] response);
-	function void (bool failure, const char[] response, any data);
+	function void (ProxyHTTPResponse response, const char[] responseData);
+	function void (ProxyHTTPResponse response, const char[] responseData, any data);
 }
 
 // =========================================================== //

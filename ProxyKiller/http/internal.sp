@@ -38,7 +38,12 @@ public int OnRequest_Completed(Handle request, bool failure, bool requestSuccess
 {
 	InfoMessage("HTTP::OnRequestCompleted");
 	
-	if (failure || !requestSuccessful)
+	int status = view_as<int>(statusCode);
+	bool fail = failure || !requestSuccessful;
+
+	ctx.Response = new ProxyHTTPResponse(fail, status);
+	
+	if (fail)
 	{
 		// Error logging
 	}
@@ -50,6 +55,7 @@ public int OnRequest_DataReceived(Handle request, bool failure, int offset, int 
 {
 	InfoMessage("HTTP::OnRequestDataReceived");
 
+	// TODO: Fire forward even when failure AND response body is 0
 	if (!failure)
 	{
 		SteamWorks_GetHTTPResponseBodyCallback(request, OnRequest_Data, ctx);
@@ -65,10 +71,10 @@ public int OnRequest_DataReceived(Handle request, bool failure, int offset, int 
 
 // =========================================================== //
 
-public int OnRequest_Data(const char[] response, ProxyHTTPContext ctx)
+public int OnRequest_Data(const char[] responseData, ProxyHTTPContext ctx)
 {
 	InfoMessage("HTTP::OnRequestData");
-	DoCallback(ctx.HTTP.Callback, false, response, ctx.Data);
+	DoCallback(ctx.HTTP.Callback, ctx.Response, responseData, ctx.Data);
 }
 
 // =========================================================== //

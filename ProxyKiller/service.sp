@@ -19,11 +19,11 @@ void QueryService(ProxyUser pUser, ProxyService service)
 
 // =========================================================== //
 
-public void OnService(bool failure, char[] response, ProxyServiceContext ctx)
+public void OnService(ProxyHTTPResponse response, const char[] responseData, ProxyServiceContext ctx)
 {
 	InfoMessage("HTTP::OnService");
 	
-	bool result = HandleResponse(response, ctx);
+	bool result = HandleResponse(responseData, ctx);
 	Call_ProxyKiller_OnClientResult(ctx.User, result, false);
 	
 	bool blockCacheExec = Call_ProxyKiller_DoClientResultCache(ctx.User, result) != Plugin_Continue;

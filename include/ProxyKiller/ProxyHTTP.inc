@@ -64,7 +64,7 @@ methodmap ProxyHTTP < StringMapEx
 	{
 		public get() { return this.GetAny("headers"); }
 	}
-	
+
 	property EHTTPMethod Method
 	{
 		public get() { return this.GetAny("method"); }
@@ -77,7 +77,7 @@ methodmap ProxyHTTP < StringMapEx
 		{
 			delete this.Callback;
 		}
-		
+
 		if (!this.IsPersistent)
 		{
 			if (this.Params != null)

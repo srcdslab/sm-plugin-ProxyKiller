@@ -37,13 +37,13 @@ bool HasAppFrom(int client, char[] appString)
 	return false;
 }
 
-void DoCallback(Handle fwd, bool failure, const char[] response, any data = 0)
+void DoCallback(Handle fwd, ProxyHTTPResponse response, const char[] responseData, any data = 0)
 {
 	if (fwd != null)
 	{
 		Call_StartForward(fwd);
-		Call_PushCell(failure);
-		Call_PushString(response);
+		Call_PushCell(response);
+		Call_PushString(responseData);
 		Call_PushCell(data);
 		Call_Finish();
 	}
