@@ -89,7 +89,6 @@ public void OnClientPostAdminCheck(int client)
 		if (!blockExec)
 		{
 			ProxyKiller_CheckClient(client);
-			Call_ProxyKiller_OnCheckClient(client);
 		}
 	}
 }

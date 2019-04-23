@@ -7,6 +7,7 @@ CacheMode GetCachingMethod()
 
 void DetermineAndDoCachingStrategy(ProxyUser pUser)
 {
+	Call_ProxyKiller_OnCheckClient(pUser);
 	g_Cache.TryGet(pUser, g_Config.Service);
 }
 

@@ -72,7 +72,7 @@ native void ProxyKiller_SendRequest(ProxyHTTP http, ProxyHTTPCallback callback =
 forward void ProxyKiller_OnConfig(ProxyConfig config);
 
 forward Action ProxyKiller_DoCheckClient(int client);
-forward void ProxyKiller_OnCheckClient(int client);
+forward void ProxyKiller_OnCheckClient(ProxyUser pUser);
 
 forward void ProxyKiller_OnClientResult(ProxyUser pUser, bool result, bool fromCache);
 

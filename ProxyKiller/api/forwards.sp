@@ -19,7 +19,7 @@ void CreateForwards()
 {
 	H_OnConfig = CreateGlobalForward("ProxyKiller_OnConfig", ET_Ignore, Param_Cell);
 	
-	H_DoCheckClient = CreateGlobalForward("ProxyKiller_OnCheckClient", ET_Hook, Param_Cell);
+	H_DoCheckClient = CreateGlobalForward("ProxyKiller_DoCheckClient", ET_Hook, Param_Cell);
 	H_OnCheckClient = CreateGlobalForward("ProxyKiller_OnCheckClient", ET_Ignore, Param_Cell);
 	
 	H_OnClientResult = CreateGlobalForward("ProxyKiller_OnClientResult", ET_Ignore, Param_Cell, Param_Cell, Param_Cell);
@@ -49,10 +49,10 @@ Action Call_ProxyKiller_DoCheckClient(int client)
 	return retval;
 }
 
-void Call_ProxyKiller_OnCheckClient(int client)
+void Call_ProxyKiller_OnCheckClient(ProxyUser pUser)
 {
 	Call_StartForward(H_OnCheckClient);
-	Call_PushCell(client);
+	Call_PushCell(pUser);
 	Call_Finish();
 }
 
