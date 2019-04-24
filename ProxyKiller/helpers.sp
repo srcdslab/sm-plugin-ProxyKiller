@@ -37,6 +37,17 @@ bool HasAppFrom(int client, char[] appString)
 	return false;
 }
 
+EHTTPMethod GetSteamWorksMethod(ProxyHTTPMethod method)
+{
+	switch (method)
+	{
+		case HTTPMethod_GET: return k_EHTTPMethodGET;
+		case HTTPMethod_POST: return k_EHTTPMethodPOST;
+	}
+	
+	return k_EHTTPMethodGET;
+}
+
 void DoCallback(Handle fwd, ProxyHTTPResponse response, const char[] responseData, any data = 0)
 {
 	if (fwd != null)

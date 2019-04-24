@@ -7,8 +7,11 @@
 
 // =========================================================== //
 
-// TODO: Make this and ProxyKiller.inc not require SteamWorks include
-#include <SteamWorks>
+enum ProxyHTTPMethod
+{
+	HTTPMethod_GET,
+	HTTPMethod_POST
+};
 
 // =========================================================== //
 
@@ -70,10 +73,10 @@ methodmap ProxyHTTP < StringMapEx
 		public set(ProxyHTTPResponse response) { this.SetValue("response", response); }
 	}
 
-	property EHTTPMethod Method
+	property ProxyHTTPMethod Method
 	{
 		public get() { return this.GetAny("method"); }
-		public set(EHTTPMethod method) { this.SetValue("method", method); }
+		public set(ProxyHTTPMethod method) { this.SetValue("method", method); }
 	}
 	
 	public void Cleanup()

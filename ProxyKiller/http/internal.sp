@@ -7,8 +7,9 @@ void QueryHTTP(ProxyHTTP http, any data)
 	
 	char url[MAX_URL_LENGTH];
 	http.GetUrl(url, sizeof(url));
-
-	Handle request = SteamWorks_CreateHTTPRequest(http.Method, url);
+	
+	EHTTPMethod method = GetSteamWorksMethod(http.Method);
+	Handle request = SteamWorks_CreateHTTPRequest(method, url);
 	
 	if (request == null)
 	{

@@ -38,7 +38,7 @@ public int Native_CreateHTTP(Handle plugin, int numParams)
 	char url[256];
 	GetNativeString(1, url, sizeof(url));
 	
-	EHTTPMethod method = GetNativeCell(2);
+	ProxyHTTPMethod method = GetNativeCell(2);
 	bool isPersistent = GetNativeCell(3);
 	
 	ProxyHTTP http = new ProxyHTTP(isPersistent);

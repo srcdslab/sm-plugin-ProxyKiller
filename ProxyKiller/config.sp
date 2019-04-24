@@ -52,11 +52,11 @@ ProxyConfig ParseConfig(char[] configFile)
 	// TODO: Bad
 	if (StrEqual(method, "GET", false))
 	{
-		service.Method = k_EHTTPMethodGET;
+		service.Method = HTTPMethod_GET;
 	}
 	else if (StrEqual(method, "POST", false))
 	{
-		service.Method = k_EHTTPMethodPOST;
+		service.Method = HTTPMethod_POST;
 	}
 
 	if (config.JumpToKey("params"))
