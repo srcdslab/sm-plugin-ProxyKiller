@@ -7,7 +7,7 @@
 
 void HandleParameters(Handle request, ProxyHTTPParams params, ProxyUser pUser = null)
 {
-	InfoMessage("HTTP::HandleParams");
+	g_Logger.DebugMessage("HTTP::HandleParams");
 	
 	if (params != null)
 	{

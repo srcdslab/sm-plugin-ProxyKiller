@@ -7,7 +7,7 @@
 
 void HandleHeaders(Handle request, ProxyHTTPHeaders headers, ProxyUser pUser = null)
 {
-	InfoMessage("HTTP::HandleHeaders");
+	g_Logger.DebugMessage("HTTP::HandleHeaders");
 	
 	if (headers != null)
 	{

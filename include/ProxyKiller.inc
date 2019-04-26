@@ -24,18 +24,27 @@
 
 #include <ProxyKiller/ProxyCache>
 #include <ProxyKiller/ProxyConfig>
+#include <ProxyKiller/ProxyLogger>
 #include <ProxyKiller/ProxyCacheMySQL>
 
 // =========================================================== //
 
 #tryinclude <ProxyKiller_Version>
 
+#if !defined PROXYKILLER_URL
+#define PROXYKILLER_URL "Built from <Unknown>"
+#endif
+
 #if !defined PROXYKILLER_VERSION
 #define PROXYKILLER_VERSION "Unknown Version"
 #endif
 
-#if !defined PROXYKILLER_URL
-#define PROXYKILLER_URL "Built from <Unknown>"
+#if !defined PROXYKILLER_SPEWMODE
+#define PROXYKILLER_SPEWMODE (SPEWMODE_LOG | SPEWMODE_CHAT)
+#endif
+
+#if !defined PROXYKILLER_SPEWLEVEL
+#define PROXYKILLER_SPEWLEVEL (SPEWLEVEL_ERRORS | SPEWLEVEL_INFO | SPEWLEVEL_DEBUG)
 #endif
 
 // =========================================================== //

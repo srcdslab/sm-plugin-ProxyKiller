@@ -2,7 +2,7 @@
 
 bool HandleResponse(const char[] response, ProxyServiceContext ctx)
 {
-	InfoMessage("HTTP::HandleResponse");
+	g_Logger.DebugMessage("HTTP::HandleResponse");
 	
 	char expectValue[MAX_RESPONSE_VALUE_LENGTH];
 	ctx.Service.ExpectedResponse.GetValue(expectValue, sizeof(expectValue));

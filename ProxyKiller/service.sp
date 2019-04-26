@@ -2,7 +2,7 @@
 
 void QueryService(ProxyUser pUser, ProxyService service)
 {
-	InfoMessage("HTTP::QueryService");
+	g_Logger.DebugMessage("HTTP::QueryService");
 	
 	char url[MAX_URL_LENGTH];
 	service.GetUrl(url, sizeof(url));
@@ -21,7 +21,7 @@ void QueryService(ProxyUser pUser, ProxyService service)
 
 public void OnService(ProxyHTTPResponse response, const char[] responseData, ProxyServiceContext ctx)
 {
-	InfoMessage("HTTP::OnService");
+	g_Logger.DebugMessage("HTTP::OnService");
 	
 	bool result = HandleResponse(responseData, ctx);
 	Call_OnClientResult(ctx.User, result, false);

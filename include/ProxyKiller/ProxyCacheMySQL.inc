@@ -69,7 +69,6 @@ methodmap ProxyCacheMySQL < ProxyCache
 	// Override ProxyCache::Initialize
 	public void Initialize()
 	{
-		PrintToServer("ProxyCacheMySQL::Initialize");
 		SQL_LockDatabase(this.Hndl);
 		SQL_FastQuery(this.Hndl, CREATE_TABLE);
 		SQL_UnlockDatabase(this.Hndl);

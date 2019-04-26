@@ -3,7 +3,7 @@
 // TODO: Make this return a boolean
 void QueryHTTP(ProxyHTTP http, any data)
 {
-	InfoMessage("HTTP::QueryHTTP");
+	g_Logger.DebugMessage("HTTP::QueryHTTP");
 	
 	char url[MAX_URL_LENGTH];
 	http.GetUrl(url, sizeof(url));
@@ -38,7 +38,7 @@ void QueryHTTP(ProxyHTTP http, any data)
 
 public int OnRequest_Completed(Handle request, bool failure, bool requestSuccessful, EHTTPStatusCode statusCode, ProxyHTTPContext ctx)
 {
-	InfoMessage("HTTP::OnRequestCompleted");
+	g_Logger.DebugMessage("HTTP::OnRequestCompleted");
 	
 	int status = view_as<int>(statusCode);
 	bool fail = failure || !requestSuccessful;
@@ -55,7 +55,7 @@ public int OnRequest_Completed(Handle request, bool failure, bool requestSuccess
 
 public int OnRequest_DataReceived(Handle request, bool failure, int offset, int bytesReceived, ProxyHTTPContext ctx)
 {
-	InfoMessage("HTTP::OnRequestDataReceived");
+	g_Logger.DebugMessage("HTTP::OnRequestDataReceived");
 
 	// TODO: Fire forward even when failure AND response body is 0
 	if (!failure)
@@ -75,7 +75,7 @@ public int OnRequest_DataReceived(Handle request, bool failure, int offset, int 
 
 public int OnRequest_Data(const char[] responseData, ProxyHTTPContext ctx)
 {
-	InfoMessage("HTTP::OnRequestData");
+	g_Logger.DebugMessage("HTTP::OnRequestData");
 	DoCallback(ctx.HTTP.Callback, ctx.HTTP.Response, responseData, ctx.Data);
 }
 

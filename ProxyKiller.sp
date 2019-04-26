@@ -13,6 +13,7 @@
 
 ProxyCache g_Cache = null;
 ProxyConfig g_Config = null;
+ProxyLogger g_Logger = null;
 
 // ======================= INCLUDES ========================== //
 
@@ -26,7 +27,6 @@ ProxyConfig g_Config = null;
 #include "ProxyKiller/http/response.sp"
 
 #include "ProxyKiller/cache/mysql.sp"
-#include "ProxyKiller/cache/sqlite.sp"
 
 #include "ProxyKiller/cache.sp"
 #include "ProxyKiller/config.sp"
@@ -59,6 +59,8 @@ public void OnPluginStart()
 {
 	g_Config = ParseConfig(PROXYKILLER_CONFIG);
 	Call_OnConfig(g_Config);
+	
+	g_Logger = new ProxyLogger(PROXYKILLER_SPEWMODE, PROXYKILLER_SPEWLEVEL);
 }
 
 public void OnConfigsExecuted()

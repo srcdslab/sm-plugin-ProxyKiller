@@ -2,7 +2,7 @@
 
 public void MySQL_OnCache(Database db, DBResultSet results, const char[] error, ProxyUser pUser)
 {
-	InfoMessage("MYSQL::OnCache");
+	g_Logger.DebugMessage("MYSQL::OnCache");
 
 	if (strlen(error) > 0 || !results.HasResults)
 	{
@@ -45,7 +45,7 @@ public void MySQL_OnCache(Database db, DBResultSet results, const char[] error, 
 
 public void MySQL_OnCached(Database db, DBResultSet results, const char[] error, any data)
 {
-	InfoMessage("MYSQL::OnCached");
+	g_Logger.DebugMessage("MYSQL::OnCached");
 	
 	if (strlen(error) > 0)
 	{
