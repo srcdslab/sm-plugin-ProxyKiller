@@ -1,14 +1,52 @@
 // =========================================================== //
 
-CacheMode GetCachingMethod()
+#define MySQL(%1) view_as<ProxyCacheMySQL>(%1)
+
+// =========================================================== //
+
+// REEEEEE WE CANNOT CALL THE METHOD FROM THE DERIVED CLASS!! :(
+ProxyCache CreateCache(int mode)
 {
-	return view_as<CacheMode>(gCV_CacheMode.IntValue);
+	ProxyCache cache = null;
+	CacheMode cm = view_as<CacheMode>(mode);
+	
+	switch (cm)
+	{
+		case CM_MySQL:
+		{
+			PrintToServer("MySQL selected");
+			cache = new ProxyCacheMySQL();
+			MySQL(cache).Initialize();
+		}
+	}
+
+	return cache;
 }
 
-void DetermineAndDoCachingStrategy(ProxyUser pUser)
+void TryGetCache(ProxyUser pUser)
 {
-	Call_ProxyKiller_OnCheckClient(pUser);
-	g_Cache.TryGet(pUser, g_Config.Service);
+	Call_OnCheckClient(pUser);
+	
+	switch (g_Cache.Mode)
+	{
+		case CM_MySQL:
+		{
+			MySQL(g_Cache).TryGetCache(pUser, g_Config.Service);
+		}
+	}
+}
+
+void TryPushCache(ProxyUser pUser, ProxyService service, any result)
+{
+	Call_OnClientResultCache(pUser, result);
+
+	switch (g_Cache.Mode)
+	{
+		case CM_MySQL:
+		{
+			MySQL(g_Cache).TryPushCache(pUser, service, result);
+		}
+	}
 }
 
 // =========================================================== //

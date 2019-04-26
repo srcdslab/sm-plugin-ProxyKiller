@@ -24,6 +24,7 @@
 
 #include <ProxyKiller/ProxyCache>
 #include <ProxyKiller/ProxyConfig>
+#include <ProxyKiller/ProxyCacheMySQL>
 
 // =========================================================== //
 
@@ -69,6 +70,7 @@ native void ProxyKiller_SendRequest(ProxyHTTP http, ProxyHTTPCallback callback =
 // =========================================================== //
 
 forward void ProxyKiller_OnConfig(ProxyConfig config);
+forward void ProxyKiller_OnValidClient(int client);
 
 forward Action ProxyKiller_DoCheckClient(int client);
 forward void ProxyKiller_OnCheckClient(ProxyUser pUser);

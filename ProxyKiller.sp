@@ -20,10 +20,10 @@ ProxyConfig g_Config = null;
 #include "ProxyKiller/api/convars.sp"
 #include "ProxyKiller/api/forwards.sp"
 
+#include "ProxyKiller/http/public.sp"
 #include "ProxyKiller/http/params.sp"
 #include "ProxyKiller/http/headers.sp"
 #include "ProxyKiller/http/response.sp"
-#include "ProxyKiller/http/internal.sp"
 
 #include "ProxyKiller/cache/mysql.sp"
 #include "ProxyKiller/cache/sqlite.sp"
@@ -54,16 +54,16 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 	CreateForwards();
 	AutoExecConfig(true, PROXYKILLER_NAME);
 }
-	
+
 public void OnPluginStart()
 {
 	g_Config = ParseConfig(PROXYKILLER_CONFIG);
-	Call_ProxyKiller_OnConfig(g_Config);
+	Call_OnConfig(g_Config);
 }
 
 public void OnConfigsExecuted()
 {
-	g_Cache = new ProxyCache(GetCachingMethod());
+	g_Cache = CreateCache(gCV_CacheMode.IntValue);
 }
 
 public void OnClientPostAdminCheck(int client)
@@ -72,6 +72,8 @@ public void OnClientPostAdminCheck(int client)
 	{
 		return;
 	}
+
+	Call_OnValidClient(client);
 
 	char ignoreApps[256];
 	gCV_IgnoreAppOwners.GetString(ignoreApps, sizeof(ignoreApps));
@@ -86,7 +88,8 @@ public void OnClientPostAdminCheck(int client)
 
 	if (shouldCheck)
 	{
-		bool blockExec = Call_ProxyKiller_DoCheckClient(client) != Plugin_Continue;
+		bool blockExec = Call_DoCheckClient(client) != Plugin_Continue;
+
 		if (!blockExec)
 		{
 			ProxyKiller_CheckClient(client);

@@ -44,7 +44,7 @@ EHTTPMethod GetSteamWorksMethod(ProxyHTTPMethod method)
 		case HTTPMethod_GET: return k_EHTTPMethodGET;
 		case HTTPMethod_POST: return k_EHTTPMethodPOST;
 	}
-	
+
 	return k_EHTTPMethodGET;
 }
 
@@ -74,28 +74,6 @@ JSON_Object GetObjectSafe(JSON_Object obj, char[] key = "", int index = -1)
 	{
 		return obj.GetObjectIndexed(index);
 	}
-}
-
-bool EnsureDBDriver(const char[] conf, const char[] driver)
-{
-	char dbFilePath[PLATFORM_MAX_PATH];
-	BuildPath(Path_SM, dbFilePath, sizeof(dbFilePath), "configs\\databases.cfg");
-
-	bool result = false;
-	KeyValues kv = new KeyValues("Databases");
-
-	kv.ImportFromFile(dbFilePath);
-	bool confExists = kv.JumpToKey(conf);
-	
-	if (confExists)
-	{
-		char driverIdent[32];
-		kv.GetString("driver", driverIdent, sizeof(driverIdent));
-		result = StrEqual(driverIdent, driver, false);
-	}
-	
-	delete kv;
-	return result;
 }
 
 // =========================================================== //

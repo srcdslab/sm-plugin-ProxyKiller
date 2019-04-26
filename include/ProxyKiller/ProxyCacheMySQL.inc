@@ -35,40 +35,48 @@ static char SELECT_RECORD[] =
 
 // =========================================================== //
 
-methodmap ProxyCacheMySQL < Database
+methodmap ProxyCacheMySQL < ProxyCache
 {
 	public ProxyCacheMySQL()
 	{
-		Database database = null;
-		bool validDriver = EnsureDBDriver(MYSQL_DB_CONF, "mysql");
-		
-		if (validDriver)
-		{	
-			char error[256] = "Unknown";
-			database = SQL_Connect(MYSQL_DB_CONF, true, error, sizeof(error));
-			
-			if (database == null)
-			{
-				SetFailState("<Cache-MySQL> Error connecting to configuration \"%s\"", MYSQL_DB_CONF);
-			}
+		char error[256] = "Unknown";
+		Database db = SQL_Connect(MYSQL_DB_CONF, true, error, sizeof(error));
+
+		if (db == null)
+		{
+			SetFailState("<Cache-MySQL> Error connecting to configuration \"%s\" \n%s", MYSQL_DB_CONF, error);
 		}
 		else
 		{
-			SetFailState("<Cache-MySQL> Invalid database driver for \"%s\", expecting \"mysql\"", MYSQL_DB_CONF);
+			char driver[16];
+			SQL_ReadDriver(db, driver, sizeof(driver));
+			
+			if (!StrEqual(driver, "mysql", false))
+			{
+				SetFailState("<Cache-MySQL> Invalid database driver for \"%s\", expecting \"mysql\"", MYSQL_DB_CONF);
+			}
 		}
 
-		return view_as<ProxyCacheMySQL>(database);
+		return view_as<ProxyCacheMySQL>(new ProxyCache(CM_MySQL, db));
 	}
 	
+	// Override ProxyCache::Hndl
+	property Database Hndl
+	{
+		public get() { return this.GetAny("hndl"); }
+	}
+	
+	// Override ProxyCache::Initialize
 	public void Initialize()
 	{
-		// non async monkaS
-		SQL_LockDatabase(this);
-		SQL_FastQuery(this, CREATE_TABLE);
-		SQL_UnlockDatabase(this);
+		PrintToServer("ProxyCacheMySQL::Initialize");
+		SQL_LockDatabase(this.Hndl);
+		SQL_FastQuery(this.Hndl, CREATE_TABLE);
+		SQL_UnlockDatabase(this.Hndl);
 	}
 	
-	public void TryGet(ProxyUser pUser, ProxyService service, SQLQueryCallback callback)
+	// Override ProxyCache::TryGetCache
+	public void TryGetCache(ProxyUser pUser, ProxyService service)
 	{
 		char ipAddress[24];
 		pUser.GetIPAddress(ipAddress, sizeof(ipAddress));
@@ -78,10 +86,14 @@ methodmap ProxyCacheMySQL < Database
 		
 		char query[512];
 		Format(query, sizeof(query), SELECT_RECORD, ipAddress, serviceName);
-		this.Query(callback, query, pUser);
+		
+		// TODO!!!
+		Function callback = GetFunctionByName(INVALID_HANDLE, "MySQL_OnCache");
+		this.Hndl.Query(view_as<SQLQueryCallback>(callback), query, pUser);
 	}
 	
-	public void TryCache(ProxyUser pUser, ProxyService service, any result, SQLQueryCallback callback)
+	// Override ProxyCache::TryPushCache
+	public void TryPushCache(ProxyUser pUser, ProxyService service, any result)
 	{
 		char ipAddress[24];
 		pUser.GetIPAddress(ipAddress, sizeof(ipAddress));
@@ -91,7 +103,10 @@ methodmap ProxyCacheMySQL < Database
 		
 		char query[512];
 		Format(query, sizeof(query), INSERT_RECORD, ipAddress, serviceName, result, result);
-		this.Query(callback, query);
+		
+		// TODO!!!
+		Function callback = GetFunctionByName(INVALID_HANDLE, "MySQL_OnCached");
+		this.Hndl.Query(view_as<SQLQueryCallback>(callback), query); 
 	}
 }
 
