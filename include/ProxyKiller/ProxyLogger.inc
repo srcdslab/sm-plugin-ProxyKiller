@@ -47,7 +47,7 @@ methodmap ProxyLogger < StringMapEx
 		if (this.SpewMode == 0) return;
 
 		char buffer[600];
-		VFormat(buffer, sizeof(buffer), format, 3); // this has to be a bug
+		VFormat(buffer, sizeof(buffer), format, 3);
 
 		if (this.SpewMode & SPEWMODE_LOG)
 		{
@@ -67,7 +67,7 @@ methodmap ProxyLogger < StringMapEx
 		if (this.SpewLevel & SPEWLEVEL_INFO)
 		{
 			char buffer[512];
-			VFormat(buffer, sizeof(buffer), format, 2);
+			VFormat(buffer, sizeof(buffer), format, 3);
 			
 			this.DoSpew("[I]: %s", buffer);
 		}
@@ -78,7 +78,7 @@ methodmap ProxyLogger < StringMapEx
 		if (this.SpewLevel & SPEWLEVEL_ERRORS)
 		{
 			char buffer[512];
-			VFormat(buffer, sizeof(buffer), format, 2);
+			VFormat(buffer, sizeof(buffer), format, 3);
 			
 			this.DoSpew("[!] %s", buffer);
 		}
@@ -89,7 +89,7 @@ methodmap ProxyLogger < StringMapEx
 		if (this.SpewLevel & SPEWLEVEL_DEBUG)
 		{
 			char buffer[512];
-			VFormat(buffer, sizeof(buffer), format, 2);
+			VFormat(buffer, sizeof(buffer), format, 3);
 
 			this.DoSpew("[~] %s", buffer);
 		}
