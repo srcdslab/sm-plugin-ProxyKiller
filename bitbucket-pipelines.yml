@@ -2,31 +2,23 @@ image: i386/alpine:3.8
 
 definitions:
   steps:
-    - step: &compileDev
-        name: Compile plugin for development environment
+    - step: &compile
+        name: Compile plugin
         artifacts:
           - smdir/addons/sourcemod/plugins/ProxyKiller.smx
         script:
           - apk update
-          - apk add wget libc6-compat libstdc++
+          - apk add jq wget libc6-compat libstdc++
           - mkdir smdir
           - wget -q -O - "http://sourcemod.net/latest.php?os=linux&version=1.9" | tar x -C ./smdir -vzf -
-          - echo -e "#define PROXYKILLER_VERSION \"dev-${BITBUCKET_COMMIT:0:7}\"" >> ./include/ProxyKiller_Version.inc
-          - echo -e "#define PROXYKILLER_URL \"Built from ${BITBUCKET_GIT_HTTP_ORIGIN}/commits/${BITBUCKET_COMMIT}\"" >> ./include/ProxyKiller_Version.inc
-          - for file in *.sp; do ./smdir/addons/sourcemod/scripting/spcomp $file -i ./include; done;
-          - mv ./*.smx ./smdir/addons/sourcemod/plugins/
-
-    - step: &compileProd
-        name: Compile plugin for production environment
-        artifacts:
-          - smdir/addons/sourcemod/plugins/ProxyKiller.smx
-        script:
-          - apk update
-          - apk add wget libc6-compat libstdc++
-          - mkdir smdir
-          - wget -q -O - "http://sourcemod.net/latest.php?os=linux&version=1.9" | tar x -C ./smdir -vzf -
-          - echo -e "#define PROXYKILLER_VERSION \"V.${BITBUCKET_TAG}"" >> ./include/ProxyKiller_Version.inc
-          - echo -e "#define PROXYKILLER_URL \"Built from ${BITBUCKET_GIT_HTTP_ORIGIN}/commits/${BITBUCKET_COMMIT}\"" >> ./include/ProxyKiller_Version.inc
+          - eval PLUGIN_URL=$(cat configuration.json | jq ".${_deployment}.PLUGIN_URL")
+          - eval PLUGIN_VERSION=$(cat configuration.json | jq ".${_deployment}.PLUGIN_VERSION")
+          - eval PLUGIN_SPEWMODE=$(cat configuration.json | jq ".${_deployment}.PLUGIN_SPEWMODE")
+          - eval PLUGIN_SPEWLEVEL=$(cat configuration.json | jq ".${_deployment}.PLUGIN_SPEWLEVEL")
+          - echo -e "#define PROXYKILLER_URL \"${PLUGIN_URL}\"" >> ./include/ProxyKiller_Version.inc
+          - echo -e "#define PROXYKILLER_VERSION \"${PLUGIN_VERSION}\"" >> ./include/ProxyKiller_Version.inc
+          - echo -e "#define PROXYKILLER_SPEWMODE ${PLUGIN_SPEWMODE}" >> ./include/ProxyKiller_Version.inc
+          - echo -e "#define PROXYKILLER_SPEWLEVEL ${PLUGIN_SPEWLEVEL}" >> ./include/ProxyKiller_Version.inc
           - for file in *.sp; do ./smdir/addons/sourcemod/scripting/spcomp $file -i ./include; done;
           - mv ./*.smx ./smdir/addons/sourcemod/plugins/
 
@@ -52,14 +44,20 @@ definitions:
 pipelines:
   custom:
     compile:
-      - step: *compileDev
+      - step: 
+          <<: *compile
+          deployment: staging
 
   pull-requests:
     '*':
-      - step: *compileDev
+      - step: 
+          <<: *compile
+          deployment: staging
 
   tags:
     '*':
-      - step: *compileProd
+      - step: 
+          <<: *compile
+          deployment: production
       - step: *build
       - step: *deploy
