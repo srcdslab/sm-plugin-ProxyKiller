@@ -42,18 +42,23 @@ methodmap ProxyLogger < StringMapEx
 		public get() { return this.GetInt("spewlevel"); }
 	}
 
-	public void DoSpew(char[] format, any ...)
+	public void DoSpew(int spewType, char[] format, any ...)
 	{
 		if (this.SpewMode == 0) return;
 
 		char buffer[600];
-		VFormat(buffer, sizeof(buffer), format, 3);
+		VFormat(buffer, sizeof(buffer), format, 4);
 
 		if (this.SpewMode & SPEWMODE_LOG)
 		{
-			// TODO: Pass in SpewLevel
-			// And do LogError for errors...
-			LogMessage("%s", buffer);
+			if (spewType == SPEWLEVEL_ERRORS)
+			{
+				LogError("%s", buffer);
+			}
+			else
+			{
+				LogMessage("%s", buffer);
+			}
 		}
 
 		if (this.SpewMode & SPEWMODE_CHAT)
@@ -69,7 +74,7 @@ methodmap ProxyLogger < StringMapEx
 			char buffer[512];
 			VFormat(buffer, sizeof(buffer), format, 3);
 			
-			this.DoSpew("[I]: %s", buffer);
+			this.DoSpew(SPEWLEVEL_INFO, "[I]: %s", buffer);
 		}
 	}
 	
@@ -80,7 +85,7 @@ methodmap ProxyLogger < StringMapEx
 			char buffer[512];
 			VFormat(buffer, sizeof(buffer), format, 3);
 			
-			this.DoSpew("[!] %s", buffer);
+			this.DoSpew(SPEWLEVEL_ERRORS, "[!] %s", buffer);
 		}
 	}
 	
@@ -91,7 +96,7 @@ methodmap ProxyLogger < StringMapEx
 			char buffer[512];
 			VFormat(buffer, sizeof(buffer), format, 3);
 
-			this.DoSpew("[~] %s", buffer);
+			this.DoSpew(SPEWLEVEL_DEBUG, "[~] %s", buffer);
 		}
 	}
 }
