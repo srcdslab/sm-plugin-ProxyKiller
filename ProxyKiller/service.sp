@@ -14,7 +14,7 @@ void QueryService(ProxyUser pUser, ProxyService service)
 	ctx.User = pUser;
 	ctx.Service = service;
 
-	ProxyKiller_SendRequest(service, OnService, ctx);
+	ProxyKiller_SendHTTPRequest(service, OnService, ctx);
 }
 
 // =========================================================== //

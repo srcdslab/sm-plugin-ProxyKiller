@@ -4,7 +4,7 @@ void CreateNatives()
 {
 	CreateNative("ProxyKiller_CreateHTTP", Native_CreateHTTP);
 	CreateNative("ProxyKiller_CheckClient", Native_CheckClient);
-	CreateNative("ProxyKiller_SendRequest", Native_SendRequest);
+	CreateNative("ProxyKiller_SendHTTPRequest", Native_SendHTTPRequest);
 }
 
 // =========================================================== //
@@ -20,19 +20,6 @@ public int Native_CheckClient(Handle plugin, int numParams)
 	TryGetCache(pUser);
 }
 
-public int Native_SendRequest(Handle plugin, int numParams)
-{
-	ProxyHTTP http = GetNativeCell(1);
-	Function callback = GetNativeCell(2);
-	any data = GetNativeCell(3);
-
-	Handle fwd = CreateForward(ET_Ignore, Param_Cell, Param_String, Param_Cell);
-	AddToForward(fwd, plugin, callback);
-	
-	http.Callback = fwd;
-	QueryHTTP(http, data);
-}
-
 public int Native_CreateHTTP(Handle plugin, int numParams)
 {
 	char url[256];
@@ -46,6 +33,19 @@ public int Native_CreateHTTP(Handle plugin, int numParams)
 	http.SetUrl(url);
 	
 	return view_as<int>(http);
+}
+
+public int Native_SendHTTPRequest(Handle plugin, int numParams)
+{
+	ProxyHTTP http = GetNativeCell(1);
+	Function callback = GetNativeCell(2);
+	any data = GetNativeCell(3);
+
+	Handle fwd = CreateForward(ET_Ignore, Param_Cell, Param_String, Param_Cell);
+	AddToForward(fwd, plugin, callback);
+	
+	http.Callback = fwd;
+	QueryHTTP(http, data);
 }
 
 // =========================================================== //

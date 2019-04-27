@@ -99,9 +99,4 @@ public void OnClientPostAdminCheck(int client)
 	}
 }
 
-void InfoMessage(char[] message)
-{
-	LogMessage("- [I] %s", message);
-}
-
 // =========================================================== //
