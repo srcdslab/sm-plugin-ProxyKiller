@@ -11,10 +11,10 @@ definitions:
           - apk add jq wget libc6-compat libstdc++
           - mkdir smdir
           - wget -q -O - "http://sourcemod.net/latest.php?os=linux&version=1.9" | tar x -C ./smdir -vzf -
-          - eval PLUGIN_URL=$(cat pipelines-configuration.json | jq ".${COMPILE_ENV}.PLUGIN_URL")
-          - eval PLUGIN_VERSION=$(cat pipelines-configuration.json | jq ".${COMPILE_ENV}.PLUGIN_VERSION")
-          - eval PLUGIN_SPEWMODE=$(cat pipelines-configuration.json | jq ".${COMPILE_ENV}.PLUGIN_SPEWMODE")
-          - eval PLUGIN_SPEWLEVEL=$(cat pipelines-configuration.json | jq ".${COMPILE_ENV}.PLUGIN_SPEWLEVEL")
+          - eval PLUGIN_URL=$(cat compile-configuration.json | jq ".${COMPILE_ENV}.PLUGIN_URL")
+          - eval PLUGIN_VERSION=$(cat compile-configuration.json | jq ".${COMPILE_ENV}.PLUGIN_VERSION")
+          - eval PLUGIN_SPEWMODE=$(cat compile-configuration.json | jq ".${COMPILE_ENV}.PLUGIN_SPEWMODE")
+          - eval PLUGIN_SPEWLEVEL=$(cat compile-configuration.json | jq ".${COMPILE_ENV}.PLUGIN_SPEWLEVEL")
           - echo -e "#define PROXYKILLER_URL \"${PLUGIN_URL}\"" >> ./include/ProxyKiller_Version.inc
           - echo -e "#define PROXYKILLER_VERSION \"${PLUGIN_VERSION}\"" >> ./include/ProxyKiller_Version.inc
           - echo -e "#define PROXYKILLER_SPEWMODE ${PLUGIN_SPEWMODE}" >> ./include/ProxyKiller_Version.inc
