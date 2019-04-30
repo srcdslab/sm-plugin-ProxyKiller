@@ -21,22 +21,24 @@ ProxyLogger g_Logger = null;
 #include "ProxyKiller/api/convars.sp"
 #include "ProxyKiller/api/forwards.sp"
 
-#include "ProxyKiller/http/public.sp"
-#include "ProxyKiller/http/params.sp"
-#include "ProxyKiller/http/headers.sp"
-#include "ProxyKiller/http/response.sp"
+#include "ProxyKiller/http/public/public.sp"
+#include "ProxyKiller/http/public/params.sp"
+#include "ProxyKiller/http/public/headers.sp"
 
-#include "ProxyKiller/cache/mysql.sp"
+#include "ProxyKiller/http/service/service.sp"
+#include "ProxyKiller/http/service/helpers.sp"
+#include "ProxyKiller/http/service/response.sp"
 
-#include "ProxyKiller/cache.sp"
 #include "ProxyKiller/config.sp"
-#include "ProxyKiller/service.sp"
 #include "ProxyKiller/helpers.sp"
 #include "ProxyKiller/tokenizer.sp"
 
+#include "ProxyKiller/cache.sp"
+#include "ProxyKiller/cache/mysql.sp"
+
 // ====================== PLUGIN INFO ======================== //
 
-public Plugin myinfo = 
+public Plugin myinfo =
 {
 	name = PROXYKILLER_NAME,
 	author = PROXYKILLER_AUTHOR,

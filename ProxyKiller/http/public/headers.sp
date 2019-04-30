@@ -5,9 +5,9 @@
 
 // =========================================================== //
 
-void HandleHeaders(Handle request, ProxyHTTPHeaders headers, ProxyUser pUser = null)
+void SetHeaders(Handle request, ProxyHTTPHeaders headers)
 {
-	g_Logger.DebugMessage("HTTP::HandleHeaders");
+	g_Logger.PrintFrame();
 	
 	if (headers != null)
 	{
@@ -17,19 +17,13 @@ void HandleHeaders(Handle request, ProxyHTTPHeaders headers, ProxyUser pUser = n
 		{
 			char headerName[MAX_HEADER_NAME_LENGTH];
 			headerMap.GetKey(i, headerName, sizeof(headerName));
-			
-			if (!json_is_meta_key(headerName))
-			{
-				char headerValue[MAX_HEADER_VALUE_LENGTH];
-				headers.GetString(headerName, headerValue, sizeof(headerValue));
-				
-				if (pUser != null)
-				{
-					TokenizeAll(pUser, headerName, sizeof(headerName));
-					TokenizeAll(pUser, headerValue, sizeof(headerValue));
-				}
 
-				SteamWorks_SetHTTPRequestHeaderValue(request, headerName, headerValue);
+			char headerValue[MAX_HEADER_VALUE_LENGTH];
+			headers.GetString(headerName, headerValue, sizeof(headerValue));
+
+			if (SteamWorks_SetHTTPRequestHeaderValue(request, headerName, headerValue))
+			{
+				g_Logger.DebugMessage(" -> Added header: \"%s\" with value \"%s\"", headerName, headerValue);
 			}
 		}
 

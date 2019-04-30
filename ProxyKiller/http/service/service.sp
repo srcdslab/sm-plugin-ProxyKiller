@@ -2,26 +2,29 @@
 
 void QueryService(ProxyUser pUser, ProxyService service)
 {
-	g_Logger.DebugMessage("HTTP::QueryService");
+	g_Logger.PrintFrame();
 	
 	char url[MAX_URL_LENGTH];
 	service.GetUrl(url, sizeof(url));
 	TokenizeAll(pUser, url, sizeof(url));
+
+	ProxyHTTP http = ProxyKiller_CreateHTTP(url, service.Method, false);
 	
-	service.SetUrl(url);
+	AddTokenizedParams(http, service.Params, pUser);
+	AddTokenizedHeaders(http, service.Headers, pUser);
 
 	ProxyServiceContext ctx = new ProxyServiceContext();
 	ctx.User = pUser;
 	ctx.Service = service;
 
-	ProxyKiller_SendHTTPRequest(service, OnService, ctx);
+	ProxyKiller_SendHTTPRequest(http, OnService, ctx);
 }
 
 // =========================================================== //
 
 public void OnService(ProxyHTTPResponse response, const char[] responseData, ProxyServiceContext ctx)
 {
-	g_Logger.DebugMessage("HTTP::OnService");
+	g_Logger.PrintFrame();
 	
 	bool result = HandleResponse(responseData, ctx);
 	Call_OnClientResult(ctx.User, result, false);

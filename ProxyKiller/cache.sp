@@ -14,10 +14,8 @@ ProxyCache CreateCache(int mode)
 	{
 		case CM_MySQL:
 		{
-			g_Logger.DebugMessage("Cache::MySQL");
+			g_Logger.PrintFrame("MySQL");
 			cache = new ProxyCacheMySQL();
-			
-			g_Logger.DebugMessage("Cache::Initialize");
 			MySQL(cache).Initialize();
 		}
 	}

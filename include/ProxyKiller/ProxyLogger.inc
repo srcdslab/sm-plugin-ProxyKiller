@@ -99,6 +99,28 @@ methodmap ProxyLogger < StringMapEx
 			this.DoSpew(SPEWLEVEL_DEBUG, "[~] %s", buffer);
 		}
 	}
+	
+	public void PrintFrame(char[] info = "")
+	{
+		if (this.SpewLevel & SPEWLEVEL_DEBUG)
+		{
+			FrameIterator iter = new FrameIterator();
+			// 0 = FrameIterator()
+			// 1 = ProxyLogger.PrintFrame
+			// 2 = Function we got called from
+			iter.Next();
+			iter.Next();
+			
+			char funcName[128];
+			iter.GetFunctionName(funcName, sizeof(funcName));
+			
+			char funcPath[PLATFORM_MAX_PATH];
+			iter.GetFilePath(funcPath, sizeof(funcPath));
+			
+			this.DoSpew(SPEWLEVEL_DEBUG, "[~] -> %s(%d)::%s(%s)", funcPath, iter.LineNumber, funcName, info);
+			delete iter;
+		}
+	}
 }
 
 // =========================================================== //
