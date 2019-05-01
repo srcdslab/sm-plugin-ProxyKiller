@@ -1,5 +1,6 @@
 // =========================================================== //
 
+static Handle H_OnCache = null;
 static Handle H_OnConfig = null;
 static Handle H_OnValidClient = null;
 
@@ -18,6 +19,7 @@ static Handle H_OnClientPunishment = null;
 
 void CreateForwards()
 {
+	H_OnCache = CreateGlobalForward("ProxyKiller_OnCache", ET_Ignore, Param_Cell);
 	H_OnConfig = CreateGlobalForward("ProxyKiller_OnConfig", ET_Ignore, Param_Cell);
 	H_OnValidClient = CreateGlobalForward("ProxyKiller_OnValidClient", ET_Ignore, Param_Cell);
 	
@@ -34,6 +36,13 @@ void CreateForwards()
 }
 
 // =========================================================== //
+
+void Call_OnCache(CacheMode mode)
+{
+	Call_StartForward(H_OnCache);
+	Call_PushCell(mode);
+	Call_Finish();
+}
 
 void Call_OnConfig(ProxyConfig config)
 {

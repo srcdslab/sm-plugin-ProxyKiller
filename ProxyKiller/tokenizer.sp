@@ -29,7 +29,7 @@ void TokenizeIP(char[] ipAddress, char[] buffer, int maxlength)
 
 void TokenizeUserId(int userId, char[] buffer, int maxlength)
 {
-	char userIdStr[8];
+	char userIdStr[8]; // 65535
 	IntToString(userId, userIdStr, sizeof(userIdStr));
 	ReplaceString(buffer, maxlength, USERID_TOKEN, userIdStr);
 }

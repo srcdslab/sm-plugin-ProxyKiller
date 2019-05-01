@@ -55,19 +55,17 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 	CreateConVars();
 	CreateForwards();
 	AutoExecConfig(true, PROXYKILLER_NAME);
-}
 
-public void OnPluginStart()
-{
-	g_Config = ParseConfig(PROXYKILLER_CONFIG);
-	Call_OnConfig(g_Config);
-	
 	g_Logger = new ProxyLogger(PROXYKILLER_SPEWMODE, PROXYKILLER_SPEWLEVEL);
 }
 
 public void OnConfigsExecuted()
 {
+	g_Config = ParseConfig(PROXYKILLER_CONFIG);
+	Call_OnConfig(g_Config);
+
 	g_Cache = CreateCache(gCV_CacheMode.IntValue);
+	Call_OnCache(g_Cache.Mode);
 }
 
 public void OnClientPostAdminCheck(int client)

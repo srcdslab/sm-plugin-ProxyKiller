@@ -2,6 +2,8 @@
 
 ProxyConfig ParseConfig(char[] configFile)
 {
+	g_Logger.PrintFrame();
+	
 	if (!FileExists(configFile))
 	{
 		SetFailState("%s does not exist!", configFile);
