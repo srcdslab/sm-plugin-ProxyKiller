@@ -14,13 +14,18 @@ ProxyConfig ParseConfig(char[] configFile)
 		SetFailState("Failed parsing %s!", configFile);
 	}
 
-	// Get values inside the root node
 	StringMap cachedVars = new StringMap();
-	while (config.GotoFirstSubKey(false) || config.GotoFirstSubKey(false))
+	while (config.GotoFirstSubKey(false) || config.GotoNextKey(false))
 	{
+		// We only want keys on root node
+		if (config.NodesInStack() > 1)
+		{
+			continue;
+		}
+
 		char key[64];
 		config.GetSectionName(key, sizeof(key));
-		
+
 		char value[256];
 		config.GetString(NULL_STRING, value, sizeof(value));
 
@@ -30,7 +35,7 @@ ProxyConfig ParseConfig(char[] configFile)
 	// Go back!
 	config.Rewind();
 
-	if (!config.GotoFirstSubKey())
+	if (!config.GotoFirstSubKey(true))
 	{
 		SetFailState("No service configured!");
 	}
