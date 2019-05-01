@@ -23,7 +23,7 @@ void SetParams(Handle request, ProxyHTTPParams params)
 
 			if (SteamWorks_SetHTTPRequestGetOrPostParameter(request, paramName, paramValue))
 			{
-				g_Logger.DebugMessage(" -> Added param: \"%s\" with value \"%s\"", paramName, paramValue);
+				g_Logger.DebugMessage("<- Added param: \"%s\" with value \"%s\"", paramName, paramValue);
 			}
 		}
 

@@ -30,8 +30,11 @@ ProxyConfig ParseConfig(char[] configFile)
 
 		char value[256];
 		config.GetString(NULL_STRING, value, sizeof(value));
-
-		cachedVars.SetString(key, value);
+		
+		if (!StrEqual(value, ""))
+		{
+			cachedVars.SetString(key, value);
+		}
 	}
 
 	// Go back!
@@ -81,11 +84,12 @@ ProxyConfig ParseConfig(char[] configFile)
 			{
 				if (!cachedVars.GetString(tokenName, paramValue, sizeof(paramValue)))
 				{
-					LogError("Token \"%s\" does not exist in the root node!", tokenName);
+					g_Logger.InfoMessage("Token \"%s\" does not exist in the root node!", tokenName);
 				}
 			}
 
 			service.Params.AddParam(paramName, paramValue);
+			g_Logger.DebugMessage("<- Parsed param: \"%s\" with value \"%s\"", paramName, paramValue);
 		}
 
 		config.Rewind();
@@ -107,11 +111,12 @@ ProxyConfig ParseConfig(char[] configFile)
 			{
 				if (!cachedVars.GetString(tokenName, headerValue, sizeof(headerValue)))
 				{
-					LogError("Token \"%s\" does not exist in the root node!", tokenName);
+					g_Logger.InfoMessage("Token \"%s\" does not exist in the root node!", tokenName);
 				}
 			}
 
 			service.Headers.AddHeader(headerName, headerValue);
+			g_Logger.DebugMessage("<- Parsed header: \"%s\" with value \"%s\"", headerName, headerValue);
 		}
 
 		config.Rewind();
