@@ -55,11 +55,22 @@
 #define PROXYKILLER_CONFIG "cfg/sourcemod/ProxyKiller-Config.cfg"
 
 #define MAX_URL_LENGTH 256
-#define KICK_MESSAGE_LENGTH 256
 
 #define MAX_RESPONSE_TYPE_LENGTH 32
 #define MAX_RESPONSE_NAME_LENGTH 128
 #define MAX_RESPONSE_VALUE_LENGTH 128
+
+#define MAX_PUNISHMENT_LOG_LENGTH 512
+#define MAX_PUNISHMENT_MESSAGE_LENGTH 256
+
+// =========================================================== //
+
+enum (<<= 1)
+{
+	Punishment_Log = 1 << 0,
+	Punishment_Kick = 1 << 1,
+	Punishment_Ban = 1 << 2
+};
 
 // =========================================================== //
 

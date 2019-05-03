@@ -1,18 +1,36 @@
 // =========================================================== //
 
-bool KickClientSafe(int client)
+void DoPunishment(ProxyUser pUser)
 {
-	if (client <= 0 || !IsClientConnected(client))
-	{
-		return false;
-	}
-	else
-	{
-		char kickMsg[KICK_MESSAGE_LENGTH];
-		gCV_KickMsg.GetString(kickMsg, sizeof(kickMsg));
+	int punishType = gCV_PunishmentType.IntValue;
 
-		KickClient(client, "%s", kickMsg);
-		return true;
+	if (punishType & Punishment_Log)
+	{
+		char log[MAX_PUNISHMENT_LOG_LENGTH];
+		gCV_PunishmentLog.GetString(log, sizeof(log));
+		
+		TokenizeAll(pUser, log, sizeof(log));
+		g_Logger.InfoMessage("%s", log);
+	}
+	
+	int client = GetClientOfUserId(pUser.UserId);
+	if (client > 0 && IsClientConnected(client))
+	{
+		char msg[MAX_PUNISHMENT_MESSAGE_LENGTH];
+		gCV_PunishmentMsg.GetString(msg, sizeof(msg));
+		
+		if (punishType & Punishment_Kick)
+		{
+			TokenizeAll(pUser, msg, sizeof(msg));
+			KickClient(client, "%s", msg);
+		}
+		
+		// Invalid client if the previous kick was done...
+		if (punishType & Punishment_Ban)
+		{
+			TokenizeAll(pUser, msg, sizeof(msg));
+			BanClient(client, 0, BANFLAG_AUTO, msg, msg);
+		}
 	}
 }
 

@@ -42,7 +42,7 @@ public void OnService(ProxyHTTPResponse response, const char[] responseData, Pro
 		
 		if (!blockPunishmentExec)
 		{
-			KickClientSafe(ctx.User.Client);
+			DoPunishment(ctx.User);
 			Call_OnClientPunishment(ctx.User, false);
 		}
 	}

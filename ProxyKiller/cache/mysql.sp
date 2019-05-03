@@ -6,7 +6,7 @@ public void MySQL_OnCache(Database db, DBResultSet results, const char[] error, 
 
 	if (strlen(error) > 0 || !results.HasResults)
 	{
-		LogError("<Cache-MySQL> Uh oh! Encountered a SQL error! - \"%s\"", error);
+		g_Logger.ErrorMessage("<Cache-MySQL> Uh oh! Encountered a SQL error! - \"%s\"", error);
 		return;
 	}
 
@@ -35,7 +35,7 @@ public void MySQL_OnCache(Database db, DBResultSet results, const char[] error, 
 			{
 				if (result)
 				{
-					KickClientSafe(pUser.Client);
+					DoPunishment(pUser);
 				}
 				delete pUser;
 			}
@@ -49,7 +49,7 @@ public void MySQL_OnCached(Database db, DBResultSet results, const char[] error,
 	
 	if (strlen(error) > 0)
 	{
-		LogError("<Cache-MySQL> Uh oh! Encountered a SQL error! - \"%s\"", error);
+		g_Logger.ErrorMessage("<Cache-MySQL> Uh oh! Encountered a SQL error! - \"%s\"", error);
 		return;
 	}
 }
