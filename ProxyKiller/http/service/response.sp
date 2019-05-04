@@ -1,5 +1,11 @@
 // =========================================================== //
 
+#define MAX_RESPONSE_TYPE_LENGTH 32
+#define MAX_RESPONSE_NAME_LENGTH 128
+#define MAX_RESPONSE_VALUE_LENGTH 128
+
+// =========================================================== //
+
 bool HandleResponse(const char[] response, ProxyServiceContext ctx)
 {
 	g_Logger.PrintFrame();
