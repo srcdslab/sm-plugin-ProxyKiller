@@ -10,7 +10,8 @@
 enum CacheMode
 {
 	CM_None = 0,
-	CM_MySQL
+	CM_MySQL,
+	CM_COUNT
 };
 
 // =========================================================== //
