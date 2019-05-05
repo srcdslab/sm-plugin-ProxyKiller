@@ -25,7 +25,7 @@ static char INSERT_RECORD[] =
 ..."(`IPAddress`, `ServiceName`, `Result`) "
 ..."VALUES ('%s', '%s', '%d') "
 ..."ON DUPLICATE KEY UPDATE "
-..."Result = '%d'";
+..."Result = '%d', Timestamp = CURRENT_TIMESTAMP";
 
 static char SELECT_RECORD[] =
 "SELECT `IPAddress`, `ServiceName`, "
