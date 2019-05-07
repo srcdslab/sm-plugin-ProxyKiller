@@ -39,15 +39,6 @@ methodmap ProxyCacheMySQL < ProxyCache
 {
 	public ProxyCacheMySQL()
 	{
-		char ptr1[] = "ProxyCacheMySQL.Initialize";
-		char ptr2[] = ".29312.ProxyCacheMySQL.Initialize";
-
-		Function fPtr1 = GetFunctionByName(null, ptr1);
-		Function fPtr2 = GetFunctionByName(null, ptr2);
-		
-		LogMessage("%s: %s", ptr1, fPtr1 == INVALID_FUNCTION ? "null" : "valid"); // null
-		LogMessage("%s: %s", ptr2, fPtr2 == INVALID_FUNCTION ? "null" : "valid"); // valid
-
 		char error[256] = "Unknown";
 		Database db = SQL_Connect(MYSQL_DB_CONF, true, error, sizeof(error));
 
@@ -68,13 +59,13 @@ methodmap ProxyCacheMySQL < ProxyCache
 
 		return view_as<ProxyCacheMySQL>(new ProxyCache(CM_MySQL, db));
 	}
-	
+
 	// Override ProxyCache::Hndl
 	property Database Hndl
 	{
 		public get() { return this.GetAny("hndl"); }
 	}
-	
+
 	// Override ProxyCache::Initialize
 	public void Initialize()
 	{
