@@ -56,8 +56,11 @@ methodmap ProxyCacheMySQL < ProxyCache
 				SetFailState("<Cache-MySQL> Invalid database driver for \"%s\", expecting \"mysql\"", MYSQL_DB_CONF);
 			}
 		}
+		
+		ProxyCache cache = new ProxyCache(CM_MySQL, db);
+		cache.SetString("initialize_method", "ProxyCacheMySQL.Initialize");
 
-		return view_as<ProxyCacheMySQL>(new ProxyCache(CM_MySQL, db));
+		return view_as<ProxyCacheMySQL>(cache);
 	}
 
 	// Override ProxyCache::Hndl
@@ -69,6 +72,8 @@ methodmap ProxyCacheMySQL < ProxyCache
 	// Override ProxyCache::Initialize
 	public void Initialize()
 	{
+		LogMessage("Hello from ProxyCacheMySQL::Initialize");
+		
 		SQL_LockDatabase(this.Hndl);
 		SQL_FastQuery(this.Hndl, CREATE_TABLE);
 		SQL_UnlockDatabase(this.Hndl);

@@ -27,10 +27,10 @@ ProxyCache CreateCache(int mode)
 		{
 			g_Logger.PrintFrame("MySQL");
 			cache = new ProxyCacheMySQL();
-			MySQL(cache).Initialize();
 		}
 	}
-
+	
+	cache.Initialize();
 	return cache;
 }
 
