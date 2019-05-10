@@ -7,7 +7,7 @@
 
 // =========================================================== //
 
-enum CacheMode
+enum ProxyCacheMode
 {
 	CM_None = 0,
 	CM_MySQL,
@@ -18,7 +18,7 @@ enum CacheMode
 
 methodmap ProxyCache < StringMapEx
 {
-	public ProxyCache(CacheMode mode, any hndl)
+	public ProxyCache(ProxyCacheMode mode, Handle hndl = null)
 	{
 		StringMapEx cacheObj = new StringMapEx();
 		cacheObj.SetValue("hndl", hndl);
@@ -26,39 +26,15 @@ methodmap ProxyCache < StringMapEx
 		return view_as<ProxyCache>(cacheObj);
 	}
 
-	property any Hndl
+	property Handle Hndl
 	{
 		public get() { return this.GetAny("hndl"); }
 	}
 
 	// TODO: Maybe change type name to avoid collisions
-	property CacheMode Mode
+	property ProxyCacheMode Mode
 	{
 		public get() { return this.GetAny("mode"); }
-	}
-	
-	public void GetInitialize(char[] buffer, int maxlength)
-	{
-		this.GetString("initialize_method", buffer, maxlength);
-	}
-	
-	public void Initialize()
-	{
-		char buf[128];
-		this.GetInitialize(buf, sizeof(buf));
-		
-		Function fCall = GetFunctionByName(null, buf);
-		
-		if (fCall == INVALID_FUNCTION)
-		{
-			LogError("No implementation for Initialize");
-		}
-		else
-		{
-			Call_StartFunction(null, fCall);
-			Call_PushCell(this);
-			Call_Finish();
-		}
 	}
 }
 

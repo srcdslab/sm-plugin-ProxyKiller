@@ -14,23 +14,23 @@ ProxyCache CreateCache(int mode)
 	else if (mode > maxMode) mode = 1;
 	
 	ProxyCache cache = null;
-	CacheMode cm = view_as<CacheMode>(mode);
+	ProxyCacheMode cm = view_as<ProxyCacheMode>(mode);
 	
 	switch (cm)
 	{
 		case CM_None:
 		{
 			g_Logger.PrintFrame("None");
-			cache = new ProxyCache(cm, 0);
+			cache = new ProxyCache(cm);
 		}
 		case CM_MySQL:
 		{
 			g_Logger.PrintFrame("MySQL");
 			cache = new ProxyCacheMySQL();
+			MySQL(cache).Initialize();
 		}
 	}
-	
-	cache.Initialize();
+
 	return cache;
 }
 
@@ -48,6 +48,10 @@ void TryGetCache(ProxyUser pUser)
 		{
 			MySQL(g_Cache).TryGetCache(pUser, g_Config.Service);
 		}
+		default:
+		{
+			g_Logger.DebugMessage("Cache mode %d has no implementation for TryGetCache", g_Cache.Mode);
+		}
 	}
 }
 
@@ -60,6 +64,10 @@ void TryPushCache(ProxyUser pUser, ProxyService service, any result)
 		case CM_MySQL:
 		{
 			MySQL(g_Cache).TryPushCache(pUser, service, result);
+		}
+		default:
+		{
+			g_Logger.DebugMessage("Cache mode %d has no implementation for TryPushCache", g_Cache.Mode);
 		}
 	}
 }

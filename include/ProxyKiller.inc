@@ -83,7 +83,7 @@ native ProxyHTTP ProxyKiller_CreateHTTP(const char[] url, ProxyHTTPMethod method
 
 // =========================================================== //
 
-forward void ProxyKiller_OnCache(CacheMode mode);
+forward void ProxyKiller_OnCache(ProxyCacheMode mode);
 forward void ProxyKiller_OnConfig(ProxyConfig config);
 forward void ProxyKiller_OnValidClient(int client);
 

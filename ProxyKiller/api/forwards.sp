@@ -37,7 +37,7 @@ void CreateForwards()
 
 // =========================================================== //
 
-void Call_OnCache(CacheMode mode)
+void Call_OnCache(ProxyCacheMode mode)
 {
 	Call_StartForward(H_OnCache);
 	Call_PushCell(mode);
