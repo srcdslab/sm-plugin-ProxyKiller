@@ -4,7 +4,7 @@ definitions:
   steps:
   
     - step: &setup
-        name: Setup envinroment
+        name: Setup environment
         artifacts:
           - include/ProxyKiller_Version.inc
         script:
