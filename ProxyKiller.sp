@@ -80,14 +80,14 @@ public void OnClientPostAdminCheck(int client)
 	gCV_IgnoreAppOwners.GetString(ignoreApps, sizeof(ignoreApps));
 
 	TrimString(ignoreApps);
-	bool shouldCheck = true;
+	bool shouldIgnore = false;
 
 	if (strlen(ignoreApps) > 0)
 	{
-		shouldCheck = HasAppFrom(client, ignoreApps);
+		shouldIgnore = HasAppFrom(client, ignoreApps);
 	}
 
-	if (shouldCheck)
+	if (!shouldIgnore)
 	{
 		bool blockExec = Call_DoCheckClient(client) != Plugin_Continue;
 		if (!blockExec)
