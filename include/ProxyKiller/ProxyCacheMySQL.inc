@@ -72,7 +72,7 @@ methodmap ProxyCacheMySQL < ProxyCache
 		SQL_UnlockDatabase(this.Hndl);
 	}
 
-	public void TryGetCache(ProxyUser pUser, ProxyService service)
+	public void TryGetCache(ProxyUser pUser, ProxyService service, SQLQueryCallback callback)
 	{
 		char ipAddress[24];
 		pUser.GetIPAddress(ipAddress, sizeof(ipAddress));
@@ -82,14 +82,12 @@ methodmap ProxyCacheMySQL < ProxyCache
 		
 		char query[512];
 		Format(query, sizeof(query), SELECT_RECORD, ipAddress, serviceName);
-		
-		// TODO!!!
-		Function callback = GetFunctionByName(INVALID_HANDLE, "MySQL_OnCache");
-		this.Hndl.Query(view_as<SQLQueryCallback>(callback), query, pUser);
+
+		this.Hndl.Query(callback, query, pUser);
 	}
 	
 	// Override ProxyCache::TryPushCache
-	public void TryPushCache(ProxyUser pUser, ProxyService service, any result)
+	public void TryPushCache(ProxyUser pUser, ProxyService service, any result, SQLQueryCallback callback)
 	{
 		char ipAddress[24];
 		pUser.GetIPAddress(ipAddress, sizeof(ipAddress));
@@ -99,10 +97,8 @@ methodmap ProxyCacheMySQL < ProxyCache
 		
 		char query[512];
 		Format(query, sizeof(query), INSERT_RECORD, ipAddress, serviceName, result, result);
-		
-		// TODO!!!
-		Function callback = GetFunctionByName(INVALID_HANDLE, "MySQL_OnCached");
-		this.Hndl.Query(view_as<SQLQueryCallback>(callback), query); 
+
+		this.Hndl.Query(callback, query); 
 	}
 }
 

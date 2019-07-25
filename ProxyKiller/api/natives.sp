@@ -45,7 +45,7 @@ public int Native_SendHTTPRequest(Handle plugin, int numParams)
 	AddToForward(fwd, plugin, callback);
 	
 	http.Callback = fwd;
-	QueryHTTP(http, data);
+	return QueryHTTP(http, data);
 }
 
 // =========================================================== //

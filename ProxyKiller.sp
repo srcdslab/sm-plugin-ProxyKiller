@@ -81,7 +81,7 @@ public void OnClientPostAdminCheck(int client)
 
 	TrimString(ignoreApps);
 	bool shouldCheck = true;
-	
+
 	if (strlen(ignoreApps) > 0)
 	{
 		shouldCheck = HasAppFrom(client, ignoreApps);
@@ -90,7 +90,6 @@ public void OnClientPostAdminCheck(int client)
 	if (shouldCheck)
 	{
 		bool blockExec = Call_DoCheckClient(client) != Plugin_Continue;
-
 		if (!blockExec)
 		{
 			ProxyKiller_CheckClient(client);

@@ -1,16 +1,15 @@
 // =========================================================== //
 
-// TODO: Make this return a boolean
-void QueryHTTP(ProxyHTTP http, any data)
+bool QueryHTTP(ProxyHTTP http, any data)
 {
 	g_Logger.PrintFrame();
-	
+
 	char url[MAX_URL_LENGTH];
 	http.GetUrl(url, sizeof(url));
-	
+
 	EHTTPMethod method = GetSteamWorksMethod(http.Method);
 	Handle request = SteamWorks_CreateHTTPRequest(method, url);
-	
+
 	if (request == null)
 	{
 		if (http != null)
@@ -19,7 +18,7 @@ void QueryHTTP(ProxyHTTP http, any data)
 		}
 
 		delete request;
-		return;
+		return false;
 	}
 
 	SetParams(request, http.Params);
@@ -32,6 +31,7 @@ void QueryHTTP(ProxyHTTP http, any data)
 	SteamWorks_SetHTTPCallbacks(request, OnRequest_Completed, _, OnRequest_DataReceived);
 	SteamWorks_SetHTTPRequestContextValue(request, ctx);
 	SteamWorks_SendHTTPRequest(request);
+	return true;
 }
 
 // =========================================================== //
@@ -39,15 +39,17 @@ void QueryHTTP(ProxyHTTP http, any data)
 public int OnRequest_Completed(Handle request, bool failure, bool requestSuccessful, EHTTPStatusCode statusCode, ProxyHTTPContext ctx)
 {
 	g_Logger.PrintFrame();
-	
+
 	int status = view_as<int>(statusCode);
 	bool fail = failure || !requestSuccessful;
 
 	ctx.HTTP.Response = new ProxyHTTPResponse(fail, status);
-	
+
 	if (fail)
 	{
-		// Error logging
+		char requestUrl[MAX_URL_LENGTH];
+		ctx.HTTP.GetUrl(requestUrl, sizeof(requestUrl));
+		LogError("Error making http request to \"%s\"", requestUrl);
 	}
 }
 
@@ -57,10 +59,23 @@ public int OnRequest_DataReceived(Handle request, bool failure, int offset, int 
 {
 	g_Logger.PrintFrame();
 
-	// TODO: Fire forward even when failure AND response body is 0
 	if (!failure)
 	{
-		SteamWorks_GetHTTPResponseBodyCallback(request, OnRequest_Data, ctx);
+		int bodySize = 0;
+		SteamWorks_GetHTTPResponseBodySize(request, bodySize);
+
+		if (bodySize <= 0)
+		{
+			DoCallback(ctx.HTTP.Callback, ctx.HTTP.Response, "", ctx.Data);
+		}
+		else
+		{
+			SteamWorks_GetHTTPResponseBodyCallback(request, OnRequest_Data, ctx);
+		}
+	}
+	else
+	{
+		DoCallback(ctx.HTTP.Callback, ctx.HTTP.Response, "", ctx.Data);
 	}
 
 	if (ctx != null)

@@ -3,11 +3,11 @@
 void AddTokenizedParams(ProxyHTTP http, ProxyHTTPParams params, ProxyUser pUser)
 {
 	g_Logger.PrintFrame();
-	
+
 	if (params != null)
 	{
 		StringMapSnapshot paramMap = params.Snapshot();
-		
+
 		for (int i = 0; i < paramMap.Length; i++)
 		{
 			char paramName[MAX_PARAM_NAME_LENGTH];
@@ -21,7 +21,7 @@ void AddTokenizedParams(ProxyHTTP http, ProxyHTTPParams params, ProxyUser pUser)
 
 			http.Params.AddParam(paramName, paramValue);
 		}
-		
+
 		delete paramMap;
 	}
 }
@@ -29,11 +29,11 @@ void AddTokenizedParams(ProxyHTTP http, ProxyHTTPParams params, ProxyUser pUser)
 void AddTokenizedHeaders(ProxyHTTP http, ProxyHTTPHeaders headers, ProxyUser pUser)
 {
 	g_Logger.PrintFrame();
-	
+
 	if (headers != null)
 	{
 		StringMapSnapshot headerMap = headers.Snapshot();
-		
+
 		for (int i = 0; i < headerMap.Length; i++)
 		{
 			char headerName[MAX_HEADER_NAME_LENGTH];

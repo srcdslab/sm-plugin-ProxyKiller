@@ -78,7 +78,7 @@ typeset ProxyHTTPCallback
 
 native void ProxyKiller_CheckClient(int client);
 
-native void ProxyKiller_SendHTTPRequest(ProxyHTTP http, ProxyHTTPCallback callback = INVALID_FUNCTION, any data = 0);
+native bool ProxyKiller_SendHTTPRequest(ProxyHTTP http, ProxyHTTPCallback callback = INVALID_FUNCTION, any data = 0);
 native ProxyHTTP ProxyKiller_CreateHTTP(const char[] url, ProxyHTTPMethod method = HTTPMethod_GET, isPersistent = false);
 
 // =========================================================== //

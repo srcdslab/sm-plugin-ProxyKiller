@@ -31,7 +31,6 @@ methodmap ProxyCache < StringMapEx
 		public get() { return this.GetAny("hndl"); }
 	}
 
-	// TODO: Maybe change type name to avoid collisions
 	property ProxyCacheMode Mode
 	{
 		public get() { return this.GetAny("mode"); }

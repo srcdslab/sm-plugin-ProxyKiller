@@ -1,15 +1,15 @@
 // =========================================================== //
 
-void QueryService(ProxyUser pUser, ProxyService service)
+bool QueryService(ProxyUser pUser, ProxyService service)
 {
 	g_Logger.PrintFrame();
-	
+
 	char url[MAX_URL_LENGTH];
 	service.GetUrl(url, sizeof(url));
 	TokenizeAll(pUser, url, sizeof(url));
 
 	ProxyHTTP http = ProxyKiller_CreateHTTP(url, service.Method, false);
-	
+
 	AddTokenizedParams(http, service.Params, pUser);
 	AddTokenizedHeaders(http, service.Headers, pUser);
 
@@ -17,7 +17,7 @@ void QueryService(ProxyUser pUser, ProxyService service)
 	ctx.User = pUser;
 	ctx.Service = service;
 
-	ProxyKiller_SendHTTPRequest(http, OnService, ctx);
+	return ProxyKiller_SendHTTPRequest(http, OnService, ctx);
 }
 
 // =========================================================== //
@@ -25,12 +25,11 @@ void QueryService(ProxyUser pUser, ProxyService service)
 public void OnService(ProxyHTTPResponse response, const char[] responseData, ProxyServiceContext ctx)
 {
 	g_Logger.PrintFrame();
-	
+
 	bool result = HandleResponse(responseData, ctx);
 	Call_OnClientResult(ctx.User, result, false);
-	
-	bool blockCacheExec = Call_DoClientResultCache(ctx.User, result) != Plugin_Continue;
 
+	bool blockCacheExec = Call_DoClientResultCache(ctx.User, result) != Plugin_Continue;
 	if (!blockCacheExec)
 	{
 		TryPushCache(ctx.User, ctx.Service, result);
@@ -39,7 +38,6 @@ public void OnService(ProxyHTTPResponse response, const char[] responseData, Pro
 	if (result)
 	{
 		bool blockPunishmentExec = Call_DoClientPunishment(ctx.User, false) != Plugin_Continue;
-		
 		if (!blockPunishmentExec)
 		{
 			DoPunishment(ctx.User);
