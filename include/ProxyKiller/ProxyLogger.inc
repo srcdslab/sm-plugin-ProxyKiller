@@ -42,6 +42,11 @@ methodmap ProxyLogger < StringMapEx
 		public get() { return this.GetInt("spewlevel"); }
 	}
 
+	public bool GetLastFrame(char[] buffer, int maxlength)
+	{
+		return this.GetString("lastFrame", buffer, maxlength);
+	}
+
 	public void DoSpew(int spewType, char[] format, any ...)
 	{
 		if (this.SpewMode == 0) return;
@@ -77,7 +82,7 @@ methodmap ProxyLogger < StringMapEx
 			this.DoSpew(SPEWLEVEL_INFO, "[I]: %s", buffer);
 		}
 	}
-	
+
 	public void ErrorMessage(char[] format, any ...)
 	{
 		if (this.SpewLevel & SPEWLEVEL_ERRORS)
@@ -88,7 +93,7 @@ methodmap ProxyLogger < StringMapEx
 			this.DoSpew(SPEWLEVEL_ERRORS, "[!] %s", buffer);
 		}
 	}
-	
+
 	public void DebugMessage(char[] format, any ...)
 	{
 		if (this.SpewLevel & SPEWLEVEL_DEBUG)
@@ -96,10 +101,33 @@ methodmap ProxyLogger < StringMapEx
 			char buffer[512];
 			VFormat(buffer, sizeof(buffer), format, 3);
 
-			this.DoSpew(SPEWLEVEL_DEBUG, "[~] %s", buffer);
+			char lastFunc[128];
+			if (this.GetLastFrame(lastFunc, sizeof(lastFunc)))
+			{
+				FrameIterator iter = new FrameIterator();
+				// 0 = FrameIterator()
+				// 1 = ProxyLogger.DebugMessage
+				// 2 = Function we got called from
+				iter.Next();
+				iter.Next();
+
+				char funcName[128];
+				iter.GetFunctionName(funcName, sizeof(funcName));
+
+				if (StrEqual(lastFunc, funcName))
+				{
+					this.DoSpew(SPEWLEVEL_DEBUG, "[~]  - %s", buffer);
+				}
+
+				delete iter;
+			}
+			else
+			{
+				this.DoSpew(SPEWLEVEL_DEBUG, "[~] %s", buffer);
+			}
 		}
 	}
-	
+
 	public void PrintFrame(char[] info = "")
 	{
 		if (this.SpewLevel & SPEWLEVEL_DEBUG)
@@ -110,14 +138,16 @@ methodmap ProxyLogger < StringMapEx
 			// 2 = Function we got called from
 			iter.Next();
 			iter.Next();
-			
+
 			char funcName[128];
 			iter.GetFunctionName(funcName, sizeof(funcName));
-			
+
 			char funcPath[PLATFORM_MAX_PATH];
 			iter.GetFilePath(funcPath, sizeof(funcPath));
-			
-			this.DoSpew(SPEWLEVEL_DEBUG, "[~] -> %s(%d)::%s(%s)", funcPath, iter.LineNumber, funcName, info);
+
+			this.DoSpew(SPEWLEVEL_DEBUG, "[~] %s(%d)::%s(%s)", funcPath, iter.LineNumber, funcName, info);
+
+			this.SetString("lastFrame", funcName);
 			delete iter;
 		}
 	}

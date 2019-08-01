@@ -23,7 +23,7 @@ void SetHeaders(Handle request, ProxyHTTPHeaders headers)
 
 			if (SteamWorks_SetHTTPRequestHeaderValue(request, headerName, headerValue))
 			{
-				g_Logger.DebugMessage("<- Added header: \"%s\" with value \"%s\"", headerName, headerValue);
+				g_Logger.DebugMessage("Header: \"%s\" = \"%s\"", headerName, headerValue);
 			}
 		}
 

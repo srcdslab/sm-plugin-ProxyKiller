@@ -3,14 +3,13 @@
 ProxyConfig ParseConfig(char[] configFile)
 {
 	g_Logger.PrintFrame();
-	
+
 	if (!FileExists(configFile))
 	{
 		SetFailState("%s does not exist!", configFile);
 	}
 
 	KeyValues config = new KeyValues(PROXYKILLER_NAME);
-
 	if (!config.ImportFromFile(configFile))
 	{
 		SetFailState("Failed parsing %s!", configFile);
@@ -30,7 +29,7 @@ ProxyConfig ParseConfig(char[] configFile)
 
 		char value[256];
 		config.GetString(NULL_STRING, value, sizeof(value));
-		
+
 		if (!StrEqual(value, ""))
 		{
 			cachedVars.SetString(key, value);
@@ -89,7 +88,7 @@ ProxyConfig ParseConfig(char[] configFile)
 			}
 
 			service.Params.AddParam(paramName, paramValue);
-			g_Logger.DebugMessage("<- Parsed param: \"%s\" with value \"%s\"", paramName, paramValue);
+			g_Logger.DebugMessage("Param \"%s\" = \"%s\"", paramName, paramValue);
 		}
 
 		config.Rewind();
@@ -116,7 +115,7 @@ ProxyConfig ParseConfig(char[] configFile)
 			}
 
 			service.Headers.AddHeader(headerName, headerValue);
-			g_Logger.DebugMessage("<- Parsed header: \"%s\" with value \"%s\"", headerName, headerValue);
+			g_Logger.DebugMessage("Header \"%s\" = \"%s\"", headerName, headerValue);
 		}
 
 		config.Rewind();
@@ -146,7 +145,6 @@ ProxyConfig ParseConfig(char[] configFile)
 		}
 
 		TrimString(tokens[0]);
-
 		if (response.Type == RT_JSON)
 		{
 			TrimString(tokens[1]);
@@ -161,7 +159,7 @@ ProxyConfig ParseConfig(char[] configFile)
 		config.Rewind();
 		service.ExpectedResponse = response;
 	}
-	
+
 	delete config;
 	return new ProxyConfig(cachedVars, service);
 }
