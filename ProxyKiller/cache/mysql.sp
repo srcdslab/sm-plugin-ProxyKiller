@@ -33,12 +33,12 @@ public void MySQL_OnCache(Database db, DBResultSet results, const char[] error, 
 			}
 			else
 			{
+				Call_OnClientResult(pUser, result, true);
 				if (result)
 				{
 					DoPunishment(pUser);
 				}
 
-				Call_OnClientResult(pUser, result, true);
 				delete pUser;
 			}
 		}
