@@ -37,6 +37,8 @@ public void MySQL_OnCache(Database db, DBResultSet results, const char[] error, 
 				{
 					DoPunishment(pUser);
 				}
+
+				Call_OnClientResult(pUser, result, true);
 				delete pUser;
 			}
 		}
