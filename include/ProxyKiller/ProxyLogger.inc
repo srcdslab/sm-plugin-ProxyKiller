@@ -42,9 +42,9 @@ methodmap ProxyLogger < StringMapEx
 		public get() { return this.GetInt("spewlevel"); }
 	}
 
-	public bool GetLastFrame(char[] buffer, int maxlength)
+	public void GetLastFrame(char[] buffer, int maxlength)
 	{
-		return this.GetString("lastFrame", buffer, maxlength);
+		this.GetString("lastFrame", buffer, maxlength);
 	}
 
 	public void DoSpew(int spewType, char[] format, any ...)
@@ -102,29 +102,28 @@ methodmap ProxyLogger < StringMapEx
 			VFormat(buffer, sizeof(buffer), format, 3);
 
 			char lastFunc[128];
-			if (this.GetLastFrame(lastFunc, sizeof(lastFunc)))
+			this.GetLastFrame(lastFunc, sizeof(lastFunc));
+
+			FrameIterator iter = new FrameIterator();
+			// 0 = FrameIterator()
+			// 1 = ProxyLogger.DebugMessage
+			// 2 = Function we got called from
+			iter.Next();
+			iter.Next();
+
+			char funcName[128];
+			iter.GetFunctionName(funcName, sizeof(funcName));
+
+			if (StrEqual(lastFunc, funcName))
 			{
-				FrameIterator iter = new FrameIterator();
-				// 0 = FrameIterator()
-				// 1 = ProxyLogger.DebugMessage
-				// 2 = Function we got called from
-				iter.Next();
-				iter.Next();
-
-				char funcName[128];
-				iter.GetFunctionName(funcName, sizeof(funcName));
-
-				if (StrEqual(lastFunc, funcName))
-				{
-					this.DoSpew(SPEWLEVEL_DEBUG, "[~]  - %s", buffer);
-				}
-
-				delete iter;
+				this.DoSpew(SPEWLEVEL_DEBUG, "[~]  -> %s", buffer);
 			}
 			else
 			{
 				this.DoSpew(SPEWLEVEL_DEBUG, "[~] %s", buffer);
 			}
+
+			delete iter;
 		}
 	}
 
