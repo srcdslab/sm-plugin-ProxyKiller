@@ -26,6 +26,15 @@ public void OnService(ProxyHTTPResponse response, const char[] responseData, Pro
 {
 	g_Logger.PrintFrame();
 
+	if (response.Failure)
+	{
+		char service[MAX_SERVICE_NAME_LENGTH];
+		ctx.Service.GetName(service, sizeof(service));
+
+		g_Logger.ErrorMessage("Error occured while querying service %s", service);
+		return;
+	}
+
 	bool result = HandleResponse(responseData, ctx);
 	Call_OnClientResult(ctx.User, result, false);
 

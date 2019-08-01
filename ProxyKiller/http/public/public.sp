@@ -49,7 +49,7 @@ public int OnRequest_Completed(Handle request, bool failure, bool requestSuccess
 	{
 		char requestUrl[MAX_URL_LENGTH];
 		ctx.HTTP.GetUrl(requestUrl, sizeof(requestUrl));
-		LogError("Error making http request to \"%s\"", requestUrl);
+		g_Logger.ErrorMessage("Error making http request to \"%s\"", requestUrl);
 	}
 }
 
