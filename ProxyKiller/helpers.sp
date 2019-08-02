@@ -10,7 +10,7 @@ void DoPunishment(ProxyUser pUser)
 		TokenizeAll(pUser, log, sizeof(log));
 		g_Logger.InfoMessage("%s", log);
 	}
-	
+
 	int client = GetClientOfUserId(pUser.UserId);
 	if (client > 0 && IsClientConnected(client))
 	{

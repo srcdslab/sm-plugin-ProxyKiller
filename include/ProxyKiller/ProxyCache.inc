@@ -18,22 +18,22 @@ enum ProxyCacheMode
 
 methodmap ProxyCache < StringMapEx
 {
-	public ProxyCache(ProxyCacheMode mode, Handle hndl = null)
+	public ProxyCache(ProxyCacheMode mode, any provider = 0)
 	{
 		StringMapEx cacheObj = new StringMapEx();
-		cacheObj.SetValue("hndl", hndl);
 		cacheObj.SetValue("mode", mode);
+		cacheObj.SetValue("provider", provider);
 		return view_as<ProxyCache>(cacheObj);
-	}
-
-	property Handle Hndl
-	{
-		public get() { return this.GetAny("hndl"); }
 	}
 
 	property ProxyCacheMode Mode
 	{
 		public get() { return this.GetAny("mode"); }
+	}
+
+	property any Provider
+	{
+		public get() { return this.GetAny("provider"); }
 	}
 }
 

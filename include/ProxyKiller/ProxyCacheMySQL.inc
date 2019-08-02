@@ -60,16 +60,16 @@ methodmap ProxyCacheMySQL < ProxyCache
 		return view_as<ProxyCacheMySQL>(new ProxyCache(CM_MySQL, db));
 	}
 
-	property Database Hndl
+	property Database Provider
 	{
-		public get() { return this.GetAny("hndl"); }
+		public get() { return this.GetAny("provider"); }
 	}
 
 	public void Initialize()
 	{
-		SQL_LockDatabase(this.Hndl);
-		SQL_FastQuery(this.Hndl, CREATE_TABLE);
-		SQL_UnlockDatabase(this.Hndl);
+		SQL_LockDatabase(this.Provider);
+		SQL_FastQuery(this.Provider, CREATE_TABLE);
+		SQL_UnlockDatabase(this.Provider);
 	}
 
 	public void TryGetCache(ProxyUser pUser, ProxyService service, SQLQueryCallback callback)
@@ -83,7 +83,7 @@ methodmap ProxyCacheMySQL < ProxyCache
 		char query[512];
 		Format(query, sizeof(query), SELECT_RECORD, ipAddress, serviceName);
 
-		this.Hndl.Query(callback, query, pUser);
+		this.Provider.Query(callback, query, pUser);
 	}
 	
 	// Override ProxyCache::TryPushCache
@@ -98,7 +98,7 @@ methodmap ProxyCacheMySQL < ProxyCache
 		char query[512];
 		Format(query, sizeof(query), INSERT_RECORD, ipAddress, serviceName, result, result);
 
-		this.Hndl.Query(callback, query); 
+		this.Provider.Query(callback, query); 
 	}
 }
 
