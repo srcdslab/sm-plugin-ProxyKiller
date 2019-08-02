@@ -40,8 +40,8 @@ methodmap ProxyService < ProxyHTTP
 
 	property ProxyServiceResponse ExpectedResponse
 	{
-		public get() { return this.GetAny("response"); }
-		public set(ProxyServiceResponse response) { this.SetValue("response", response); }
+		public get() { return this.GetAny("expected_response"); }
+		public set(ProxyServiceResponse response) { this.SetValue("expected_response", response); }
 	}
 }
 
