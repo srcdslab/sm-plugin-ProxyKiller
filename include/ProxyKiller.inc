@@ -62,7 +62,8 @@
 
 enum
 {
-	Punishment_Kick = 0,
+	Punishment_None = 0,
+	Punishment_Kick,
 	Punishment_Ban
 };
 

@@ -16,9 +16,8 @@ void DoPunishment(ProxyUser pUser)
 	{
 		char msg[MAX_PUNISHMENT_MESSAGE_LENGTH];
 		gCV_PunishmentMessage.GetString(msg, sizeof(msg));
-		
+
 		int punishType = gCV_PunishmentType.IntValue;
-		
 		if (punishType == Punishment_Kick)
 		{
 			TokenizeAll(pUser, msg, sizeof(msg));
