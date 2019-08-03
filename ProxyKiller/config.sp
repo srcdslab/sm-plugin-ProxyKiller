@@ -1,5 +1,13 @@
 // =========================================================== //
 
+static char MethodStrings[HTTPMethod_COUNT][] =
+{
+	"GET",
+	"POST"
+};
+
+// =========================================================== //
+
 ProxyConfig ParseConfig(char[] configFile)
 {
 	g_Logger.PrintFrame();
@@ -51,19 +59,18 @@ ProxyConfig ParseConfig(char[] configFile)
 	char url[MAX_URL_LENGTH];
 	config.GetString("url", url, sizeof(url));
 
-	char method[12];
+	char method[6];
 	config.GetString("method", method, sizeof(method));
 
 	ProxyService service = new ProxyService();
 	service.SetUrl(url);
 	service.SetName(name);
 
-	// TODO: Bad
-	if (StrEqual(method, "GET", false))
+	if (StrEqual(method, MethodStrings[HTTPMethod_GET]))
 	{
 		service.Method = HTTPMethod_GET;
 	}
-	else if (StrEqual(method, "POST", false))
+	else if (StrEqual(method, MethodStrings[HTTPMethod_POST]))
 	{
 		service.Method = HTTPMethod_POST;
 	}

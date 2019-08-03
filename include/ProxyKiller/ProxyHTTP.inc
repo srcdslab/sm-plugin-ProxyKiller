@@ -10,7 +10,8 @@
 enum ProxyHTTPMethod
 {
 	HTTPMethod_GET,
-	HTTPMethod_POST
+	HTTPMethod_POST,
+	HTTPMethod_COUNT
 };
 
 // =========================================================== //
