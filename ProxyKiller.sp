@@ -64,7 +64,7 @@ public void OnConfigsExecuted()
 	Call_OnConfig(g_Config);
 
 	g_Cache = CreateCache(gCV_CacheMode.IntValue);
-	Call_OnCache(g_Cache.Mode);
+	Call_OnCache(g_Cache);
 }
 
 public void OnClientPostAdminCheck(int client)
