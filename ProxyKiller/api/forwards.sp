@@ -2,6 +2,7 @@
 
 static Handle H_OnCache = null;
 static Handle H_OnConfig = null;
+static Handle H_OnLogger = null;
 static Handle H_OnValidClient = null;
 
 static Handle H_DoCheckClient = null;
@@ -21,16 +22,17 @@ void CreateForwards()
 {
 	H_OnCache = CreateGlobalForward("ProxyKiller_OnCache", ET_Ignore, Param_Cell);
 	H_OnConfig = CreateGlobalForward("ProxyKiller_OnConfig", ET_Ignore, Param_Cell);
+	H_OnLogger = CreateGlobalForward("ProxyKiller_OnLogger", ET_Ignore, Param_Cell);
 	H_OnValidClient = CreateGlobalForward("ProxyKiller_OnValidClient", ET_Ignore, Param_Cell);
-	
+
 	H_DoCheckClient = CreateGlobalForward("ProxyKiller_DoCheckClient", ET_Hook, Param_Cell);
 	H_OnCheckClient = CreateGlobalForward("ProxyKiller_OnCheckClient", ET_Ignore, Param_Cell);
-	
+
 	H_OnClientResult = CreateGlobalForward("ProxyKiller_OnClientResult", ET_Ignore, Param_Cell, Param_Cell, Param_Cell);
 
 	H_DoClientResultCache = CreateGlobalForward("ProxyKiller_DoClientResultCache", ET_Hook, Param_Cell, Param_Cell);
 	H_OnClientResultCache = CreateGlobalForward("ProxyKiller_OnClientResultCache", ET_Ignore, Param_Cell, Param_Cell);
-	
+
 	H_DoClientPunishment = CreateGlobalForward("ProxyKiller_DoClientPunishment", ET_Hook, Param_Cell, Param_Cell);
 	H_OnClientPunishment = CreateGlobalForward("ProxyKiller_OnClientPunishment", ET_Ignore, Param_Cell, Param_Cell);
 }
@@ -48,6 +50,13 @@ void Call_OnConfig(ProxyConfig config)
 {
 	Call_StartForward(H_OnConfig);
 	Call_PushCell(config);
+	Call_Finish();
+}
+
+void Call_OnLogger(ProxyLogger logger)
+{
+	Call_StartForward(H_OnLogger);
+	Call_PushCell(logger);
 	Call_Finish();
 }
 

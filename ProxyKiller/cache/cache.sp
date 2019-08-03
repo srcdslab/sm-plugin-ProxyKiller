@@ -6,11 +6,6 @@ static bool gB_CacheInit = false;
 
 // =========================================================== //
 
-ProxyCache GetCache()
-{
-	return g_Cache;
-}
-
 bool IsCacheInit()
 {
 	return gB_CacheInit;

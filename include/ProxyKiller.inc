@@ -78,6 +78,9 @@ typeset ProxyHTTPCallback
 // =========================================================== //
 
 native ProxyCache ProxyKiller_GetCache();
+native ProxyConfig ProxyKiller_GetConfig();
+native ProxyLogger ProxyKiller_GetLogger();
+
 native bool ProxyKiller_IsCacheInit();
 
 native void ProxyKiller_CheckClient(int client);
@@ -89,6 +92,7 @@ native ProxyHTTP ProxyKiller_CreateHTTP(const char[] url, ProxyHTTPMethod method
 
 forward void ProxyKiller_OnCache(ProxyCache cache);
 forward void ProxyKiller_OnConfig(ProxyConfig config);
+forward void ProxyKiller_OnLogger(ProxyLogger logger);
 forward void ProxyKiller_OnValidClient(int client);
 
 forward Action ProxyKiller_DoCheckClient(int client);

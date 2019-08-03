@@ -55,7 +55,9 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 	CreateConVars();
 	CreateForwards();
 	AutoExecConfig(true, PROXYKILLER_NAME ... "-Convars");
+
 	g_Logger = new ProxyLogger(PROXYKILLER_SPEWMODE, PROXYKILLER_SPEWLEVEL);
+	Call_OnLogger(g_Logger);
 }
 
 public void OnConfigsExecuted()

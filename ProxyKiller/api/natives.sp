@@ -7,6 +7,8 @@ void CreateNatives()
 	CreateNative("ProxyKiller_SendHTTPRequest", Native_SendHTTPRequest);
 
 	CreateNative("ProxyKiller_GetCache", Native_GetCache);
+	CreateNative("ProxyKiller_GetConfig", Native_GetConfig);
+	CreateNative("ProxyKiller_GetLogger", Native_GetLogger);
 	CreateNative("ProxyKiller_IsCacheInit", Native_IsCacheInit);
 }
 
@@ -53,7 +55,17 @@ public int Native_SendHTTPRequest(Handle plugin, int numParams)
 
 public int Native_GetCache(Handle plugin, int numParams)
 {
-	return view_as<int>(GetCache());
+	return view_as<int>(g_Cache);
+}
+
+public int Native_GetConfig(Handle plugin, int numParams)
+{
+	return view_as<int>(g_Config);
+}
+
+public int Native_GetLogger(Handle plugin, int numParams)
+{
+	return view_as<int>(g_Logger);
 }
 
 public int Native_IsCacheInit(Handle plugin, int numParams)
