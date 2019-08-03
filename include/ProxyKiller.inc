@@ -76,6 +76,9 @@ typeset ProxyHTTPCallback
 
 // =========================================================== //
 
+native ProxyCache ProxyKiller_GetCache();
+native bool ProxyKiller_IsCacheInit();
+
 native void ProxyKiller_CheckClient(int client);
 
 native bool ProxyKiller_SendHTTPRequest(ProxyHTTP http, ProxyHTTPCallback callback = INVALID_FUNCTION, any data = 0);

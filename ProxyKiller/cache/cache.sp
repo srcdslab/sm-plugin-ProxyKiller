@@ -1,10 +1,21 @@
 // =========================================================== //
 
+static bool gB_CacheInit = false;
+
 #define MySQL(%1) view_as<ProxyCacheMySQL>(%1)
 
 // =========================================================== //
 
-// REEEEEE WE CANNOT CALL THE METHOD FROM THE DERIVED CLASS!! :(
+ProxyCache GetCache()
+{
+	return g_Cache;
+}
+
+bool IsCacheInit()
+{
+	return gB_CacheInit;
+}
+
 ProxyCache CreateCache(int mode)
 {
 	int minMode = view_as<int>(CM_None);
@@ -31,6 +42,7 @@ ProxyCache CreateCache(int mode)
 		}
 	}
 
+	gB_CacheInit = true;
 	return cache;
 }
 

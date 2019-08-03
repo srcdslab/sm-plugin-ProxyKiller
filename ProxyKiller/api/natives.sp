@@ -5,6 +5,9 @@ void CreateNatives()
 	CreateNative("ProxyKiller_CreateHTTP", Native_CreateHTTP);
 	CreateNative("ProxyKiller_CheckClient", Native_CheckClient);
 	CreateNative("ProxyKiller_SendHTTPRequest", Native_SendHTTPRequest);
+
+	CreateNative("ProxyKiller_GetCache", Native_GetCache);
+	CreateNative("ProxyKiller_IsCacheInit", Native_IsCacheInit);
 }
 
 // =========================================================== //
@@ -46,6 +49,16 @@ public int Native_SendHTTPRequest(Handle plugin, int numParams)
 	
 	http.Callback = fwd;
 	return QueryHTTP(http, data);
+}
+
+public int Native_GetCache(Handle plugin, int numParams)
+{
+	return view_as<int>(GetCache());
+}
+
+public int Native_IsCacheInit(Handle plugin, int numParams)
+{
+	return IsCacheInit();
 }
 
 // =========================================================== //
