@@ -17,25 +17,15 @@ methodmap ProxyService < ProxyHTTP
 	{
 		return view_as<ProxyService>(new ProxyHTTP(true));
 	}
-	
-	public void SetToken(char[] token)
+
+	public void SetName(char[] name)
 	{
-		this.SetString("token", token);
+		this.SetString("name", name);
 	}
-	
-	public void GetToken(char[] buffer, int maxlength)
+
+	public bool GetName(char[] buffer, int maxlength)
 	{
-		this.GetString("token", buffer, maxlength);
-	}
-	
-	public void SetTokenValue(char[] tokenValue)
-	{
-		this.SetString("token_value", tokenValue);
-	}
-	
-	public void GetTokenValue(char[] buffer, int maxlength)
-	{
-		this.GetString("token_value", buffer, maxlength);
+		return this.GetString("name", buffer, maxlength);
 	}
 
 	property ProxyServiceResponse ExpectedResponse

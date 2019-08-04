@@ -29,32 +29,22 @@ methodmap ProxyHTTP < StringMapEx
 		http.SetValue("headers", new ProxyHTTPHeaders());
 		return view_as<ProxyHTTP>(http);
 	}
-	
+
 	public void SetUrl(char[] url)
 	{
 		this.SetString("url", url);
 	}
-	
+
 	public void GetUrl(char[] buffer, int maxlength)
 	{
 		this.GetString("url", buffer, maxlength);
 	}
-	
-	public void SetName(char[] name)
-	{
-		this.SetString("name", name);
-	}
 
-	public void GetName(char[] buffer, int maxlength)
-	{
-		this.GetString("name", buffer, maxlength);
-	}
-	
 	property bool IsPersistent
 	{
 		public get() { return this.GetBool("isPersistent"); }
 	}
-	
+
 	property Handle Callback
 	{
 		public get() { return this.GetAny("callback"); }
@@ -65,7 +55,7 @@ methodmap ProxyHTTP < StringMapEx
 	{
 		public get() { return this.GetAny("params"); }
 	}
-	
+
 	property ProxyHTTPHeaders Headers
 	{
 		public get() { return this.GetAny("headers"); }
@@ -82,7 +72,7 @@ methodmap ProxyHTTP < StringMapEx
 		public get() { return this.GetAny("method"); }
 		public set(ProxyHTTPMethod method) { this.SetValue("method", method); }
 	}
-	
+
 	public void Cleanup()
 	{
 		if (this.Callback != null)
