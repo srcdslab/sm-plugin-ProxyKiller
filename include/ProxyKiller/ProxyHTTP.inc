@@ -7,10 +7,13 @@
 
 // =========================================================== //
 
+/**
+ * Types of ProxyHTTP methods available
+ */
 enum ProxyHTTPMethod
 {
-	HTTPMethod_GET,
-	HTTPMethod_POST,
+	HTTPMethod_GET,		/**< Do GET request */
+	HTTPMethod_POST,	/**< Do POST request */
 	HTTPMethod_COUNT
 };
 

@@ -7,18 +7,24 @@
 
 // =========================================================== //
 
+/**
+ * Types of supported responses
+ */
 enum ResponseType
 {
-	RT_JSON = 0,
-	RT_PLAINTEXT,
-	RT_STATUSCODE,
+	RT_JSON = 0,	/**< Parse as JSON */
+	RT_PLAINTEXT,	/**< Parse as Plaintext */
+	RT_STATUSCODE,	/**< Parse http status code */
 	RT_COUNT
 };
 
+/**
+ * Types of response equality checks
+ */
 enum ResponseCompare
 {
-	RC_EQUAL = 0,
-	RC_NOTEQUAL,
+	RC_EQUAL = 0,	/**< Look for equality */
+	RC_NOTEQUAL,	/**< Look for inequality */
 	RC_COUNT
 };
 

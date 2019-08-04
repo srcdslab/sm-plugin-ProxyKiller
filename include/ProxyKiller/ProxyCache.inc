@@ -7,10 +7,13 @@
 
 // =========================================================== //
 
+/**
+ * Types of caching solutions available
+ */
 enum ProxyCacheMode
 {
-	CM_None = 0,
-	CM_MySQL,
+	CM_None = 0,	/**< No caching */
+	CM_MySQL,		/**< Use MySQL */
 	CM_COUNT
 };
 

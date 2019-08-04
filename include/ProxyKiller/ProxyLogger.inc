@@ -7,17 +7,23 @@
 
 // =========================================================== //
 
+/**
+ * Types of logging spewmodes available
+ */
 enum (<<= 1)
 {
-	SPEWMODE_LOG = 1 << 0,
-	SPEWMODE_CHAT = 1 << 1
+	SPEWMODE_LOG = 1 << 0,		/**< Spew messages to logs */
+	SPEWMODE_CHAT = 1 << 1		/**< Spew messages to ingame chat */
 };
 
+/**
+ * Types of logging spewlevels available
+ */
 enum (<<= 1)
 {
-	SPEWLEVEL_ERRORS = 1 << 0,
-	SPEWLEVEL_INFO = 1 << 1,
-	SPEWLEVEL_DEBUG = 1 << 2
+	SPEWLEVEL_ERRORS = 1 << 0,	/**< Spew error messages */
+	SPEWLEVEL_INFO = 1 << 1,	/**< Spew info messages */
+	SPEWLEVEL_DEBUG = 1 << 2	/**< Spew debugging messages */
 };
 
 // =========================================================== //
