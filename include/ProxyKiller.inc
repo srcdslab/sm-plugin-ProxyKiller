@@ -67,7 +67,8 @@ enum
 {
 	Punishment_None = 0, 	/**< No punishment */
 	Punishment_Kick, 		/**< Kick the client */
-	Punishment_Ban			/**< Ban the client */
+	Punishment_Ban,			/**< Ban the client */
+	Punishment_COUNT
 };
 
 // =========================================================== //
