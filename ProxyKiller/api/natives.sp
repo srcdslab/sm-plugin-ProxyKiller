@@ -55,17 +55,17 @@ public int Native_SendHTTPRequest(Handle plugin, int numParams)
 
 public int Native_GetCache(Handle plugin, int numParams)
 {
-	return view_as<int>(CloneHandle(g_Cache));
+	return view_as<int>(CloneHandle(g_Cache, plugin));
 }
 
 public int Native_GetConfig(Handle plugin, int numParams)
 {
-	return view_as<int>(CloneHandle(g_Config));
+	return view_as<int>(CloneHandle(g_Config, plugin));
 }
 
 public int Native_GetLogger(Handle plugin, int numParams)
 {
-	return view_as<int>(CloneHandle(g_Logger));
+	return view_as<int>(CloneHandle(g_Logger, plugin));
 }
 
 public int Native_IsCacheInit(Handle plugin, int numParams)
