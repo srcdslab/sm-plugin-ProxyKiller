@@ -180,18 +180,17 @@ bool GetTokenFromInput(char[] input, char[] buffer, int maxlength)
 
 	if (start != -1 && end != -1 && end > start)
 	{
-		buffer[0] = '\0';
 		start = start + charsLen;
 		end = end + charsLen;
-		
+
 		for (int i = start; i < end; i++)
 		{
 			Format(buffer, maxlength, "%s%c", buffer, input[i]);
 		}
-		
+
 		return true;
 	}
-	
+
 	return false;
 }
 

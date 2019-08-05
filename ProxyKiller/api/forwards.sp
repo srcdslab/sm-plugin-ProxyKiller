@@ -67,13 +67,13 @@ void Call_OnValidClient(int client)
 	Call_Finish();
 }
 
-Action Call_DoCheckClient(int client)
+bool Call_DoCheckClient(int client)
 {
 	Action retval = Plugin_Continue;
 	Call_StartForward(H_DoCheckClient);
 	Call_PushCell(client);
 	Call_Finish(retval);
-	return retval;
+	return retval == Plugin_Continue;
 }
 
 void Call_OnCheckClient(ProxyUser pUser)
@@ -92,14 +92,14 @@ void Call_OnClientResult(ProxyUser pUser, bool result, bool fromCache)
 	Call_Finish();
 }
 
-Action Call_DoClientResultCache(ProxyUser pUser, bool result)
+bool Call_DoClientResultCache(ProxyUser pUser, bool result)
 {
 	Action retval = Plugin_Continue;
 	Call_StartForward(H_DoClientResultCache);
 	Call_PushCell(pUser);
 	Call_PushCell(result);
 	Call_Finish(retval);
-	return retval;
+	return retval == Plugin_Continue;
 }
 
 void Call_OnClientResultCache(ProxyUser pUser, bool result)
@@ -110,14 +110,14 @@ void Call_OnClientResultCache(ProxyUser pUser, bool result)
 	Call_Finish();
 }
 
-Action Call_DoClientPunishment(ProxyUser pUser, bool fromCache)
+bool Call_DoClientPunishment(ProxyUser pUser, bool fromCache)
 {
 	Action retval = Plugin_Continue;
 	Call_StartForward(H_DoClientPunishment);
 	Call_PushCell(pUser);
 	Call_PushCell(fromCache);
 	Call_Finish(retval);
-	return retval;
+	return retval == Plugin_Continue;
 }
 
 void Call_OnClientPunishment(ProxyUser pUser, bool fromCache)

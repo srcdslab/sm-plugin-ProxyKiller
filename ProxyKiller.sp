@@ -91,8 +91,7 @@ public void OnClientPostAdminCheck(int client)
 
 	if (!shouldIgnore)
 	{
-		bool continueExec = Call_DoCheckClient(client) == Plugin_Continue;
-		if (continueExec)
+		if (Call_DoCheckClient(client))
 		{
 			ProxyKiller_CheckClient(client);
 		}

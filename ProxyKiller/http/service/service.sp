@@ -38,16 +38,14 @@ public void OnService(ProxyHTTPResponse response, const char[] responseData, Pro
 	bool result = HandleResponse(responseData, ctx);
 	Call_OnClientResult(ctx.User, result, false);
 
-	bool contineCacheExec = Call_DoClientResultCache(ctx.User, result) == Plugin_Continue;
-	if (contineCacheExec)
+	if (Call_DoClientResultCache(ctx.User, result))
 	{
 		TryPushCache(ctx.User, ctx.Service, result);
 	}
 
 	if (result)
 	{
-		bool continuePunishmentExec = Call_DoClientPunishment(ctx.User, false) == Plugin_Continue;
-		if (continuePunishmentExec)
+		if (Call_DoClientPunishment(ctx.User, false))
 		{
 			DoPunishment(ctx.User);
 			Call_OnClientPunishment(ctx.User, false);
