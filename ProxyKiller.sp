@@ -57,16 +57,16 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 	AutoExecConfig(true, PROXYKILLER_NAME ... "-Convars");
 
 	g_Logger = new ProxyLogger(PROXYKILLER_SPEWMODE, PROXYKILLER_SPEWLEVEL);
-	Call_OnLogger(g_Logger);
+	Call_OnLogger();
 }
 
 public void OnConfigsExecuted()
 {
 	g_Config = ParseConfig(PROXYKILLER_CONFIG);
-	Call_OnConfig(g_Config);
+	Call_OnConfig();
 
 	g_Cache = CreateCache(gCV_CacheMode.IntValue);
-	Call_OnCache(g_Cache);
+	Call_OnCache();
 }
 
 public void OnClientPostAdminCheck(int client)

@@ -29,14 +29,14 @@ public int Native_CreateHTTP(Handle plugin, int numParams)
 {
 	char url[256];
 	GetNativeString(1, url, sizeof(url));
-	
+
 	ProxyHTTPMethod method = GetNativeCell(2);
 	bool isPersistent = GetNativeCell(3);
-	
+
 	ProxyHTTP http = new ProxyHTTP(isPersistent);
 	http.Method = method;
 	http.SetUrl(url);
-	
+
 	return view_as<int>(http);
 }
 
@@ -48,24 +48,24 @@ public int Native_SendHTTPRequest(Handle plugin, int numParams)
 
 	Handle fwd = CreateForward(ET_Ignore, Param_Cell, Param_String, Param_Cell);
 	AddToForward(fwd, plugin, callback);
-	
+
 	http.Callback = fwd;
 	return QueryHTTP(http, data);
 }
 
 public int Native_GetCache(Handle plugin, int numParams)
 {
-	return view_as<int>(g_Cache);
+	return view_as<int>(CloneHandle(g_Cache));
 }
 
 public int Native_GetConfig(Handle plugin, int numParams)
 {
-	return view_as<int>(g_Config);
+	return view_as<int>(CloneHandle(g_Config));
 }
 
 public int Native_GetLogger(Handle plugin, int numParams)
 {
-	return view_as<int>(g_Logger);
+	return view_as<int>(CloneHandle(g_Logger));
 }
 
 public int Native_IsCacheInit(Handle plugin, int numParams)
