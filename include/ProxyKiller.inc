@@ -161,26 +161,23 @@ native ProxyHTTP ProxyKiller_CreateHTTP(const char[] url, ProxyHTTPMethod method
 /**
  * Called when the cache is initialized for ProxyKiller
  *
- * @param cache					Initialized ProxyCache object
  * @noreturn
  */
-forward void ProxyKiller_OnCache(ProxyCache cache);
+forward void ProxyKiller_OnCache();
 
 /**
  * Called when the config is initialized for ProxyKiller
  *
- * @param config				Initialized ProxyConfig object
  * @noreturn
  */
-forward void ProxyKiller_OnConfig(ProxyConfig config);
+forward void ProxyKiller_OnConfig();
 
 /**
  * Called when the logger is initialized for ProxyKiller
  *
- * @param logger				Initialized ProxyLogger object
  * @noreturn
  */
-forward void ProxyKiller_OnLogger(ProxyLogger logger);
+forward void ProxyKiller_OnLogger();
 
 /**
  * Called when a valid ProxyKiller client is connected
