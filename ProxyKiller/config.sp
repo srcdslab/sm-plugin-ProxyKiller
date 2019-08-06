@@ -2,8 +2,13 @@
 
 static char MethodStrings[HTTPMethod_COUNT][] =
 {
-	"GET",
-	"POST"
+    "GET",
+    "HEAD",
+    "POST",
+    "PUT",
+    "DELETE",
+    "OPTIONS",
+    "PATCH"
 };
 
 // =========================================================== //
@@ -59,20 +64,20 @@ ProxyConfig ParseConfig(char[] configFile)
 	char url[MAX_URL_LENGTH];
 	config.GetString("url", url, sizeof(url));
 
-	char method[6];
+	char method[10];
 	config.GetString("method", method, sizeof(method));
 
 	ProxyService service = new ProxyService();
 	service.SetUrl(url);
 	service.SetName(name);
 
-	if (StrEqual(method, MethodStrings[HTTPMethod_GET]))
+	for (ProxyHTTPMethod i; i < HTTPMethod_COUNT; i++)
 	{
-		service.Method = HTTPMethod_GET;
-	}
-	else if (StrEqual(method, MethodStrings[HTTPMethod_POST]))
-	{
-		service.Method = HTTPMethod_POST;
+		if (StrEqual(method, MethodStrings[i]))
+		{
+			service.Method = i;
+			break;
+		}
 	}
 
 	if (config.JumpToKey("params"))

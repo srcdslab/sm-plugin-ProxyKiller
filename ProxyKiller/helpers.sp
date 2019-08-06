@@ -4,7 +4,7 @@ void DoPunishment(ProxyUser pUser)
 {
 	char log[MAX_PUNISHMENT_LOG_LENGTH];
 	gCV_PunishmentLogFormat.GetString(log, sizeof(log));
-		
+
 	if (!StrEqual(log, ""))
 	{
 		TokenizeAll(pUser, log, sizeof(log));
@@ -57,7 +57,12 @@ EHTTPMethod GetSteamWorksMethod(ProxyHTTPMethod method)
 	switch (method)
 	{
 		case HTTPMethod_GET: return k_EHTTPMethodGET;
+		case HTTPMethod_HEAD: return k_EHTTPMethodHEAD;
 		case HTTPMethod_POST: return k_EHTTPMethodPOST;
+		case HTTPMethod_PUT: return k_EHTTPMethodPUT;
+		case HTTPMethod_DELETE: return k_EHTTPMethodDELETE;
+		case HTTPMethod_OPTIONS: return k_EHTTPMethodOPTIONS;
+		case HTTPMethod_PATCH: return k_EHTTPMethodPATCH;
 	}
 
 	return k_EHTTPMethodGET;

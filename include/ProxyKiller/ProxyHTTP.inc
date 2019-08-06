@@ -12,8 +12,13 @@
  */
 enum ProxyHTTPMethod
 {
-	HTTPMethod_GET,		/**< Do GET request */
-	HTTPMethod_POST,	/**< Do POST request */
+    HTTPMethod_GET,		/**< Do GET request */
+    HTTPMethod_HEAD,	/**< DO HEAD request */
+    HTTPMethod_POST,	/**< Do POST request */
+    HTTPMethod_PUT,		/**< Do PUT request */
+    HTTPMethod_DELETE,	/**< Do DELETE request */
+    HTTPMethod_OPTIONS,	/**< Do OPTIONS request */
+    HTTPMethod_PATCH,	/**< Do PATCH request */
 	HTTPMethod_COUNT
 };
 
