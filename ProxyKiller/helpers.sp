@@ -42,7 +42,7 @@ bool HasAppFrom(int client, char[] appString)
 {
 	char appIds[16][16];
 	int appCount = ExplodeString(appString, ",", appIds, sizeof(appIds), sizeof(appIds[]));
-	
+
 	for (int i = 0; i < appCount; i++)
 	{
 		if (HasApp(client, StringToInt(appIds[i])))
@@ -50,7 +50,7 @@ bool HasAppFrom(int client, char[] appString)
 			return true;
 		}
 	}
-	
+
 	return false;
 }
 

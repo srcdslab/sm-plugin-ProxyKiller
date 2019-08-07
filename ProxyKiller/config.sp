@@ -11,6 +11,13 @@ static char MethodStrings[HTTPMethod_COUNT][] =
     "PATCH"
 };
 
+static char TypePhrases[RT_COUNT][] =
+{
+	"json",
+	"plaintext",
+	"statuscode"
+};
+
 // =========================================================== //
 
 ProxyConfig ParseConfig(char[] configFile)
@@ -73,7 +80,7 @@ ProxyConfig ParseConfig(char[] configFile)
 
 	for (ProxyHTTPMethod i; i < HTTPMethod_COUNT; i++)
 	{
-		if (StrEqual(method, MethodStrings[i]))
+		if (StrEqual(method, MethodStrings[i], false))
 		{
 			service.Method = i;
 			break;
@@ -144,7 +151,13 @@ ProxyConfig ParseConfig(char[] configFile)
 		char responseStr[MAX_RESPONSE_NAME_LENGTH + MAX_RESPONSE_VALUE_LENGTH];
 		config.GetString("expect", responseStr, sizeof(responseStr));
 
-		response.SetType(responseType);
+		for (ResponseType t; t < RT_COUNT; t++)
+		{
+			if (StrEqual(responseType, TypePhrases[t], false))
+			{
+				response.Type = t;
+			}
+		}
 
 		char tokens[2][MAX_RESPONSE_VALUE_LENGTH];
 		if (ExplodeString(responseStr, "==", tokens, sizeof(tokens), sizeof(tokens[])) >= 2)

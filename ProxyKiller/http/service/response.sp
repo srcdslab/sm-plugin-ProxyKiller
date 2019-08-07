@@ -37,6 +37,8 @@ bool HandleResponse(const char[] response, ProxyServiceContext ctx)
 
 static void Internal_Handle_JSON(const char[] response, ProxyServiceContext ctx, char[] buffer, int maxlength)
 {
+	g_Logger.PrintFrame();
+	
 	char obj[MAX_RESPONSE_NAME_LENGTH];
 	ctx.Service.ExpectedResponse.GetObject(obj, sizeof(obj));
 
@@ -93,11 +95,14 @@ static void Internal_Handle_JSON(const char[] response, ProxyServiceContext ctx,
 
 static void Internal_Handle_PlainText(const char[] response, char[] buffer, int maxlength)
 {
+	g_Logger.PrintFrame();
 	strcopy(buffer, maxlength, response);
 }
 
 static void Internal_Handle_StatusCode(ProxyServiceContext ctx, char[] buffer, int maxlength)
 {
+	g_Logger.PrintFrame();
+	
 	char statusCode[12];
 	IntToString(ctx.Service.Response.Status, statusCode, sizeof(statusCode));
 

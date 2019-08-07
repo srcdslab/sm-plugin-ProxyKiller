@@ -28,13 +28,6 @@ enum ResponseCompare
 	RC_COUNT
 };
 
-char TypePhrases[RT_COUNT][] =
-{
-	"json",
-	"plaintext",
-	"statuscode"
-};
-
 // =========================================================== //
 
 methodmap ProxyServiceResponse < StringMapEx
@@ -43,23 +36,13 @@ methodmap ProxyServiceResponse < StringMapEx
 	{
 		return view_as<ProxyServiceResponse>(new StringMapEx());
 	}
-	
-	public void SetType(char[] type)
-	{
-		for (int i = 0; i < sizeof(TypePhrases); i++)
-		{
-			if (StrEqual(TypePhrases[i], type))
-			{
-				this.SetValue("type", i);
-			}
-		}
-	}
-	
+
 	property ResponseType Type
 	{
 		public get() { return view_as<ResponseType>(this.GetInt("type")); }
+		public set(ResponseType type) { this.SetValue("type", type); }
 	}
-	
+
 	property ResponseCompare Compare
 	{
 		public get() { return view_as<ResponseCompare>(this.GetInt("compare")); }
