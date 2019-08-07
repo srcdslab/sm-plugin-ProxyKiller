@@ -10,7 +10,7 @@
 #define MYSQL_DB_CONF "ProxyKiller"
 
 static char CREATE_TABLE[] =
-"CREATE TABLE `ProxyKiller_Cache` "
+"CREATE TABLE `ProxyKiller2_Cache` "
 ..."("
 ..."`IPAddress` VARCHAR(24) NOT NULL, "
 ..."`ServiceName` VARCHAR(128) NOT NULL, "
@@ -21,7 +21,7 @@ static char CREATE_TABLE[] =
 ...")"
 
 static char INSERT_RECORD[] =
-"INSERT INTO `ProxyKiller_Cache` "
+"INSERT INTO `ProxyKiller2_Cache` "
 ..."(`IPAddress`, `ServiceName`, `Result`) "
 ..."VALUES ('%s', '%s', '%d') "
 ..."ON DUPLICATE KEY UPDATE "
@@ -30,7 +30,8 @@ static char INSERT_RECORD[] =
 static char SELECT_RECORD[] =
 "SELECT `IPAddress`, `ServiceName`, "
 ..."`Result`, UNIX_TIMESTAMP(`Timestamp`) "
-..."FROM ProxyKiller_Cache WHERE `IPAddress` = '%s' "
+..."FROM ProxyKiller2_Cache "
+..."WHERE `IPAddress` = '%s' "
 ..."AND `ServiceName` = '%s'";
 
 // =========================================================== //
