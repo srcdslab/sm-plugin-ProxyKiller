@@ -26,7 +26,9 @@ void DoPunishment(ProxyUser pUser)
 		else if (punishType == Punishment_Ban)
 		{
 			TokenizeAll(pUser, msg, sizeof(msg));
-			BanClient(client, 0, BANFLAG_AUTO, msg, msg);
+
+			int banLength = gCV_PunishmentBanLength.IntValue;
+			BanClient(client, banLength, BANFLAG_AUTO, msg, msg);
 		}
 	}
 }

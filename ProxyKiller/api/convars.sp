@@ -6,6 +6,7 @@ ConVar gCV_IgnoreAppOwners = null;
 ConVar gCV_PunishmentType = null;
 ConVar gCV_PunishmentMessage = null;
 ConVar gCV_PunishmentLogFormat = null;
+ConVar gCV_PunishmentBanLength = null;
 
 ConVar gCV_CacheMode = null;
 ConVar gCV_CacheLifetime = null;
@@ -20,6 +21,7 @@ void CreateConVars()
 	gCV_PunishmentType = CreateConVar("ProxyKiller_PunishmentMode", "0", "Type of punishment to apply to clients\n0 = None\n1 = Kick\n2 = Ban", _, true, 0.0, true, float(Punishment_COUNT - 1));
 	gCV_PunishmentMessage = CreateConVar("ProxyKiller_PunishmentMessage", "VPNs and Proxies are not tolerated on this server!", "Message to display to clients who were punished");
 	gCV_PunishmentLogFormat = CreateConVar("ProxyKiller_PunishmentLogFormat", "{steamid2} with ip {ip} was found to be using a proxy or a vpn", "Message to apply to logs, set empty to disable entirely");
+	gCV_PunishmentBanLength = CreateConVar("ProxyKiller_PunishmentBanLength", "10080", "Ban length in minutes to apply when clients are punished and punishment mode is set to \"ban\"", _, true, 0.0);
 
 	gCV_CacheMode = CreateConVar("ProxyKiller_CacheMode", "1", "Caching mode used for ProxyKiller\n0 = Disabled\n1 = MySQL", _, true, 0.0, true, float(view_as<int>(CM_COUNT) - 1));
 	gCV_CacheLifetime = CreateConVar("ProxyKiller_CacheLifetime", "43200", "Time in second(s) when to invalidate cache entries and re-query ip addresses\nIt is recommended that you set this to at least 1 hour (3600 seconds)", _, true, 0.0, false);
