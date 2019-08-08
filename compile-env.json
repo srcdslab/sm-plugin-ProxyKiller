@@ -7,7 +7,7 @@
 	},
 	"production": {
 		"URL": "Built from ${BITBUCKET_GIT_HTTP_ORIGIN}/commits/${BITBUCKET_COMMIT}",
-		"VERSION": "V.${BITBUCKET_TAG}",
+		"VERSION": "${BITBUCKET_TAG}",
 		"SPEWMODE": "(SPEWMODE_LOG)",
 		"SPEWLEVEL": "(SPEWLEVEL_ERRORS | SPEWLEVEL_INFO)"
 	}

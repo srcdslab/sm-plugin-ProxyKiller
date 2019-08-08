@@ -32,11 +32,11 @@
 #tryinclude <ProxyKiller_Version>
 
 #if !defined PROXYKILLER_URL
-#define PROXYKILLER_URL "Built from <Unknown>"
+#define PROXYKILLER_URL "Unknown source"
 #endif
 
 #if !defined PROXYKILLER_VERSION
-#define PROXYKILLER_VERSION "Unknown Version"
+#define PROXYKILLER_VERSION "Unknown version"
 #endif
 
 #if !defined PROXYKILLER_SPEWMODE
