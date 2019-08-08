@@ -1,8 +1,10 @@
 // =========================================================== //
 
 #define MAX_RESPONSE_TYPE_LENGTH 32
+#define MAX_RESPONSE_COMPARE_LENGTH 16
 #define MAX_RESPONSE_NAME_LENGTH 128
 #define MAX_RESPONSE_VALUE_LENGTH 128
+#define MAX_RESPONSE_OBJECT_LENGTH 64
 
 // =========================================================== //
 
@@ -13,17 +15,26 @@ bool HandleResponse(const char[] response, ProxyServiceContext ctx)
 	char expectValue[MAX_RESPONSE_VALUE_LENGTH];
 	ctx.Service.ExpectedResponse.GetValue(expectValue, sizeof(expectValue));
 
-	char responseValue[MAX_RESPONSE_VALUE_LENGTH];
 	TokenizeAll(ctx.User, expectValue, sizeof(expectValue));
 
+	char responseValue[MAX_RESPONSE_VALUE_LENGTH];
 	switch (ctx.Service.ExpectedResponse.Type)
 	{
-		case RT_JSON: Internal_Handle_JSON(response, ctx, responseValue, sizeof(responseValue));
-		case RT_PLAINTEXT: Internal_Handle_PlainText(response, responseValue, sizeof(responseValue));
-		case RT_STATUSCODE: Internal_Handle_StatusCode(ctx, responseValue, sizeof(responseValue));
+		case ResponseType_JSON:
+		{
+			Internal_Handle_JSON(response, ctx, responseValue, sizeof(responseValue));
+		}
+		case ResponseType_PLAINTEXT:
+		{
+			Internal_Handle_PlainText(response, responseValue, sizeof(responseValue));
+		}
+		case ResponseType_STATUSCODE:
+		{
+			Internal_Handle_StatusCode(ctx, responseValue, sizeof(responseValue));
+		}
 	}
 
-	if (ctx.Service.ExpectedResponse.Compare == RC_EQUAL)
+	if (ctx.Service.ExpectedResponse.Compare == ResponseCompare_EQUAL)
 	{
 		return StrEqual(responseValue, expectValue);
 	}
@@ -38,7 +49,7 @@ bool HandleResponse(const char[] response, ProxyServiceContext ctx)
 static void Internal_Handle_JSON(const char[] response, ProxyServiceContext ctx, char[] buffer, int maxlength)
 {
 	g_Logger.PrintFrame();
-	
+
 	char obj[MAX_RESPONSE_NAME_LENGTH];
 	ctx.Service.ExpectedResponse.GetObject(obj, sizeof(obj));
 
@@ -102,7 +113,7 @@ static void Internal_Handle_PlainText(const char[] response, char[] buffer, int 
 static void Internal_Handle_StatusCode(ProxyServiceContext ctx, char[] buffer, int maxlength)
 {
 	g_Logger.PrintFrame();
-	
+
 	char statusCode[12];
 	IntToString(ctx.Service.Response.Status, statusCode, sizeof(statusCode));
 

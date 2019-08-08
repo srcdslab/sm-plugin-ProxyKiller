@@ -26,18 +26,15 @@ enum ProxyHTTPMethod
 
 methodmap ProxyHTTP < StringMapEx
 {
-	public ProxyHTTP(bool isPersistent = false)
+	public ProxyHTTP(char[] url, ProxyHTTPMethod method, bool isPersistent = false)
 	{
 		StringMapEx http = new StringMapEx();
+		http.SetString("url", url);
+		http.SetValue("method", method);
 		http.SetValue("isPersistent", isPersistent);
 		http.SetValue("params", new ProxyHTTPParams());
 		http.SetValue("headers", new ProxyHTTPHeaders());
 		return view_as<ProxyHTTP>(http);
-	}
-
-	public void SetUrl(char[] url)
-	{
-		this.SetString("url", url);
 	}
 
 	public void GetUrl(char[] buffer, int maxlength)
@@ -75,7 +72,6 @@ methodmap ProxyHTTP < StringMapEx
 	property ProxyHTTPMethod Method
 	{
 		public get() { return this.GetAny("method"); }
-		public set(ProxyHTTPMethod method) { this.SetValue("method", method); }
 	}
 
 	public void Cleanup()

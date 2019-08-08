@@ -12,10 +12,10 @@
  */
 enum ResponseType
 {
-	RT_JSON = 0,	/**< Parse as JSON */
-	RT_PLAINTEXT,	/**< Parse as Plaintext */
-	RT_STATUSCODE,	/**< Parse http status code */
-	RT_COUNT
+	ResponseType_JSON = 0,	 /**< Parse as JSON */
+	ResponseType_PLAINTEXT,	 /**< Parse as Plaintext */
+	ResponseType_STATUSCODE, /**< Parse http status code */
+	ResponseType_COUNT
 };
 
 /**
@@ -23,46 +23,33 @@ enum ResponseType
  */
 enum ResponseCompare
 {
-	RC_EQUAL = 0,	/**< Look for equality */
-	RC_NOTEQUAL,	/**< Look for inequality */
-	RC_COUNT
+	ResponseCompare_EQUAL = 0,	/**< Look for equality */
+	ResponseCompare_NOTEQUAL,	/**< Look for inequality */
+	ResponseCompare_COUNT
 };
 
 // =========================================================== //
 
 methodmap ProxyServiceResponse < StringMapEx
 {
-	public ProxyServiceResponse()
+	public ProxyServiceResponse(ResponseType type, ResponseCompare compare, char[] value, char[] objStr = "")
 	{
-		return view_as<ProxyServiceResponse>(new StringMapEx());
+		StringMapEx response = new StringMapEx();
+		response.SetValue("type", type);
+		response.SetValue("compare", compare);
+		response.SetString("value", value);
+		response.SetString("object", objStr);
+		return view_as<ProxyServiceResponse>(response);
 	}
 
 	property ResponseType Type
 	{
 		public get() { return view_as<ResponseType>(this.GetInt("type")); }
-		public set(ResponseType type) { this.SetValue("type", type); }
 	}
 
 	property ResponseCompare Compare
 	{
 		public get() { return view_as<ResponseCompare>(this.GetInt("compare")); }
-		public set(ResponseCompare compare) { this.SetValue("compare", compare); }
-	}
-
-	public void GetObject(char[] buffer, int maxlength)
-	{
-		if (this.Type == RT_JSON)
-		{
-			this.GetString("object", buffer, maxlength);
-		}
-	}
-
-	public void SetObject(char[] objectStr)
-	{
-		if (this.Type == RT_JSON)
-		{
-			this.SetString("object", objectStr);
-		}
 	}
 
 	public void GetValue(char[] buffer, int maxlength)
@@ -70,9 +57,9 @@ methodmap ProxyServiceResponse < StringMapEx
 		this.GetString("value", buffer, maxlength);
 	}
 
-	public void SetValue(char[] valueStr)
+	public void GetObject(char[] buffer, int maxlength)
 	{
-		this.SetString("value", valueStr);
+		this.GetString("object", buffer, maxlength);
 	}
 }
 

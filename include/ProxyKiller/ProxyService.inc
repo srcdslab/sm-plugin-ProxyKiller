@@ -13,14 +13,12 @@
 
 methodmap ProxyService < ProxyHTTP
 {
-	public ProxyService()
+	public ProxyService(char[] url, ProxyHTTPMethod method, char[] name, ProxyServiceResponse response)
 	{
-		return view_as<ProxyService>(new ProxyHTTP(true));
-	}
-
-	public void SetName(char[] name)
-	{
-		this.SetString("name", name);
+		ProxyHTTP service = new ProxyHTTP(url, method, true);
+		service.SetString("name", name);
+		service.SetValue("expected_response", response);
+		return view_as<ProxyService>(service);
 	}
 
 	public bool GetName(char[] buffer, int maxlength)
@@ -31,7 +29,6 @@ methodmap ProxyService < ProxyHTTP
 	property ProxyServiceResponse ExpectedResponse
 	{
 		public get() { return this.GetAny("expected_response"); }
-		public set(ProxyServiceResponse response) { this.SetValue("expected_response", response); }
 	}
 }
 

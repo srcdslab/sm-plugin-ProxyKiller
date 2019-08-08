@@ -33,11 +33,7 @@ public int Native_CreateHTTP(Handle plugin, int numParams)
 	ProxyHTTPMethod method = GetNativeCell(2);
 	bool isPersistent = GetNativeCell(3);
 
-	ProxyHTTP http = new ProxyHTTP(isPersistent);
-	http.Method = method;
-	http.SetUrl(url);
-
-	return view_as<int>(http);
+	return view_as<int>(new ProxyHTTP(url, method, isPersistent));
 }
 
 public int Native_SendHTTPRequest(Handle plugin, int numParams)
