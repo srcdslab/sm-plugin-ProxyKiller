@@ -12,9 +12,9 @@
  */
 enum ProxyCacheMode
 {
-	CM_None = 0,	/**< No caching */
-	CM_MySQL,		/**< Use MySQL */
-	CM_COUNT
+	CacheMode_None = 0,	/**< No caching */
+	CacheMode_MySQL,	/**< Use MySQL */
+	CacheMode_COUNT
 };
 
 // =========================================================== //

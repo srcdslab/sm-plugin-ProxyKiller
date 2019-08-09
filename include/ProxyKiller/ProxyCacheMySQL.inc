@@ -58,7 +58,7 @@ methodmap ProxyCacheMySQL < ProxyCache
 			}
 		}
 
-		return view_as<ProxyCacheMySQL>(new ProxyCache(CM_MySQL, db));
+		return view_as<ProxyCacheMySQL>(new ProxyCache(CacheMode_MySQL, db));
 	}
 
 	property Database Provider

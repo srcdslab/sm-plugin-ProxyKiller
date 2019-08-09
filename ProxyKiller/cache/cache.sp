@@ -13,8 +13,8 @@ bool IsCacheInit()
 
 ProxyCache CreateCache(int mode)
 {
-	int minMode = view_as<int>(CM_None);
-	int maxMode = view_as<int>(CM_COUNT) - 1;
+	int minMode = view_as<int>(CacheMode_None);
+	int maxMode = view_as<int>(CacheMode_COUNT) - 1;
 
 	if (mode < minMode) mode = 0;
 	else if (mode > maxMode) mode = 1;
@@ -24,12 +24,12 @@ ProxyCache CreateCache(int mode)
 
 	switch (cm)
 	{
-		case CM_None:
+		case CacheMode_None:
 		{
 			g_Logger.PrintFrame("None");
 			cache = new ProxyCache(cm);
 		}
-		case CM_MySQL:
+		case CacheMode_MySQL:
 		{
 			g_Logger.PrintFrame("MySQL");
 			cache = new ProxyCacheMySQL();
@@ -47,11 +47,11 @@ void TryGetCache(ProxyUser pUser)
 
 	switch (g_Cache.Mode)
 	{
-		case CM_None:
+		case CacheMode_None:
 		{
 			QueryService(pUser, g_Config.Service);
 		}
-		case CM_MySQL:
+		case CacheMode_MySQL:
 		{
 			MySQL(g_Cache).TryGetCache(pUser, g_Config.Service, MySQL_OnCache);
 		}
@@ -68,7 +68,7 @@ void TryPushCache(ProxyUser pUser, ProxyService service, any result)
 
 	switch (g_Cache.Mode)
 	{
-		case CM_MySQL:
+		case CacheMode_MySQL:
 		{
 			MySQL(g_Cache).TryPushCache(pUser, service, result, MySQL_OnCached);
 		}
