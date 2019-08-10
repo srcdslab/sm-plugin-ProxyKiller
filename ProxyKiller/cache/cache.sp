@@ -16,8 +16,8 @@ ProxyCache CreateCache(int mode)
 	int minMode = view_as<int>(CacheMode_None);
 	int maxMode = view_as<int>(CacheMode_COUNT) - 1;
 
-	if (mode < minMode) mode = 0;
-	else if (mode > maxMode) mode = 1;
+	if (mode < minMode) mode = minMode;
+	else if (mode > maxMode) mode = maxMode;
 
 	ProxyCache cache = null;
 	ProxyCacheMode cm = view_as<ProxyCacheMode>(mode);
