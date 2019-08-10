@@ -2,7 +2,7 @@
 
 static bool gB_CacheInit = false;
 
-#define MySQL(%1) view_as<ProxyCacheMySQL>(%1)
+#define Cache_MySQL(%1) view_as<ProxyCacheMySQL>(%1)
 
 // =========================================================== //
 
@@ -33,7 +33,7 @@ ProxyCache CreateCache(int mode)
 		{
 			g_Logger.PrintFrame("MySQL");
 			cache = new ProxyCacheMySQL();
-			MySQL(cache).Initialize();
+			Cache_MySQL(cache).Initialize();
 		}
 	}
 
@@ -53,7 +53,7 @@ void TryGetCache(ProxyUser pUser)
 		}
 		case CacheMode_MySQL:
 		{
-			MySQL(g_Cache).TryGetCache(pUser, g_Config.Service, MySQL_OnCache);
+			Cache_MySQL(g_Cache).TryGetCache(pUser, g_Config.Service, MySQL_OnCache);
 		}
 		default:
 		{
@@ -70,7 +70,7 @@ void TryPushCache(ProxyUser pUser, ProxyService service, any result)
 	{
 		case CacheMode_MySQL:
 		{
-			MySQL(g_Cache).TryPushCache(pUser, service, result, MySQL_OnCached);
+			Cache_MySQL(g_Cache).TryPushCache(pUser, service, result, MySQL_OnCached);
 		}
 		default:
 		{

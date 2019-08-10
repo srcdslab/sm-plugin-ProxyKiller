@@ -7,7 +7,7 @@
 
 // =========================================================== //
 
-#define MYSQL_DB_CONF "ProxyKiller"
+static char DB_CONF_NAME[] = "ProxyKiller";
 
 static char CREATE_TABLE[] =
 "CREATE TABLE `ProxyKiller2_Cache` "
@@ -20,19 +20,19 @@ static char CREATE_TABLE[] =
 ..."PRIMARY KEY (`IPAddress`, `ServiceName`)"
 ...")"
 
-static char INSERT_RECORD[] =
-"INSERT INTO `ProxyKiller2_Cache` "
-..."(`IPAddress`, `ServiceName`, `Result`) "
-..."VALUES ('%s', '%s', '%d') "
-..."ON DUPLICATE KEY UPDATE "
-..."Result = '%d', Timestamp = CURRENT_TIMESTAMP";
-
 static char SELECT_RECORD[] =
 "SELECT `IPAddress`, `ServiceName`, "
 ..."`Result`, UNIX_TIMESTAMP(`Timestamp`) "
 ..."FROM ProxyKiller2_Cache "
 ..."WHERE `IPAddress` = '%s' "
 ..."AND `ServiceName` = '%s'";
+
+static char INSERT_RECORD[] =
+"INSERT INTO `ProxyKiller2_Cache` "
+..."(`IPAddress`, `ServiceName`, `Result`) "
+..."VALUES ('%s', '%s', '%d') "
+..."ON DUPLICATE KEY UPDATE "
+..."Result = '%d', Timestamp = CURRENT_TIMESTAMP";
 
 // =========================================================== //
 
@@ -41,11 +41,11 @@ methodmap ProxyCacheMySQL < ProxyCache
 	public ProxyCacheMySQL()
 	{
 		char error[256] = "Unknown";
-		Database db = SQL_Connect(MYSQL_DB_CONF, true, error, sizeof(error));
+		Database db = SQL_Connect(DB_CONF_NAME, true, error, sizeof(error));
 
 		if (db == null)
 		{
-			SetFailState("<Cache-MySQL> Error connecting to configuration \"%s\" \n%s", MYSQL_DB_CONF, error);
+			SetFailState("<Cache-MySQL> Error connecting to configuration \"%s\" \n%s", DB_CONF_NAME, error);
 		}
 		else
 		{
@@ -54,7 +54,7 @@ methodmap ProxyCacheMySQL < ProxyCache
 			
 			if (!StrEqual(driver, "mysql", false))
 			{
-				SetFailState("<Cache-MySQL> Invalid database driver for \"%s\", expecting \"mysql\"", MYSQL_DB_CONF);
+				SetFailState("<Cache-MySQL> Invalid database driver for \"%s\", expecting \"mysql\"", DB_CONF_NAME);
 			}
 		}
 
