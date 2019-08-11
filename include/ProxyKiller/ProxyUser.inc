@@ -15,7 +15,7 @@ methodmap ProxyUser < StringMapEx
 		proxyUser.SetValue("userid", userid);
 		return view_as<ProxyUser>(proxyUser);
 	}
-	
+
 	property int UserId
 	{
 		public get()
@@ -23,7 +23,7 @@ methodmap ProxyUser < StringMapEx
 			return this.GetInt("userid");
 		}
 	}
-	
+
 	property int Client 
 	{
 		public get()
@@ -31,17 +31,17 @@ methodmap ProxyUser < StringMapEx
 			return GetClientOfUserId(this.UserId);
 		}
 	}
-	
+
 	public void SetSteamId2(const char[] steamId2)
 	{
 		this.SetString("steamid2", steamId2);
 	}
-	
+
 	public void SetIPAddress(const char[] ipAddress)
 	{
 		this.SetString("ipaddress", ipAddress);
 	}
-	
+
 	public void GetSteamId2(char[] buffer, int maxlength)
 	{
 		this.GetString("steamid2", buffer, maxlength);
@@ -51,7 +51,7 @@ methodmap ProxyUser < StringMapEx
 	{
 		this.GetString("ipaddress", buffer, maxlength);
 	}
-	
+
 	public void GetAndSetSteamId2()
 	{
 		char steamId2[32];
@@ -59,10 +59,10 @@ methodmap ProxyUser < StringMapEx
 		{
 			strcopy(steamId2, sizeof(steamId2), "Unknown");
 		}
-		
+
 		this.SetSteamId2(steamId2);
 	}
-	
+
 	public void GetAndSetIPAddress()
 	{
 		char ipAddress[24];
@@ -70,7 +70,7 @@ methodmap ProxyUser < StringMapEx
 		{
 			strcopy(ipAddress, sizeof(ipAddress), "Unknown");
 		}
-		
+
 		this.SetIPAddress(ipAddress);
 	}
 }

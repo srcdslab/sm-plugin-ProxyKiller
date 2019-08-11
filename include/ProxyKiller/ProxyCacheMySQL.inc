@@ -82,12 +82,11 @@ methodmap ProxyCacheMySQL < ProxyCache
 		service.GetName(serviceName, sizeof(serviceName));
 		
 		char query[512];
-		Format(query, sizeof(query), SELECT_RECORD, ipAddress, serviceName);
+		this.Provider.Format(query, sizeof(query), SELECT_RECORD, ipAddress, serviceName);
 
 		this.Provider.Query(callback, query, pUser);
 	}
-	
-	// Override ProxyCache::TryPushCache
+
 	public void TryPushCache(ProxyUser pUser, ProxyService service, any result, SQLQueryCallback callback)
 	{
 		char ipAddress[24];
@@ -97,7 +96,7 @@ methodmap ProxyCacheMySQL < ProxyCache
 		service.GetName(serviceName, sizeof(serviceName));
 		
 		char query[512];
-		Format(query, sizeof(query), INSERT_RECORD, ipAddress, serviceName, result, result);
+		this.Provider.Format(query, sizeof(query), INSERT_RECORD, ipAddress, serviceName, result, result);
 
 		this.Provider.Query(callback, query); 
 	}
