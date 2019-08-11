@@ -43,7 +43,7 @@ bool HasApp(int client, int appid)
 	return (SteamWorks_HasLicenseForApp(client, appid) == k_EUserHasLicenseResultHasLicense);
 }
 
-bool HasFlagFrom(int client, char[] flagString)
+bool HasFlagFromFlagString(int client, char[] flagString)
 {
 	int bitString = ReadFlagString(flagString);
 
@@ -52,7 +52,7 @@ bool HasFlagFrom(int client, char[] flagString)
 
 	for (int i = 0; i < flagCount; i++)
 	{
-		if (HasFlag(client, flags[i]))
+		if (HasFlag(client, FlagToBit(flags[i])))
 		{
 			return true;
 		}
@@ -61,7 +61,7 @@ bool HasFlagFrom(int client, char[] flagString)
 	return false;
 }
 
-bool HasAppFrom(int client, char[] appString)
+bool HasAppFromAppString(int client, char[] appString)
 {
 	char appIds[16][16];
 	int appCount = ExplodeString(appString, ",", appIds, sizeof(appIds), sizeof(appIds[]));

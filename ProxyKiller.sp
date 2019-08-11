@@ -85,7 +85,7 @@ public void OnClientPostAdminCheck(int client)
 	TrimString(ignoreFlags);
 	if (!shouldIgnore && strlen(ignoreFlags) > 0)
 	{
-		shouldIgnore = HasFlagFrom(client, ignoreFlags);
+		shouldIgnore = HasFlagFromFlagString(client, ignoreFlags);
 	}
 
 	char ignoreApps[256];
@@ -94,7 +94,7 @@ public void OnClientPostAdminCheck(int client)
 	TrimString(ignoreApps);
 	if (!shouldIgnore && strlen(ignoreApps) > 0)
 	{
-		shouldIgnore = HasAppFrom(client, ignoreApps);
+		shouldIgnore = HasAppFromAppString(client, ignoreApps);
 	}
 
 	if (!shouldIgnore)
