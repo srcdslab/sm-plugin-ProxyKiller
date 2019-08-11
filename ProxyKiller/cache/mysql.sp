@@ -7,6 +7,7 @@ public void MySQL_OnCache(Database db, DBResultSet results, const char[] error, 
 	if (strlen(error) > 0 || results == null || !results.HasResults)
 	{
 		g_Logger.ErrorMessage("<Cache-MySQL> Uh oh! Encountered a SQL error! - \"%s\"", error);
+		delete pUser;
 		return;
 	}
 
