@@ -39,10 +39,10 @@ public void MySQL_OnCache(Database db, DBResultSet results, const char[] error, 
 				{
 					DoPunishment(pUser);
 				}
-
-				delete pUser;
 			}
 		}
+
+		delete pUser;
 	}
 }
 
