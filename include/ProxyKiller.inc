@@ -22,10 +22,14 @@
 #include <ProxyKiller/ProxyService>
 #include <ProxyKiller/ProxyServiceContext>
 
-#include <ProxyKiller/ProxyCache>
 #include <ProxyKiller/ProxyConfig>
 #include <ProxyKiller/ProxyLogger>
+
+#include <ProxyKiller/ProxyCache>
 #include <ProxyKiller/ProxyCacheMySQL>
+
+#include <ProxyKiller/ProxyRules>
+#include <ProxyKiller/ProxyRulesMySQL>
 
 // =========================================================== //
 
