@@ -75,7 +75,7 @@ public void OnConfigsExecuted()
 	Call_OnCache();
 	
 	g_Rules = CreateRules(gCV_RulesMode.IntValue);
-	//Call_OnRules();
+	Call_OnRules();
 }
 
 public void OnClientPostAdminCheck(int client)
@@ -108,8 +108,7 @@ public void OnClientPostAdminCheck(int client)
 
 	if (shouldIgnore)
 	{
-		// Lets see what ProxyKiller-Rules thinks of this
-		// An user could be blacklisted (Rules_Blacklist)
+		// FUTURE FEATURE -> Check for blacklisted user
 	}
 	else
 	{

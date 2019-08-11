@@ -21,7 +21,7 @@ ProxyRules CreateRules(int mode)
 
 	ProxyRules rules = null;
 	ProxyRulesMode rm = view_as<ProxyRulesMode>(mode);
-	
+
 	if (rm == RulesMode_Inherit)
 	{
 		// Infinite loop if g_Cache.Mode can somehow return -1

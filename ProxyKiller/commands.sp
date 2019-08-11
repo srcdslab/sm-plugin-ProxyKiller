@@ -19,6 +19,9 @@ public Action Command_RulesAdd(int client, int args)
 	char expression[32];
 	GetCmdArgString(expression, sizeof(expression));
 
+	TrimString(expression);
+	StripQuotes(expression);
+
 	TryPushRule(expression);
 	return Plugin_Handled;
 }
@@ -33,6 +36,9 @@ public Action Command_RulesDelete(int client, int args)
 
 	char expression[32];
 	GetCmdArgString(expression, sizeof(expression));
+
+	TrimString(expression);
+	StripQuotes(expression);
 
 	TryDeleteRule(expression);
 	return Plugin_Handled;
