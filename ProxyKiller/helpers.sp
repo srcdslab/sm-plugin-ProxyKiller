@@ -33,9 +33,32 @@ void DoPunishment(ProxyUser pUser)
 	}
 }
 
+bool HasFlag(int client, int flag)
+{
+	return (CheckCommandAccess(client, "ProxyKiller_Bypass", flag));
+}
+
 bool HasApp(int client, int appid)
 {
 	return (SteamWorks_HasLicenseForApp(client, appid) == k_EUserHasLicenseResultHasLicense);
+}
+
+bool HasFlagFrom(int client, char[] flagString)
+{
+	int bitString = ReadFlagString(flagString);
+
+	AdminFlag flags[AdminFlags_TOTAL];
+	int flagCount = FlagBitsToArray(bitString, flags, sizeof(flags));
+
+	for (int i = 0; i < flagCount; i++)
+	{
+		if (HasFlag(client, flags[i]))
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 bool HasAppFrom(int client, char[] appString)

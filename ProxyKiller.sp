@@ -76,15 +76,23 @@ public void OnClientPostAdminCheck(int client)
 		return;
 	}
 
+	bool shouldIgnore = false;
 	Call_OnValidClient(client);
+
+	char ignoreFlags[64];
+	gCV_IgnoreFlags.GetString(ignoreFlags, sizeof(ignoreFlags));
+
+	TrimString(ignoreFlags);
+	if (!shouldIgnore && strlen(ignoreFlags) > 0)
+	{
+		shouldIgnore = HasFlagFrom(client, ignoreFlags);
+	}
 
 	char ignoreApps[256];
 	gCV_IgnoreAppOwners.GetString(ignoreApps, sizeof(ignoreApps));
 
 	TrimString(ignoreApps);
-	bool shouldIgnore = false;
-
-	if (strlen(ignoreApps) > 0)
+	if (!shouldIgnore && strlen(ignoreApps) > 0)
 	{
 		shouldIgnore = HasAppFrom(client, ignoreApps);
 	}
