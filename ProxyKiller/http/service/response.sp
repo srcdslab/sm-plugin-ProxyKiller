@@ -8,7 +8,7 @@
 
 // =========================================================== //
 
-bool HandleResponse(const char[] response, ProxyServiceContext ctx)
+bool GetResultFromResponse(const char[] response, ProxyServiceContext ctx)
 {
 	g_Logger.PrintFrame();
 

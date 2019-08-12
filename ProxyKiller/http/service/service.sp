@@ -22,7 +22,7 @@ bool QueryService(ProxyUser pUser, ProxyService service)
 
 // =========================================================== //
 
-public void OnService(ProxyHTTPResponse response, const char[] responseData, ProxyServiceContext ctx)
+public void OnService(ProxyHTTPResponse response, const char[] responseStr, ProxyServiceContext ctx)
 {
 	g_Logger.PrintFrame();
 
@@ -35,7 +35,7 @@ public void OnService(ProxyHTTPResponse response, const char[] responseData, Pro
 		return;
 	}
 
-	bool result = HandleResponse(responseData, ctx);
+	bool result = GetResultFromResponse(responseStr, ctx);
 	Call_OnClientResult(ctx.User, result, false);
 
 	if (Call_DoClientResultCache(ctx.User, result))
