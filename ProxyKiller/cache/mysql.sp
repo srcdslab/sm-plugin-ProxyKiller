@@ -17,6 +17,7 @@ public void MySQL_OnCache(Database db, DBResultSet results, const char[] error, 
 	}
 	else
 	{
+		bool inFlight = false;
 		if (results.FetchRow())
 		{
 			bool result = !!results.FetchInt(2);
@@ -30,7 +31,7 @@ public void MySQL_OnCache(Database db, DBResultSet results, const char[] error, 
 
 			if ((GetTime() - timestamp) >= gCV_CacheLifetime.IntValue)
 			{
-				QueryService(pUser, g_Config.Service);
+				inFlight = QueryService(pUser, g_Config.Service);
 			}
 			else
 			{
@@ -39,10 +40,17 @@ public void MySQL_OnCache(Database db, DBResultSet results, const char[] error, 
 				{
 					DoPunishment(pUser);
 				}
+			
+				char dateTime[24];
+				FormatTime(dateTime, sizeof(dateTime), NULL_STRING, timestamp);
+				g_Logger.DebugMessage("Cache hit for \"%s\" (%s)", ipAddress, dateTime);
 			}
 		}
 
-		delete pUser;
+		if (!inFlight)
+		{
+			delete pUser;
+		}
 	}
 }
 
