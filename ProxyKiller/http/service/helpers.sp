@@ -16,8 +16,8 @@ void AddTokenizedParams(ProxyHTTP http, ProxyHTTPParams params, ProxyUser pUser)
 			char paramValue[MAX_PARAM_VALUE_LENGTH];
 			params.GetString(paramName, paramValue, sizeof(paramValue));
 
-			TokenizeAll(pUser, paramName, sizeof(paramName));
-			TokenizeAll(pUser, paramValue, sizeof(paramValue));
+			ExpandRuntimeVariables(pUser, paramName, sizeof(paramName));
+			ExpandRuntimeVariables(pUser, paramValue, sizeof(paramValue));
 
 			http.Params.AddParam(paramName, paramValue);
 		}
@@ -42,8 +42,8 @@ void AddTokenizedHeaders(ProxyHTTP http, ProxyHTTPHeaders headers, ProxyUser pUs
 			char headerValue[MAX_HEADER_VALUE_LENGTH];
 			headers.GetString(headerName, headerValue, sizeof(headerValue));
 
-			TokenizeAll(pUser, headerName, sizeof(headerName));
-			TokenizeAll(pUser, headerValue, sizeof(headerValue));
+			ExpandRuntimeVariables(pUser, headerName, sizeof(headerName));
+			ExpandRuntimeVariables(pUser, headerValue, sizeof(headerValue));
 
 			http.Headers.AddHeader(headerName, headerValue);
 		}

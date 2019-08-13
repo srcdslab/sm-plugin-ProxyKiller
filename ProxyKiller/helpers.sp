@@ -7,7 +7,7 @@ void DoPunishment(ProxyUser pUser)
 
 	if (!StrEqual(log, ""))
 	{
-		TokenizeAll(pUser, log, sizeof(log));
+		ExpandRuntimeVariables(pUser, log, sizeof(log));
 		g_Logger.InfoMessage("%s", log);
 	}
 
@@ -20,12 +20,12 @@ void DoPunishment(ProxyUser pUser)
 		int punishType = gCV_PunishmentType.IntValue;
 		if (punishType == Punishment_Kick)
 		{
-			TokenizeAll(pUser, msg, sizeof(msg));
+			ExpandRuntimeVariables(pUser, msg, sizeof(msg));
 			KickClient(client, "%s", msg);
 		}
 		else if (punishType == Punishment_Ban)
 		{
-			TokenizeAll(pUser, msg, sizeof(msg));
+			ExpandRuntimeVariables(pUser, msg, sizeof(msg));
 
 			int banLength = gCV_PunishmentBanLength.IntValue;
 			BanClient(client, banLength, BANFLAG_AUTO, msg, msg);

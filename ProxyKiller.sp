@@ -31,7 +31,7 @@ ProxyLogger g_Logger = null;
 
 #include "ProxyKiller/config.sp"
 #include "ProxyKiller/helpers.sp"
-#include "ProxyKiller/tokenizer.sp"
+#include "ProxyKiller/string_utils.sp"
 
 #include "ProxyKiller/cache/cache.sp"
 #include "ProxyKiller/cache/mysql.sp"

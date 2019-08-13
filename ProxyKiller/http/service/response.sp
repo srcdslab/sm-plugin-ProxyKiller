@@ -15,7 +15,7 @@ bool GetResultFromResponse(const char[] response, ProxyServiceContext ctx)
 	char expectValue[MAX_RESPONSE_VALUE_LENGTH];
 	ctx.Service.ExpectedResponse.GetValue(expectValue, sizeof(expectValue));
 
-	TokenizeAll(ctx.User, expectValue, sizeof(expectValue));
+	ExpandRuntimeVariables(ctx.User, expectValue, sizeof(expectValue));
 
 	char responseValue[MAX_RESPONSE_VALUE_LENGTH];
 	switch (ctx.Service.ExpectedResponse.Type)
@@ -62,7 +62,7 @@ static void Internal_Handle_JSON(const char[] response, ProxyServiceContext ctx,
 
 	for (int i = 0; i < objCount; i++)
 	{
-		TokenizeAll(ctx.User, objs[i], sizeof(objs[]));
+		ExpandRuntimeVariables(ctx.User, objs[i], sizeof(objs[]));
 
 		if (i < objCount - 1)
 		{

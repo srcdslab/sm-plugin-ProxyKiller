@@ -6,7 +6,7 @@ bool QueryService(ProxyUser pUser, ProxyService service)
 
 	char url[MAX_URL_LENGTH];
 	service.GetUrl(url, sizeof(url));
-	TokenizeAll(pUser, url, sizeof(url));
+	ExpandRuntimeVariables(pUser, url, sizeof(url));
 
 	ProxyHTTP http = ProxyKiller_CreateHTTP(url, service.Method, false);
 

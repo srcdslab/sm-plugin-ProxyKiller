@@ -65,7 +65,7 @@ ProxyConfig ParseConfig(char[] configFile)
 
 		if (!StrEqual(value, ""))
 		{
-			TokenizeVariables(variables, value, sizeof(value));
+			ExpandConfigVariables(variables, value, sizeof(value));
 			variables.SetString(key, value);
 		}
 	}
@@ -120,7 +120,7 @@ int ParseAndSetParams(KeyValues config, ProxyService service, StringMap vars)
 			char paramValue[MAX_PARAM_VALUE_LENGTH];
 			config.GetString(NULL_STRING, paramValue, sizeof(paramValue));
 
-			TokenizeVariables(vars, paramValue, sizeof(paramValue));
+			ExpandConfigVariables(vars, paramValue, sizeof(paramValue));
 
 			addedParamsCount++;
 			service.Params.AddParam(paramName, paramValue);
@@ -144,7 +144,7 @@ int ParseAndSetHeaders(KeyValues config, ProxyService service, StringMap vars)
 			char headerValue[MAX_HEADER_VALUE_LENGTH];
 			config.GetString(NULL_STRING, headerValue, sizeof(headerValue));
 
-			TokenizeVariables(vars, headerValue, sizeof(headerValue));
+			ExpandConfigVariables(vars, headerValue, sizeof(headerValue));
 
 			addedHeadersCount++;
 			service.Headers.AddHeader(headerName, headerValue);
