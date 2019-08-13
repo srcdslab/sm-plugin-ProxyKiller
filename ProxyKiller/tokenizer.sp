@@ -21,6 +21,24 @@ void TokenizeAll(ProxyUser pUser, char[] buffer, int maxlength)
 	TokenizeSteamId2(steamId2, buffer, maxlength);
 }
 
+void TokenizeVariables(StringMap variables, char[] buffer, int maxlength)
+{
+	StringMapSnapshot vars = variables.Snapshot();
+	for (int i = 0; i < vars.Length; i++)
+	{
+		char varName[128];
+		vars.GetKey(i, varName, sizeof(varName));
+		
+		char varValue[256];
+		variables.GetString(varName, varValue, sizeof(varValue));
+
+		Format(varName, sizeof(varName), "{{%s}}", varName);
+		ReplaceString(buffer, maxlength, varName, varValue);
+	}
+
+	delete vars;
+}
+
 // =========================================================== //
 
 void TokenizeIP(char[] ipAddress, char[] buffer, int maxlength)

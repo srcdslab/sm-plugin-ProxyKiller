@@ -48,7 +48,7 @@ ProxyConfig ParseConfig(char[] configFile)
 		SetFailState("Failed parsing %s!", configFile);
 	}
 
-	StringMap cachedVars = new StringMap();
+	StringMap variables = new StringMap();
 	while (config.GotoFirstSubKey(false) || config.GotoNextKey(false))
 	{
 		// We only want keys on root node
@@ -65,7 +65,8 @@ ProxyConfig ParseConfig(char[] configFile)
 
 		if (!StrEqual(value, ""))
 		{
-			cachedVars.SetString(key, value);
+			TokenizeVariables(variables, value, sizeof(value));
+			variables.SetString(key, value);
 		}
 	}
 
@@ -94,39 +95,16 @@ ProxyConfig ParseConfig(char[] configFile)
 	ProxyHTTPMethod httpMethod = GetHTTPMethodFromString(method);
 	ProxyService service = new ProxyService(url, httpMethod, name, response);
 
-	ParseAndSetParams(config, service, cachedVars);
+	ParseAndSetParams(config, service, variables);
 	config.Rewind();
 	config.JumpToKey(name);
 	
-	ParseAndSetHeaders(config, service, cachedVars);
+	ParseAndSetHeaders(config, service, variables);
 	config.Rewind();
 	config.JumpToKey(name);
 
 	delete config;
-	return new ProxyConfig(cachedVars, service);
-}
-
-// TODO: not really good way of doing this
-bool GetTokenFromInput(char[] input, char[] buffer, int maxlength)
-{
-	int charsLen = strlen("{{}}") / 2;
-	int start = StrContains(input, "{{");
-	int end = StrContains(input[start + charsLen], "}}");
-
-	if (start != -1 && end != -1 && end > start)
-	{
-		start = start + charsLen;
-		end = end + charsLen;
-
-		for (int i = start; i < end; i++)
-		{
-			Format(buffer, maxlength, "%s%c", buffer, input[i]);
-		}
-
-		return true;
-	}
-
-	return false;
+	return new ProxyConfig(variables, service);
 }
 
 int ParseAndSetParams(KeyValues config, ProxyService service, StringMap vars)
@@ -142,14 +120,7 @@ int ParseAndSetParams(KeyValues config, ProxyService service, StringMap vars)
 			char paramValue[MAX_PARAM_VALUE_LENGTH];
 			config.GetString(NULL_STRING, paramValue, sizeof(paramValue));
 
-			char tokenName[MAX_PARAM_VALUE_LENGTH];
-			if (GetTokenFromInput(paramValue, tokenName, sizeof(tokenName)))
-			{
-				if (!vars.GetString(tokenName, paramValue, sizeof(paramValue)))
-				{
-					g_Logger.InfoMessage("Token \"%s\" does not exist in the root node!", tokenName);
-				}
-			}
+			TokenizeVariables(vars, paramValue, sizeof(paramValue));
 
 			addedParamsCount++;
 			service.Params.AddParam(paramName, paramValue);
@@ -173,14 +144,7 @@ int ParseAndSetHeaders(KeyValues config, ProxyService service, StringMap vars)
 			char headerValue[MAX_HEADER_VALUE_LENGTH];
 			config.GetString(NULL_STRING, headerValue, sizeof(headerValue));
 
-			char tokenName[MAX_HEADER_VALUE_LENGTH];
-			if (GetTokenFromInput(headerValue, tokenName, sizeof(tokenName)))
-			{
-				if (!vars.GetString(tokenName, headerValue, sizeof(headerValue)))
-				{
-					g_Logger.InfoMessage("Token \"%s\" does not exist in the root node!", tokenName);
-				}
-			}
+			TokenizeVariables(vars, headerValue, sizeof(headerValue));
 
 			addedHeadersCount++;
 			service.Headers.AddHeader(headerName, headerValue);
