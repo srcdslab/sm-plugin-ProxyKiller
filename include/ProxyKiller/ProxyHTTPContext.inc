@@ -26,13 +26,13 @@ methodmap ProxyHTTPContext < StringMapEx
 		public set(any data) { this.SetValue("data", data); }
 	}
 	
-	public void Cleanup()
+	public void Dispose()
 	{
 		if (this.HTTP != null)
 		{
-			this.HTTP.Cleanup();
+			this.HTTP.Dispose();
 		}
-		
+
 		delete this;
 	}
 }

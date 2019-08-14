@@ -26,15 +26,13 @@ methodmap ProxyServiceContext < StringMapEx
 		public set(ProxyService service) { this.SetValue("service", service); }
 	}
 	
-	public void Cleanup()
+	public void Dispose()
 	{
-		if (this.User != null)
-		{
-			delete this.User;
-		}
+		delete this.User;
+
 		if (this.Service != null)
 		{
-			this.Service.Cleanup();
+			this.Service.Dispose();
 		}
 
 		delete this;

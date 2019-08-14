@@ -74,31 +74,18 @@ methodmap ProxyHTTP < StringMapEx
 		public get() { return this.GetAny("method"); }
 	}
 
-	public void Cleanup()
+	public void Dispose()
 	{
-		if (this.Callback != null)
-		{
-			delete this.Callback;
-		}
-
-		if (this.Response != null)
-		{
-			delete this.Response;
-		}
+		delete this.Callback;
+		delete this.Response;
 
 		if (!this.IsPersistent)
 		{
-			if (this.Params != null)
-			{
-				delete this.Params;
-			}
-			if (this.Headers != null)
-			{
-				delete this.Headers;
-			}
-
-			delete this;
+			delete this.Params;
+			delete this.Headers;
 		}
+
+		delete this;
 	}
 }
 

@@ -54,7 +54,7 @@ public void OnService(ProxyHTTPResponse response, const char[] responseStr, Prox
 
 	if (ctx != null)
 	{
-		ctx.Cleanup();
+		ctx.Dispose();
 	}
 }
 
