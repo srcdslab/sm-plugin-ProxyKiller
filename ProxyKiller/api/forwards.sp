@@ -1,6 +1,7 @@
 // =========================================================== //
 
 static Handle H_OnCache = null;
+static Handle H_OnRules = null;
 static Handle H_OnConfig = null;
 static Handle H_OnLogger = null;
 static Handle H_OnValidClient = null;
@@ -21,6 +22,7 @@ static Handle H_OnClientPunishment = null;
 void CreateForwards()
 {
 	H_OnCache = CreateGlobalForward("ProxyKiller_OnCache", ET_Ignore);
+	H_OnRules = CreateGlobalForward("ProxyKiller_OnRules", ET_Ignore);
 	H_OnConfig = CreateGlobalForward("ProxyKiller_OnConfig", ET_Ignore);
 	H_OnLogger = CreateGlobalForward("ProxyKiller_OnLogger", ET_Ignore);
 	H_OnValidClient = CreateGlobalForward("ProxyKiller_OnValidClient", ET_Ignore, Param_Cell);
@@ -42,6 +44,12 @@ void CreateForwards()
 void Call_OnCache()
 {
 	Call_StartForward(H_OnCache);
+	Call_Finish();
+}
+
+void Call_OnRules()
+{
+	Call_StartForward(H_OnRules);
 	Call_Finish();
 }
 

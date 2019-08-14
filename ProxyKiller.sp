@@ -12,6 +12,7 @@
 // ====================== VARIABLES ========================== //
 
 ProxyCache g_Cache = null;
+ProxyRules g_Rules = null;
 ProxyConfig g_Config = null;
 ProxyLogger g_Logger = null;
 
@@ -31,10 +32,14 @@ ProxyLogger g_Logger = null;
 
 #include "ProxyKiller/config.sp"
 #include "ProxyKiller/helpers.sp"
+#include "ProxyKiller/commands.sp"
 #include "ProxyKiller/string_utils.sp"
 
 #include "ProxyKiller/cache/cache.sp"
 #include "ProxyKiller/cache/mysql.sp"
+
+#include "ProxyKiller/rules/rules.sp"
+#include "ProxyKiller/rules/mysql.sp"
 
 // ====================== PLUGIN INFO ======================== //
 
@@ -54,6 +59,7 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 	CreateNatives();
 	CreateConVars();
 	CreateForwards();
+	CreateCommands();
 	AutoExecConfig(true, PROXYKILLER_NAME ... "-Convars");
 
 	g_Logger = new ProxyLogger(PROXYKILLER_SPEWMODE, PROXYKILLER_SPEWLEVEL);
@@ -67,6 +73,9 @@ public void OnConfigsExecuted()
 
 	g_Cache = CreateCache(gCV_CacheMode.IntValue);
 	Call_OnCache();
+	
+	g_Rules = CreateRules(gCV_RulesMode.IntValue);
+	Call_OnRules();
 }
 
 public void OnClientPostAdminCheck(int client)
@@ -97,7 +106,11 @@ public void OnClientPostAdminCheck(int client)
 		shouldIgnore = HasAppFromAppString(client, ignoreApps);
 	}
 
-	if (!shouldIgnore)
+	if (shouldIgnore)
+	{
+		// FUTURE FEATURE -> Check for blacklisted user
+	}
+	else
 	{
 		if (Call_DoCheckClient(client))
 		{

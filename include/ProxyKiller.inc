@@ -22,10 +22,14 @@
 #include <ProxyKiller/ProxyService>
 #include <ProxyKiller/ProxyServiceContext>
 
-#include <ProxyKiller/ProxyCache>
 #include <ProxyKiller/ProxyConfig>
 #include <ProxyKiller/ProxyLogger>
+
+#include <ProxyKiller/ProxyCache>
 #include <ProxyKiller/ProxyCacheMySQL>
+
+#include <ProxyKiller/ProxyRules>
+#include <ProxyKiller/ProxyRulesMySQL>
 
 // =========================================================== //
 
@@ -103,9 +107,16 @@ typeset ProxyHTTPCallback
 /**
  * Gets the ProxyCache used by ProxyKiller
  *
- * @return						ProxyCache object being used by ProxyKiller		
+ * @return						ProxyCache object being used by ProxyKiller
  */
 native ProxyCache ProxyKiller_GetCache();
+
+/**
+ * Gets the ProxyRules used by ProxyKiller
+ *
+ * @return						ProxyRules object being used by ProxyKiller
+ */
+native ProxyRules ProxyKiller_GetRules();
 
 /**
  * Gets the ProxyConfig used by ProxyKiller
@@ -117,16 +128,23 @@ native ProxyConfig ProxyKiller_GetConfig();
 /**
  * Gets the ProxyLogger used by ProxyKiller
  *
- * @return						ProxyLogger object being used by ProxyKiller		
+ * @return						ProxyLogger object being used by ProxyKiller
  */
 native ProxyLogger ProxyKiller_GetLogger();
 
 /**
  * Gets whether cache is initialized for ProxyKiller
  *
- * @return						Whether cache was initialized for ProxyKiller		
+ * @return						Whether cache was initialized for ProxyKiller
  */
 native bool ProxyKiller_IsCacheInit();
+
+/**
+ * Gets whether rules is initialized for ProxyKiller
+ *
+ * @return						Whether rules was initialized for ProxyKiller
+ */
+native bool ProxyKiller_IsRulesInit();
 
 /**
  * Tells ProxyKiller to check the specified client
@@ -164,6 +182,13 @@ native ProxyHTTP ProxyKiller_CreateHTTP(const char[] url, ProxyHTTPMethod method
  * @noreturn
  */
 forward void ProxyKiller_OnCache();
+
+/**
+ * Called when the rules is initialized for ProxyKiller
+ *
+ * @noreturn
+ */
+forward void ProxyKiller_OnRules();
 
 /**
  * Called when the config is initialized for ProxyKiller
