@@ -83,9 +83,8 @@ methodmap ProxyHTTP < StringMapEx
 		{
 			delete this.Params;
 			delete this.Headers;
+			delete this;
 		}
-
-		delete this;
 	}
 }
 
