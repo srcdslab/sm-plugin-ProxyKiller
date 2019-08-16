@@ -24,9 +24,9 @@ int ExpandConfigVariables(StringMap variables, char[] buffer, int maxlength)
 
 	for (int i = 0; i < vars.Length; i++)
 	{
-		char varName[128];
+		char varName[64];
 		vars.GetKey(i, varName, sizeof(varName));
-		
+
 		char varValue[256];
 		variables.GetString(varName, varValue, sizeof(varValue));
 
