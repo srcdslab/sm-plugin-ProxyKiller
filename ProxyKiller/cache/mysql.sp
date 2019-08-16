@@ -43,7 +43,7 @@ public void MySQL_OnCache(Database db, DBResultSet results, const char[] error, 
 			
 				char dateTime[24];
 				FormatTime(dateTime, sizeof(dateTime), NULL_STRING, timestamp);
-				g_Logger.DebugMessage("Cache hit for \"%s\" (%s)", ipAddress, dateTime);
+				g_Logger.DebugMessage("Cache hit for \"%s\" - Result: %d (%s)", ipAddress, result, dateTime);
 			}
 		}
 
