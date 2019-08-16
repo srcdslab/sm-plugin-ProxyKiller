@@ -21,8 +21,8 @@ Please see the [Wiki](https://bitbucket.org/Sikarii/proxykiller/wiki) for a feat
 	 -  NOTE: **Currently (2.0.0) rules only support whitelisting**
 - **Configurable punishments**
 	- Choose from log, kick or ban (ban length also configurable)
-	- Configurable kick message (also supports variables)
 	- Configurable logging message (also supports variables)
+	- Configurable punishment message (also supports variables)
 - **Entirely configurable service**
 	- Supports config and runtime variables! (See **X**)
 	- Choose from status code, plaintext or json response
