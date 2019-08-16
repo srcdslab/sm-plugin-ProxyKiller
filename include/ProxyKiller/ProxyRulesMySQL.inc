@@ -13,28 +13,31 @@ static char CREATE_TABLE[] =
 "CREATE TABLE `ProxyKiller2_Rules` "
 ..."("
 ..."`Expression` VARCHAR(32) NOT NULL, "
+..."`Type` TINYINT NOT NULL, "
 ..."`Timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, "
 ..."PRIMARY KEY (`Expression`)"
 ...")";
 
-// Kind of bad? Currently designed for IP/SteamId
 static char SELECT_RECORD[] =
 "SELECT `Expression`, "
 ..."UNIX_TIMESTAMP(`Timestamp`) "
 ..."FROM ProxyKiller2_Rules "
-..."WHERE `Expression` = '%s' "
-..."OR `Expression` = '%s'";
+..."WHERE `Expression` "
+..."IN ('%s', '%s') "
+..."AND `Type` = '%d'";
 
 static char INSERT_RECORD[] =
 "INSERT INTO `ProxyKiller2_Rules` "
-..."(`Expression`) "
-..."VALUES ('%s') "
+..."(`Expression`, `Type`) "
+..."VALUES ('%s', '%d') "
 ..."ON DUPLICATE KEY UPDATE "
-..."Timestamp = CURRENT_TIMESTAMP";
+..."`Type` = VALUES(`Type`), "
+..."`Timestamp` = CURRENT_TIMESTAMP";
 
 static char DELETE_RECORD[] =
 "DELETE FROM `ProxyKiller2_Rules` "
-..."WHERE `Expression` = '%s'";
+..."WHERE `Expression` = '%s' "
+..."AND `Type` = '%d'";
 
 // =========================================================== //
 
@@ -75,7 +78,7 @@ methodmap ProxyRulesMySQL < ProxyRules
 		SQL_UnlockDatabase(this.Provider);
 	}
 	
-	public void TryGetRules(ProxyUser pUser, SQLQueryCallback callback)
+	public void TryGetRules(ProxyUser pUser, ProxyRulesType type, SQLQueryCallback callback)
 	{
 		char steamId2[32];
 		pUser.GetSteamId2(steamId2, sizeof(steamId2));
@@ -84,23 +87,23 @@ methodmap ProxyRulesMySQL < ProxyRules
 		pUser.GetIPAddress(ipAddress, sizeof(ipAddress));
 		
 		char query[512];
-		this.Provider.Format(query, sizeof(query), SELECT_RECORD, steamId2, ipAddress);
+		this.Provider.Format(query, sizeof(query), SELECT_RECORD, steamId2, ipAddress, type);
 
 		this.Provider.Query(callback, query, pUser);
 	}
 	
-	public void TryPushRule(char[] expression, SQLQueryCallback callback)
+	public void TryPushRule(char[] expression, ProxyRulesType type, SQLQueryCallback callback)
 	{
 		char query[512];
-		this.Provider.Format(query, sizeof(query), INSERT_RECORD, expression);
+		this.Provider.Format(query, sizeof(query), INSERT_RECORD, expression, type);
 
 		this.Provider.Query(callback, query);
 	}
 	
-	public void TryDeleteRule(char[] expression, SQLQueryCallback callback)
+	public void TryDeleteRule(char[] expression, ProxyRulesType type, SQLQueryCallback callback)
 	{
 		char query[512];
-		this.Provider.Format(query, sizeof(query), DELETE_RECORD, expression);
+		this.Provider.Format(query, sizeof(query), DELETE_RECORD, expression, type);
 
 		this.Provider.Query(callback, query);
 	}

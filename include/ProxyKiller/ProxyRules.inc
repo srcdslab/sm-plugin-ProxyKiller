@@ -18,6 +18,13 @@ enum ProxyRulesMode
 	RulesMode_COUNT
 };
 
+enum ProxyRulesType
+{
+	RulesType_None = 0,
+	RulesType_Whitelist,
+	RulesType_COUNT
+};
+
 // =========================================================== //
 
 methodmap ProxyRules < StringMapEx

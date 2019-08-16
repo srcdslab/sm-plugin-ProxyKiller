@@ -51,7 +51,7 @@ ProxyRules CreateRules(int mode)
 	return rules;
 }
 
-void TryGetRules(ProxyUser pUser)
+void TryGetRules(ProxyUser pUser, ProxyRulesType type = RulesType_Whitelist)
 {
 	switch (g_Rules.Mode)
 	{
@@ -61,7 +61,7 @@ void TryGetRules(ProxyUser pUser)
 		}
 		case RulesMode_MySQL:
 		{
-			Rules_MySQL(g_Rules).TryGetRules(pUser, MySQL_OnRules);
+			Rules_MySQL(g_Rules).TryGetRules(pUser, type, MySQL_OnRules);
 		}
 		default:
 		{
@@ -70,13 +70,13 @@ void TryGetRules(ProxyUser pUser)
 	}
 }
 
-void TryPushRule(char[] expression)
+void TryPushRule(char[] expression, ProxyRulesType type = RulesType_Whitelist)
 {
 	switch (g_Rules.Mode)
 	{
 		case RulesMode_MySQL:
 		{
-			Rules_MySQL(g_Rules).TryPushRule(expression, MySQL_OnRuleGeneric);
+			Rules_MySQL(g_Rules).TryPushRule(expression, type, MySQL_OnRuleGeneric);
 		}
 		default:
 		{
@@ -85,13 +85,13 @@ void TryPushRule(char[] expression)
 	}
 }
 
-void TryDeleteRule(char[] expression)
+void TryDeleteRule(char[] expression, ProxyRulesType type = RulesType_Whitelist)
 {
 	switch (g_Rules.Mode)
 	{
 		case RulesMode_MySQL:
 		{
-			Rules_MySQL(g_Rules).TryDeleteRule(expression, MySQL_OnRuleGeneric);
+			Rules_MySQL(g_Rules).TryDeleteRule(expression, type, MySQL_OnRuleGeneric);
 		}
 		default:
 		{
