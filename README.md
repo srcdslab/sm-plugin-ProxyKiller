@@ -6,24 +6,24 @@ Please see the [Wiki](https://bitbucket.org/Sikarii/proxykiller/wiki) for a feat
 ---
 
 ## **Features**
-- Extensive logging
+- **Extensive logging**
 	 - Decide what logging messages you want to see and where
-- Extensive plugin api
+- **Extensive plugin api**
 	 - Tons of natives and forwards available for third-party plugins
-- Caching of IP Addresses
+- **Caching of IP Addresses**
   	 - Configurable caching time
- - Admin flags & app owners whitelisting
+ - **Admin flags & app owners whitelisting**
 	 - Configure clients with admin flags to be ignored
 	 - Configure clients with steam apps to be ignored
- - Configurable rules
+ - **Configurable rules**
 	 - 	Supports adding and removing rules in-game
 	 - Could be expanded to more complex rules in the future
 	 -  NOTE: **Currently (2.0.0) rules only support whitelisting**
-- Configurable punishments
+- **Configurable punishments**
 	- Choose from log, kick or ban (ban length also configurable)
 	- Configurable kick message (also supports variables)
 	- Configurable logging message (also supports variables)
-- Entirely configurable service
+- **Entirely configurable service**
 	- Supports config and runtime variables! (See **X**)
 	- Choose from status code, plaintext or json response
 	- Choose from inequality or equality comparisations
