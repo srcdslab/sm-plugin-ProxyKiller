@@ -32,7 +32,8 @@ static char INSERT_RECORD[] =
 ..."(`IPAddress`, `ServiceName`, `Result`) "
 ..."VALUES ('%s', '%s', '%d') "
 ..."ON DUPLICATE KEY UPDATE "
-..."Result = '%d', Timestamp = CURRENT_TIMESTAMP";
+..."`Result` = VALUES(`Result`), "
+..."`Timestamp` = CURRENT_TIMESTAMP";
 
 // =========================================================== //
 
@@ -96,7 +97,7 @@ methodmap ProxyCacheMySQL < ProxyCache
 		service.GetName(serviceName, sizeof(serviceName));
 		
 		char query[512];
-		this.Provider.Format(query, sizeof(query), INSERT_RECORD, ipAddress, serviceName, result, result);
+		this.Provider.Format(query, sizeof(query), INSERT_RECORD, ipAddress, serviceName, result);
 
 		this.Provider.Query(callback, query); 
 	}
