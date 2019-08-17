@@ -24,7 +24,7 @@ Please see the [Wiki](https://bitbucket.org/Sikarii/proxykiller/wiki) for a feat
 	- Configurable logging message (also supports variables)
 	- Configurable punishment message (also supports variables)
 - **Entirely configurable service**
-	- Supports config and runtime variables! (See **X**)
+	- Supports config and runtime variables! (See [Variables](https://bitbucket.org/Sikarii/proxykiller/wiki/Variables))
 	- Choose from status code, plaintext or json response
 	- Choose from inequality or equality comparisations
 	- Choose what response value is considered as a Proxy/VPN
