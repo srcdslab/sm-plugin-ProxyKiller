@@ -21,10 +21,10 @@ Please see the [Wiki](https://bitbucket.org/Sikarii/proxykiller/wiki) for a feat
 	 -  NOTE: **Currently (2.0.0) rules only support whitelisting**
 - **Configurable punishments**
 	- Choose from log, kick or ban (ban length also configurable)
-	- Configurable logging message (also supports variables)
-	- Configurable punishment message (also supports variables)
+	- Configurable logging message (also supports [variables](https://bitbucket.org/Sikarii/proxykiller/wiki/Variables))
+	- Configurable punishment message (also supports [variables](https://bitbucket.org/Sikarii/proxykiller/wiki/Variables))
 - **Entirely configurable service**
-	- Supports config and runtime variables! (See [Variables](https://bitbucket.org/Sikarii/proxykiller/wiki/Variables))
+	- Supports config and runtime [variables](https://bitbucket.org/Sikarii/proxykiller/wiki/Variables)!
 	- Choose from status code, plaintext or json response
 	- Choose from inequality or equality comparisations
 	- Choose what response value is considered as a Proxy/VPN
