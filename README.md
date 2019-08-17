@@ -39,10 +39,7 @@ Please see the [Wiki](https://bitbucket.org/Sikarii/proxykiller/wiki) for a feat
 
 
 ## **Installation**
-- **Make sure the above requirements are met**
-- Download [ProxyKiller-latest.smx](https://bitbucket.org/Sikarii/proxykiller/downloads/ProxyKiller-latest.smx) and drop it to `/csgo/addons/sourcemod/plugins/`
-- Edit or use the [example configuration](https://bitbucket.org/Sikarii/proxykiller/src/master/docs/CONFIG.md) and drop it to `/csgo/cfg/sourcemod/ProxyKiller-Config.cfg`
-- Add an entry called "ProxyKiller" to `/csgo/addons/sourcemod/configs/databases.cfg`
+- **TODO**
 
 ---
 
