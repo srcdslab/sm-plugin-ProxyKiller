@@ -5,6 +5,10 @@ Please see the [Wiki](https://bitbucket.org/Sikarii/proxykiller/wiki) for a feat
 
 ---
 
+In case you wanna support me, heres an [incredibly optional donate link](https://paypal.me/Sikarii)
+
+---
+
 ## **Features**
 - **Extensive logging**
 	 - Decide what logging messages you want to see and where
