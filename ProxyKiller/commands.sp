@@ -4,6 +4,8 @@ void CreateCommands()
 {
 	RegAdminCmd("sm_proxykiller_rules_add", Command_RulesAdd, ADMFLAG_RCON, "Adds an expression to ProxyKiller Rules");
 	RegAdminCmd("sm_proxykiller_rules_delete", Command_RulesDelete, ADMFLAG_RCON, "Deletes an expression from ProxyKiller Rules");
+
+	RegAdminCmd("sm_proxykiller_apply_migration", Command_ApplyMigration, ADMFLAG_RCON, "Applies a migration to ProxyKiller");
 }
 
 // =========================================================== //
@@ -41,6 +43,33 @@ public Action Command_RulesDelete(int client, int args)
 	StripQuotes(expression);
 
 	TryDeleteRule(expression);
+	return Plugin_Handled;
+}
+
+
+public Action Command_ApplyMigration(int client, int args)
+{
+	if (args <= 0)
+	{
+		return Plugin_Handled;
+	}
+
+	char migration[128];
+	GetCmdArg(1, migration, sizeof(migration));
+	MigrationResult result = ApplyMigration(migration);
+
+	switch (result)
+	{
+		case Result_Success:
+		{
+			ReplyToCommand(client, "Successfully applied migration \"%s\"", migration);
+		}
+		case Result_LookupFailure:
+		{
+			ReplyToCommand(client, "Failed to lookup migration by name \"%s\"", migration);
+		}
+	}
+
 	return Plugin_Handled;
 }
 
