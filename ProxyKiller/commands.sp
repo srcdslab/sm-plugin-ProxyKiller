@@ -54,7 +54,7 @@ public Action Command_ApplyMigration(int client, int args)
 		return Plugin_Handled;
 	}
 
-	char migration[128];
+	char migration[MAX_MIGRATION_LENGTH];
 	GetCmdArg(1, migration, sizeof(migration));
 	MigrationResult result = ApplyMigration(migration);
 
