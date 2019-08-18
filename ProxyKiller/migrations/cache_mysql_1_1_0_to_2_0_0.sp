@@ -23,8 +23,18 @@ static char Queries[][] =
 
 // =========================================================== //
 
-public int PKMigration_cache_mysql_1_1_0_to_2_0_0()
+public MigrationResult PKMigration_cache_mysql_1_1_0_to_2_0_0()
 {
+	if (!ProxyKiller_IsCacheInit())
+	{
+		return Result_OtherFailure;
+	}
+
+	if (g_Cache.Mode != CacheMode_MySQL)
+	{
+		return Result_ProviderMismatch;
+	}
+
 	int failureCount = 0;
 	for (int i = 0; i < sizeof(Queries); i++)
 	{
@@ -38,7 +48,7 @@ public int PKMigration_cache_mysql_1_1_0_to_2_0_0()
 		}
 	}
 
-	return failureCount;
+	return failureCount <= 0 ? Result_Success : Result_FailedQueries;
 }
 
 // =========================================================== //

@@ -68,6 +68,10 @@ public Action Command_ApplyMigration(int client, int args)
 		{
 			ReplyToCommand(client, "Failed to lookup migration by name \"%s\"", migration);
 		}
+		case Result_ProviderMismatch:
+		{
+			ReplyToCommand(client, "Failed to apply migration \"%s\" as providers mismatch", migration);
+		}
 	}
 
 	return Plugin_Handled;

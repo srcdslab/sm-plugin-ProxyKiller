@@ -6,7 +6,9 @@ enum MigrationResult
 {
 	Result_Success = 0,
 	Result_LookupFailure,
-	Result_FailedQueries
+	Result_ProviderMismatch,
+	Result_FailedQueries,
+	Result_OtherFailure
 };
 
 // =========================================================== //
@@ -26,10 +28,10 @@ MigrationResult ApplyMigration(char migration[MAX_MIGRATION_LENGTH])
 		return Result_LookupFailure;
 	}
 
-	int failureCount = 0;
+	MigrationResult result = Result_Success;
 	Call_StartFunction(null, migrationFunc);
-	Call_Finish(failureCount);
-	return failureCount <= 0 ? Result_Success : Result_FailedQueries;
+	Call_Finish(result);
+	return result;
 }
 
 // =========================================================== //
