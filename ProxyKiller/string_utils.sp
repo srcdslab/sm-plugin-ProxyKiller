@@ -17,6 +17,14 @@ static char RuntimeVariables[RuntimeVar_COUNT][] =
 
 // =========================================================== //
 
+/**
+ * Takes a stringmap of (config) variables and performs expansions on |buffer|
+ *
+ * @param variables		StringMap of (config) variables available
+ * @param buffer		Buffer from which variables will be expanded
+ * @param maxlength		Maxlength of the buffer
+ * @return				Number of expansions done on the buffer
+ */
 int ExpandConfigVariables(StringMap variables, char[] buffer, int maxlength)
 {
 	int totalExpands = 0;
@@ -38,6 +46,14 @@ int ExpandConfigVariables(StringMap variables, char[] buffer, int maxlength)
 	return totalExpands;
 }
 
+/**
+ * Takes a ProxyUser object and performs expansions on |buffer|
+ *
+ * @param pUser			ProxyUser object containing runtime variables
+ * @param buffer		Buffer from which variables will be expanded
+ * @param maxlength		Maxlength of the |buffer|
+ * @return				Number of expansions done on the buffer
+ */
 int ExpandRuntimeVariables(ProxyUser pUser, char[] buffer, int maxlength)
 {
 	int totalExpands = 0;
@@ -57,6 +73,14 @@ int ExpandRuntimeVariables(ProxyUser pUser, char[] buffer, int maxlength)
 
 // =========================================================== //
 
+/**
+ * Expands userid string template with the given |userId|
+ *
+ * @param userId		Userid which will be used when expanding
+ * @param buffer		Buffer from which userid will be expanded
+ * @param maxlength		Maxlength of the buffer
+ * @return				Number of expansions done on the buffer
+ */
 int ExpandUserId(int userId, char[] buffer, int maxlength)
 {
 	char userIdStr[6];
@@ -64,11 +88,27 @@ int ExpandUserId(int userId, char[] buffer, int maxlength)
 	return ReplaceString(buffer, maxlength, RuntimeVariables[RuntimeVar_UserId], userIdStr);
 }
 
+/**
+ * Expands ip address string template with the given |ipAddress|
+ *
+ * @param ipAddress		Ip address which will be used when expanding
+ * @param buffer		Buffer from which ip address will be expanded
+ * @param maxlength		Maxlength of the buffer
+ * @return				Number of expansions done on the buffer
+ */
 int ExpandIPAddress(char[] ipAddress, char[] buffer, int maxlength)
 {
 	return ReplaceString(buffer, maxlength, RuntimeVariables[RuntimeVar_IPAddress], ipAddress);
 }
 
+/**
+ * Expands steamid2 string template with the given |steamId2|
+ *
+ * @param steamId2		Steamid2 which will be used when expanding
+ * @param buffer		Buffer from which steamid2 will be expanded
+ * @param maxlength		Maxlength of the buffer
+ * @return				Number of expansions done on the buffer
+ */
 int ExpandSteamId2(char[] steamId2, char[] buffer, int maxlength)
 {
 	return ReplaceString(buffer, maxlength, RuntimeVariables[RuntimeVar_SteamId2], steamId2);
