@@ -41,6 +41,12 @@ methodmap StringMapEx < StringMap
 		this.GetValue(key, value);
 		return value;
 	}
+	
+	public bool StringKeyExists(char[] key)
+	{
+		char dummy[1];
+		return this.GetString(key, dummy, sizeof(dummy));
+	}
 }
 
 // =========================================================== //
