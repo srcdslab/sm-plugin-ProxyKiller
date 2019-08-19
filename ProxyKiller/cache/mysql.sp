@@ -38,7 +38,7 @@ public void MySQL_OnCache(Database db, DBResultSet results, const char[] error, 
 				Call_OnClientResult(pUser, result, true);
 				if (result)
 				{
-					DoPunishment(pUser);
+					DoPunishment(pUser, true);
 				}
 			
 				char dateTime[24];

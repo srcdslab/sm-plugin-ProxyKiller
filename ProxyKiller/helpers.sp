@@ -1,6 +1,6 @@
 // =========================================================== //
 
-void DoPunishment(ProxyUser pUser)
+void DoPunishment(ProxyUser pUser, bool fromCache)
 {
 	char log[MAX_PUNISHMENT_LOG_LENGTH];
 	gCV_PunishmentLogFormat.GetString(log, sizeof(log));
@@ -31,6 +31,8 @@ void DoPunishment(ProxyUser pUser)
 			BanClient(client, banLength, BANFLAG_AUTO, msg, msg);
 		}
 	}
+
+	Call_OnClientPunishment(pUser, fromCache);
 }
 
 bool HasFlag(int client, int flag)

@@ -47,8 +47,7 @@ public void OnService(ProxyHTTPResponse response, const char[] responseStr, Prox
 	{
 		if (Call_DoClientPunishment(ctx.User, false))
 		{
-			DoPunishment(ctx.User);
-			Call_OnClientPunishment(ctx.User, false);
+			DoPunishment(ctx.User, false);
 		}
 	}
 
