@@ -4,10 +4,9 @@
 
 enum MigrationResult
 {
-	Result_Success = 0,
-	Result_LookupFailure,
+	Result_LookupFailure = 0,
 	Result_ProviderMismatch,
-	Result_FailedQueries,
+	Result_NoInitialError,
 	Result_OtherFailure
 };
 
@@ -28,10 +27,20 @@ MigrationResult ApplyMigration(char migration[MAX_MIGRATION_LENGTH])
 		return Result_LookupFailure;
 	}
 
-	MigrationResult result = Result_Success;
+	MigrationResult result = Result_NoInitialError;
 	Call_StartFunction(null, migrationFunc);
 	Call_Finish(result);
 	return result;
+}
+
+public void OnSQL_MigrationSuccess(Database db, any data, int numQueries, DBResultSet[] results, any[] queryData)
+{
+	g_Logger.InfoMessage("Successfully executed migration");
+}
+
+public void OnSQL_MigrationFailure(Database db, any data, int numQueries, const char[] error, int failIndex, any[] queryData)
+{
+	g_Logger.ErrorMessage("Failure during migration, one or more queries failed!");
 }
 
 // =========================================================== //

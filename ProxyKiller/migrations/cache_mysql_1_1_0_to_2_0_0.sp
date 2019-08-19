@@ -34,21 +34,15 @@ public MigrationResult PKMigration_cache_mysql_1_1_0_to_2_0_0()
 	{
 		return Result_ProviderMismatch;
 	}
-
-	int failureCount = 0;
+	
+	Transaction txn = new Transaction();
 	for (int i = 0; i < sizeof(Queries); i++)
 	{
-		if (!SQL_FastQuery(g_Cache.Provider, Queries[i]))
-		{
-			char error[256];
-			SQL_GetError(g_Cache.Provider, error, sizeof(error));
-
-			failureCount++;
-			g_Logger.ErrorMessage("Failed to apply migration query - Error: \"%s\"", error);
-		}
+		txn.AddQuery(Queries[i]);
 	}
 
-	return failureCount <= 0 ? Result_Success : Result_FailedQueries;
+	SQL_ExecuteTransaction(g_Cache.Provider, txn, OnSQL_MigrationSuccess, OnSQL_MigrationFailure);
+	return Result_NoInitialError;
 }
 
 // =========================================================== //

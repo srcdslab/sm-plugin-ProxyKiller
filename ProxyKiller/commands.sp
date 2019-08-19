@@ -60,10 +60,6 @@ public Action Command_ApplyMigration(int client, int args)
 
 	switch (result)
 	{
-		case Result_Success:
-		{
-			ReplyToCommand(client, "Successfully applied migration \"%s\"", migration);
-		}
 		case Result_LookupFailure:
 		{
 			ReplyToCommand(client, "Failed to lookup migration by name \"%s\"", migration);
