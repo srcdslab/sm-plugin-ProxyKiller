@@ -8,7 +8,7 @@
 // =========================================================== //
 
 /**
- * Types of caching solutions available
+ * Types of rules providers available
  */
 enum ProxyRulesMode
 {
@@ -18,10 +18,13 @@ enum ProxyRulesMode
 	RulesMode_COUNT
 };
 
+/**
+ * Types of proxy rules available
+ */
 enum ProxyRulesType
 {
-	RulesType_None = 0,
-	RulesType_Whitelist,
+	RulesType_None = 0,		/**< No rule set */
+	RulesType_Whitelist,	/**< Whitelist rule */
 	RulesType_COUNT
 };
 

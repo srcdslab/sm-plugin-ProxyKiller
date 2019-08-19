@@ -8,7 +8,7 @@
 // =========================================================== //
 
 /**
- * Types of caching solutions available
+ * Types of caching providers available
  */
 enum ProxyCacheMode
 {
