@@ -25,6 +25,7 @@ ProxyLogger g_Logger = null;
 #include "ProxyKiller/http/public/public.sp"
 #include "ProxyKiller/http/public/params.sp"
 #include "ProxyKiller/http/public/headers.sp"
+#include "ProxyKiller/http/public/rawbody.sp"
 
 #include "ProxyKiller/http/service/service.sp"
 #include "ProxyKiller/http/service/helpers.sp"

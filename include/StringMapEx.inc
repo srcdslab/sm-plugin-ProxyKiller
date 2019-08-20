@@ -42,7 +42,7 @@ methodmap StringMapEx < StringMap
 		return value;
 	}
 	
-	public bool StringKeyExists(char[] key)
+	public bool HasKeyWithString(char[] key)
 	{
 		char dummy[1];
 		return this.GetString(key, dummy, sizeof(dummy));

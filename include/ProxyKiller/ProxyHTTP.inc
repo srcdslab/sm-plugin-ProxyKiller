@@ -42,6 +42,22 @@ methodmap ProxyHTTP < StringMapEx
 		this.GetString("url", buffer, maxlength);
 	}
 
+	public void SetRawBody(char[] body, char[] type = "application/json")
+	{
+		this.SetString("rawbody", body);
+		this.SetString("rawbody_type", type);
+	}
+	
+	public void GetRawBody(char[] buffer, int maxlength)
+	{
+		this.GetString("rawbody", buffer, maxlength);
+	}
+	
+	public void GetRawBodyType(char[] buffer, int maxlength)
+	{
+		this.GetString("rawbody_type", buffer, maxlength);
+	}
+
 	property bool IsPersistent
 	{
 		public get() { return this.GetBool("isPersistent"); }

@@ -21,8 +21,12 @@ bool QueryHTTP(ProxyHTTP http, any data)
 		return false;
 	}
 
-	SetParams(request, http.Params);
 	SetHeaders(request, http.Headers);
+
+	if (!SetRawBody(request, http))
+	{
+		SetParams(request, http.Params);
+	}
 
 	ProxyHTTPContext ctx = new ProxyHTTPContext();
 	ctx.HTTP = http;
