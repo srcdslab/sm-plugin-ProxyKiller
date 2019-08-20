@@ -5,7 +5,7 @@ Please see the [Wiki](https://bitbucket.org/Sikarii/proxykiller/wiki) for a feat
 
 ---
 
-In case you wanna support development, heres an [incredibly optional donate link](https://paypal.me/Sikarii)
+In case you wanna support development, heres an [incredibly optional donate link](https://streamelements.com/sikari/tip)
 
 ---
 
