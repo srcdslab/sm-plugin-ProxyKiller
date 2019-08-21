@@ -1,6 +1,6 @@
 // =========================================================== //
 
-static bool gB_CacheInit = false;
+static bool CacheInit = false;
 
 #define Cache_MySQL(%1) view_as<ProxyCacheMySQL>(%1)
 
@@ -8,7 +8,7 @@ static bool gB_CacheInit = false;
 
 bool IsCacheInit()
 {
-	return gB_CacheInit;
+	return CacheInit;
 }
 
 ProxyCache CreateCache(int mode)
@@ -37,7 +37,7 @@ ProxyCache CreateCache(int mode)
 		}
 	}
 
-	gB_CacheInit = true;
+	CacheInit = true;
 	return cache;
 }
 

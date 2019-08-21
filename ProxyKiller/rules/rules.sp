@@ -1,6 +1,6 @@
 // =========================================================== //
 
-static bool gB_RulesInit = false;
+static bool RulesInit = false;
 
 #define Rules_MySQL(%1) view_as<ProxyRulesMySQL>(%1)
 
@@ -8,7 +8,7 @@ static bool gB_RulesInit = false;
 
 bool IsRulesInit()
 {
-	return gB_RulesInit;
+	return RulesInit;
 }
 
 ProxyRules CreateRules(int mode)
@@ -47,7 +47,7 @@ ProxyRules CreateRules(int mode)
 		}
 	}
 
-	gB_RulesInit = true;
+	RulesInit = true;
 	return rules;
 }
 
