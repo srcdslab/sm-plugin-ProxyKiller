@@ -80,7 +80,7 @@ methodmap ProxyLogger < StringMapEx
 			char buffer[512];
 			VFormat(buffer, sizeof(buffer), format, 3);
 			
-			this.DoSpew(SPEWLEVEL_INFO, "[I]: %s", buffer);
+			this.DoSpew(SPEWLEVEL_INFO, "[INFO ] %s", buffer);
 		}
 	}
 
@@ -91,7 +91,7 @@ methodmap ProxyLogger < StringMapEx
 			char buffer[512];
 			VFormat(buffer, sizeof(buffer), format, 3);
 			
-			this.DoSpew(SPEWLEVEL_ERRORS, "[!] %s", buffer);
+			this.DoSpew(SPEWLEVEL_ERRORS, "[ERROR] %s", buffer);
 		}
 	}
 
@@ -101,7 +101,7 @@ methodmap ProxyLogger < StringMapEx
 		{
 			char buffer[512];
 			VFormat(buffer, sizeof(buffer), format, 3);
-			this.DoSpew(SPEWLEVEL_DEBUG, "[~] %s", buffer);
+			this.DoSpew(SPEWLEVEL_DEBUG, "[DEBUG] %s", buffer);
 		}
 	}
 
@@ -122,7 +122,7 @@ methodmap ProxyLogger < StringMapEx
 			char funcPath[PLATFORM_MAX_PATH];
 			iter.GetFilePath(funcPath, sizeof(funcPath));
 
-			this.DoSpew(SPEWLEVEL_DEBUG, "[~] %s(%d)::%s(%s)", funcPath, iter.LineNumber, funcName, info);
+			this.DebugMessage("-> %s(%d)::%s(%s)", funcPath, iter.LineNumber, funcName, info);
 			delete iter;
 		}
 	}
