@@ -1,5 +1,7 @@
 // =========================================================== //
 
+static bool ConfigInit = false;
+
 #define DEFAULT_REQUEST_METHOD (HTTPMethod_GET)
 #define DEFAULT_RESPONSE_TYPE (ResponseType_PLAINTEXT)
 #define DEFAULT_RESPONSE_COMPARE (ResponseCompare_EQUAL)
@@ -31,6 +33,11 @@ static char ComparePhrases[ResponseCompare_COUNT][] =
 };
 
 // =========================================================== //
+
+bool IsConfigInit()
+{
+	return ConfigInit;
+}
 
 ProxyConfig ParseConfig(char[] configFile)
 {
@@ -103,6 +110,7 @@ ProxyConfig ParseConfig(char[] configFile)
 	config.JumpToKey(name);
 
 	delete config;
+	ConfigInit = true;
 	return new ProxyConfig(variables, service);
 }
 

@@ -147,6 +147,13 @@ native bool ProxyKiller_IsCacheInit();
 native bool ProxyKiller_IsRulesInit();
 
 /**
+ * Gets whether config is initialized for ProxyKiller
+ *
+ * @return						Whether config was initialized for ProxyKiller
+ */
+native bool ProxyKiller_IsConfigInit();
+
+/**
  * Tells ProxyKiller to check the specified client
  *
  * @param client				Client index of the client to check

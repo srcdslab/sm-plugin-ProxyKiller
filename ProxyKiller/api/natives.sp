@@ -12,6 +12,7 @@ void CreateNatives()
 	CreateNative("ProxyKiller_GetLogger", Native_GetLogger);
 	CreateNative("ProxyKiller_IsCacheInit", Native_IsCacheInit);
 	CreateNative("ProxyKiller_IsRulesInit", Native_IsRulesInit);
+	CreateNative("ProxyKiller_IsConfigInit", Native_IsConfigInit);
 }
 
 // =========================================================== //
@@ -79,6 +80,11 @@ public int Native_IsCacheInit(Handle plugin, int numParams)
 public int Native_IsRulesInit(Handle plugin, int numParams)
 {
 	return IsRulesInit();
+}
+
+public int Native_IsConfigInit(Handle plugin, int numParams)
+{
+	return IsConfigInit();
 }
 
 // =========================================================== //
