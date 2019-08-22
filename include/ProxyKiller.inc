@@ -282,3 +282,33 @@ forward Action ProxyKiller_DoClientPunishment(ProxyUser pUser, bool fromCache);
 forward void ProxyKiller_OnClientPunishment(ProxyUser pUser, bool fromCache);
 
 // =========================================================== //
+
+public SharedPlugin __pl_ProxyKiller =
+{
+	name = "ProxyKiller",
+	file = "ProxyKiller.smx",
+	#if defined REQUIRE_PLUGIN
+	required = 1,
+	#else
+	required = 0,
+	#endif
+};
+
+#if !defined REQUIRE_PLUGIN
+public void __pl_ProxyKiller_SetNTVOptional()
+{
+	MarkNativeAsOptional("ProxyKiller_CreateHTTP");
+	MarkNativeAsOptional("ProxyKiller_CheckClient");
+	MarkNativeAsOptional("ProxyKiller_SendHTTPRequest");
+
+	MarkNativeAsOptional("ProxyKiller_GetCache");
+	MarkNativeAsOptional("ProxyKiller_GetRules");
+	MarkNativeAsOptional("ProxyKiller_GetConfig");
+	MarkNativeAsOptional("ProxyKiller_GetLogger");
+	MarkNativeAsOptional("ProxyKiller_IsCacheInit");
+	MarkNativeAsOptional("ProxyKiller_IsRulesInit");
+	MarkNativeAsOptional("ProxyKiller_IsConfigInit");
+};
+#endif
+
+// =========================================================== //
