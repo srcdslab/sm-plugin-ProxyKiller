@@ -36,12 +36,24 @@ public MigrationResult PKMigration_cache_mysql_1_1_0_to_2_0_0()
 	}
 	
 	Transaction txn = new Transaction();
+	ArrayList queries = new ArrayList(ByteCountToCells(512));
+
 	for (int i = 0; i < sizeof(Queries); i++)
 	{
 		txn.AddQuery(Queries[i]);
+		queries.PushString(Queries[i]);
 	}
 
-	SQL_ExecuteTransaction(g_Cache.Provider, txn, OnSQL_MigrationSuccess, OnSQL_MigrationFailure);
+	char serviceName[MAX_SERVICE_NAME_LENGTH];
+	g_Config.Service.GetName(serviceName, sizeof(serviceName));
+	
+	char query[80 + sizeof(serviceName)];
+	Format(query, sizeof(query), "UPDATE `ProxyKiller_Cache` SET `ServiceName` = '%s' WHERE `ServiceName` = ''", serviceName);
+
+	txn.AddQuery(query);
+	queries.PushString(query);
+
+	SQL_ExecuteTransaction(g_Cache.Provider, txn, OnSQL_MigrationSuccess, OnSQL_MigrationFailure, queries);
 	return Result_NoInitialError;
 }
 
