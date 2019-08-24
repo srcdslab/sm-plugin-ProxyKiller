@@ -37,8 +37,11 @@ ProxyRules CreateRules(int mode)
 		}
 		case RulesMode_MySQL:
 		{
+			char prefix[64];
+			gCV_DatabaseTablePrefix.GetString(prefix, sizeof(prefix));
+			
 			g_Logger.PrintFrame("MySQL");
-			rules = new ProxyRulesMySQL();
+			rules = new ProxyRulesMySQL(prefix);
 			Rules_MySQL(rules).Initialize();
 		}
 		default:

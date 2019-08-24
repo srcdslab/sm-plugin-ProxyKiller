@@ -10,7 +10,7 @@
 static char DB_CONF_NAME[] = "ProxyKiller";
 
 static char CREATE_TABLE[] =
-"CREATE TABLE `ProxyKiller2_Cache` "
+"CREATE TABLE `%s_Cache` "
 ..."("
 ..."`IPAddress` VARCHAR(24) NOT NULL, "
 ..."`ServiceName` VARCHAR(128) NOT NULL, "
@@ -23,12 +23,12 @@ static char CREATE_TABLE[] =
 static char SELECT_RECORD[] =
 "SELECT `IPAddress`, `ServiceName`, "
 ..."`Result`, UNIX_TIMESTAMP(`Timestamp`) "
-..."FROM ProxyKiller2_Cache "
+..."FROM `%s_Cache` "
 ..."WHERE `IPAddress` = '%s' "
 ..."AND `ServiceName` = '%s'";
 
 static char INSERT_RECORD[] =
-"INSERT INTO `ProxyKiller2_Cache` "
+"INSERT INTO `%s_Cache` "
 ..."(`IPAddress`, `ServiceName`, `Result`) "
 ..."VALUES ('%s', '%s', '%d') "
 ..."ON DUPLICATE KEY UPDATE "
@@ -39,7 +39,7 @@ static char INSERT_RECORD[] =
 
 methodmap ProxyCacheMySQL < ProxyCache
 {
-	public ProxyCacheMySQL()
+	public ProxyCacheMySQL(char[] tablePrefix)
 	{
 		char error[256] = "Unknown";
 		Database db = SQL_Connect(DB_CONF_NAME, true, error, sizeof(error));
@@ -59,7 +59,9 @@ methodmap ProxyCacheMySQL < ProxyCache
 			}
 		}
 
-		return view_as<ProxyCacheMySQL>(new ProxyCache(CacheMode_MySQL, db));
+		ProxyCache cache = new ProxyCache(CacheMode_MySQL, db);
+		cache.SetString("table_prefix", tablePrefix);
+		return view_as<ProxyCacheMySQL>(cache);
 	}
 
 	property Database Provider
@@ -67,10 +69,21 @@ methodmap ProxyCacheMySQL < ProxyCache
 		public get() { return this.GetAny("provider"); }
 	}
 
+	public void GetTablePrefix(char[] buffer, int maxlength)
+	{
+		this.GetString("table_prefix", buffer, maxlength);
+	}
+
 	public void Initialize()
 	{
+		char prefix[64];
+		this.GetTablePrefix(prefix, sizeof(prefix));
+
+		char query[sizeof(CREATE_TABLE) + sizeof(prefix)];
+		this.Provider.Format(query, sizeof(query), CREATE_TABLE, prefix);
+
 		SQL_LockDatabase(this.Provider);
-		SQL_FastQuery(this.Provider, CREATE_TABLE);
+		SQL_FastQuery(this.Provider, query);
 		SQL_UnlockDatabase(this.Provider);
 	}
 
@@ -81,9 +94,12 @@ methodmap ProxyCacheMySQL < ProxyCache
 		
 		char serviceName[MAX_SERVICE_NAME_LENGTH];
 		service.GetName(serviceName, sizeof(serviceName));
-		
+
+		char prefix[64];
+		this.GetTablePrefix(prefix, sizeof(prefix));
+
 		char query[512];
-		this.Provider.Format(query, sizeof(query), SELECT_RECORD, ipAddress, serviceName);
+		this.Provider.Format(query, sizeof(query), SELECT_RECORD, prefix, ipAddress, serviceName);
 
 		this.Provider.Query(callback, query, pUser);
 	}
@@ -95,9 +111,12 @@ methodmap ProxyCacheMySQL < ProxyCache
 		
 		char serviceName[MAX_SERVICE_NAME_LENGTH];
 		service.GetName(serviceName, sizeof(serviceName));
-		
+
+		char prefix[64];
+		this.GetTablePrefix(prefix, sizeof(prefix));
+
 		char query[512];
-		this.Provider.Format(query, sizeof(query), INSERT_RECORD, ipAddress, serviceName, result);
+		this.Provider.Format(query, sizeof(query), INSERT_RECORD, prefix, ipAddress, serviceName, result);
 
 		this.Provider.Query(callback, query); 
 	}
