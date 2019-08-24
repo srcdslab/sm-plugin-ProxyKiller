@@ -31,16 +31,18 @@ ProxyLogger g_Logger = null;
 #include "ProxyKiller/http/service/helpers.sp"
 #include "ProxyKiller/http/service/response.sp"
 
-#include "ProxyKiller/config.sp"
-#include "ProxyKiller/helpers.sp"
-#include "ProxyKiller/commands.sp"
-#include "ProxyKiller/string_utils.sp"
-
 #include "ProxyKiller/cache/cache.sp"
 #include "ProxyKiller/cache/mysql.sp"
 
 #include "ProxyKiller/rules/rules.sp"
 #include "ProxyKiller/rules/mysql.sp"
+
+#include "ProxyKiller/helpers.sp"
+#include "ProxyKiller/migrations.sp"
+#include "ProxyKiller/string_utils.sp"
+
+#include "ProxyKiller/config.sp"
+#include "ProxyKiller/commands.sp"
 
 // ====================== PLUGIN INFO ======================== //
 
