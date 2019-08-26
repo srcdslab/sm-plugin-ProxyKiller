@@ -2,7 +2,8 @@
 
 enum
 {
-	RuntimeVar_UserId = 0,
+	RuntimeVar_Name,
+	RuntimeVar_UserId,
 	RuntimeVar_IPAddress,
 	RuntimeVar_SteamId2,
 	RuntimeVar_COUNT
@@ -10,6 +11,7 @@ enum
 
 static char RuntimeVariables[RuntimeVar_COUNT][] =
 {
+	"{name}",
 	"{userid}",
 	"{ip}",
 	"{steamid2}"
@@ -59,12 +61,16 @@ int ExpandRuntimeVariables(ProxyUser pUser, char[] buffer, int maxlength)
 	int totalExpands = 0;
 	int userId = pUser.UserId;
 
+	char name[MAX_NAME_LENGTH];
+	pUser.GetName(name, sizeof(name));
+
 	char ipAddr[24];
 	pUser.GetIPAddress(ipAddr, sizeof(ipAddr));
 
 	char steamId2[32];
 	pUser.GetSteamId2(steamId2, sizeof(steamId2));
 
+	totalExpands += ExpandName(name, buffer, maxlength);
 	totalExpands += ExpandUserId(userId, buffer, maxlength);
 	totalExpands += ExpandIPAddress(ipAddr, buffer, maxlength);
 	totalExpands += ExpandSteamId2(steamId2, buffer, maxlength);
@@ -72,6 +78,19 @@ int ExpandRuntimeVariables(ProxyUser pUser, char[] buffer, int maxlength)
 }
 
 // =========================================================== //
+
+/**
+ * Expands name string template with the given |name|
+ *
+ * @param name			Name which will be used when expanding
+ * @param buffer		Buffer from which name will be expanded
+ * @param maxlength		Maxlength of the buffer
+ * @return				Number of expansions done on the buffer
+ */
+int ExpandName(char[] name, char[] buffer, int maxlength)
+{
+	return ReplaceString(buffer, maxlength, RuntimeVariables[RuntimeVar_Name], name);
+}
 
 /**
  * Expands userid string template with the given |userId|

@@ -157,9 +157,10 @@ native bool ProxyKiller_IsConfigInit();
  * Tells ProxyKiller to check the specified client
  *
  * @param client				Client index of the client to check
- * @noreturn		
+ * @return						Whether the client is being checked
+ * @error						Invalid client index passed
  */
-native void ProxyKiller_CheckClient(int client);
+native bool ProxyKiller_CheckClient(int client);
 
 /**
  * Sends a ProxyHTTP request and calls the callback function when done

@@ -20,12 +20,20 @@ void CreateNatives()
 public int Native_CheckClient(Handle plugin, int numParams)
 {
 	int client = GetNativeCell(1);
-	int userid = GetClientUserId(client);
+	if (client <= 0 || client > MaxClients)
+	{
+		ThrowNativeError(SP_ERROR_NATIVE, "Invalid client index passed!");
+		return false;
+	}
 
-	ProxyUser pUser = new ProxyUser(userid);
-	pUser.GetAndSetSteamId2();
-	pUser.GetAndSetIPAddress();
-	TryGetRules(pUser);
+	if (!IsClientConnected(client))
+	{
+		ThrowNativeError(SP_ERROR_NATIVE, "Client passed in was not connected!");
+		return false;
+	}
+
+	TryGetRules(new ProxyUser(client));
+	return 1;
 }
 
 public int Native_CreateHTTP(Handle plugin, int numParams)
