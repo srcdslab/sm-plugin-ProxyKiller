@@ -6,6 +6,7 @@ enum
 	RuntimeVar_UserId,
 	RuntimeVar_IPAddress,
 	RuntimeVar_SteamId2,
+	RuntimeVar_SteamId64,
 	RuntimeVar_COUNT
 };
 
@@ -14,7 +15,8 @@ static char RuntimeVariables[RuntimeVar_COUNT][] =
 	"{name}",
 	"{userid}",
 	"{ip}",
-	"{steamid2}"
+	"{steamid2}",
+	"{steamid64}"
 };
 
 // =========================================================== //
@@ -70,10 +72,14 @@ int ExpandRuntimeVariables(ProxyUser pUser, char[] buffer, int maxlength)
 	char steamId2[32];
 	pUser.GetSteamId2(steamId2, sizeof(steamId2));
 
+	char steamId64[24];
+	pUser.GetSteamId64(steamId64, sizeof(steamId64));
+
 	totalExpands += ExpandName(name, buffer, maxlength);
 	totalExpands += ExpandUserId(userId, buffer, maxlength);
 	totalExpands += ExpandIPAddress(ipAddr, buffer, maxlength);
 	totalExpands += ExpandSteamId2(steamId2, buffer, maxlength);
+	totalExpands += ExpandSteamId64(steamId64, buffer, maxlength);
 	return totalExpands;
 }
 
@@ -131,6 +137,19 @@ int ExpandIPAddress(char[] ipAddress, char[] buffer, int maxlength)
 int ExpandSteamId2(char[] steamId2, char[] buffer, int maxlength)
 {
 	return ReplaceString(buffer, maxlength, RuntimeVariables[RuntimeVar_SteamId2], steamId2);
+}
+
+/**
+ * Expands steamid64 string template with the given |steamId64|
+ *
+ * @param steamId64		Steamid64 which will be used when expanding
+ * @param buffer		Buffer from which steamid64 will be expanded
+ * @param maxlength		Maxlength of the buffer
+ * @return				Number of expansions done on the buffer
+ */
+int ExpandSteamId64(char[] steamId64, char[] buffer, int maxlength)
+{
+	return ReplaceString(buffer, maxlength, RuntimeVariables[RuntimeVar_SteamId64], steamId64);
 }
 
 // =========================================================== //
