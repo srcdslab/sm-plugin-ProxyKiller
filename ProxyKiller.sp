@@ -73,14 +73,23 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 
 public void OnConfigsExecuted()
 {
-	g_Config = ParseConfig(PROXYKILLER_CONFIG);
-	Call_OnConfig();
+	if (!ProxyKiller_IsConfigInit())
+	{
+		g_Config = ParseConfig(PROXYKILLER_CONFIG);
+		Call_OnConfig();
+	}
 
-	g_Cache = CreateCache(gCV_CacheMode.IntValue);
-	Call_OnCache();
-	
-	g_Rules = CreateRules(gCV_RulesMode.IntValue);
-	Call_OnRules();
+	if (!ProxyKiller_IsCacheInit())
+	{
+		g_Cache = CreateCache(gCV_CacheMode.IntValue);
+		Call_OnCache();
+	}
+
+	if (!ProxyKiller_IsRulesInit())
+	{
+		g_Rules = CreateRules(gCV_RulesMode.IntValue);
+		Call_OnRules();
+	}
 }
 
 public void OnClientPostAdminCheck(int client)
