@@ -13,8 +13,8 @@
 
 ProxyCache g_Cache = null;
 ProxyRules g_Rules = null;
-ProxyConfig g_Config = null;
 ProxyLogger g_Logger = null;
+ProxyConfig g_Config = null;
 
 // ======================= INCLUDES ========================== //
 
@@ -63,7 +63,7 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 	CreateConVars();
 	CreateForwards();
 	CreateCommands();
-	
+
 	RegPluginLibrary(PROXYKILLER_NAME);
 	AutoExecConfig(true, PROXYKILLER_NAME ... "-Convars");
 

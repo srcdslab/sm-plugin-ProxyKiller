@@ -66,11 +66,11 @@ ProxyConfig ParseConfig(char[] configFile)
 		char key[64];
 		config.GetSectionName(key, sizeof(key));
 
-		char value[256];
-		config.GetString(NULL_STRING, value, sizeof(value));
-
-		if (!StrEqual(value, ""))
+		if (config.GetDataType(NULL_STRING) == KvData_String)
 		{
+			char value[256];
+			config.GetString(NULL_STRING, value, sizeof(value));
+
 			ExpandConfigVariables(variables, value, sizeof(value));
 			variables.SetString(key, value);
 		}
@@ -104,7 +104,7 @@ ProxyConfig ParseConfig(char[] configFile)
 	ParseAndSetParams(config, service, variables);
 	config.Rewind();
 	config.JumpToKey(name);
-	
+
 	ParseAndSetHeaders(config, service, variables);
 	config.Rewind();
 	config.JumpToKey(name);
