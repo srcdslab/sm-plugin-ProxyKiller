@@ -2,9 +2,6 @@
 
 #define MAX_RESPONSE_TYPE_LENGTH 32
 #define MAX_RESPONSE_COMPARE_LENGTH 16
-#define MAX_RESPONSE_NAME_LENGTH 128
-#define MAX_RESPONSE_VALUE_LENGTH 128
-#define MAX_RESPONSE_OBJECT_LENGTH 64
 
 // =========================================================== //
 

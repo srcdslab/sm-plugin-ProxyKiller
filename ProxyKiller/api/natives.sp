@@ -8,11 +8,18 @@ void CreateNatives()
 
 	CreateNative("ProxyKiller_GetCache", Native_GetCache);
 	CreateNative("ProxyKiller_GetRules", Native_GetRules);
-	CreateNative("ProxyKiller_GetConfig", Native_GetConfig);
 	CreateNative("ProxyKiller_GetLogger", Native_GetLogger);
 	CreateNative("ProxyKiller_IsCacheInit", Native_IsCacheInit);
 	CreateNative("ProxyKiller_IsRulesInit", Native_IsRulesInit);
-	CreateNative("ProxyKiller_IsConfigInit", Native_IsConfigInit);
+
+	CreateNative("ProxyKiller_Config_IsInit", Native_Config_IsInit);
+	CreateNative("ProxyKiller_Config_HasVariable", Native_Config_HasVariable);
+	CreateNative("ProxyKiller_Config_GetVariable", Native_Config_GetVariable);
+	CreateNative("ProxyKiller_Config_GetServiceName", Native_Config_GetServiceName);
+	CreateNative("ProxyKiller_Config_GetServiceResponseValue", Native_Config_GetServiceResponseValue);
+	CreateNative("ProxyKiller_Config_GetServiceResponseObject", Native_Config_GetServiceResponseObject);
+	CreateNative("ProxyKiller_Config_GetServiceResponseType", Native_Config_GetServiceResponseType);
+	CreateNative("ProxyKiller_Config_GetServiceResponseCompare", Native_Config_GetServiceResponseCompare);
 }
 
 // =========================================================== //
@@ -70,11 +77,6 @@ public int Native_GetRules(Handle plugin, int numParams)
 	return view_as<int>(CloneHandle(g_Rules, plugin));
 }
 
-public int Native_GetConfig(Handle plugin, int numParams)
-{
-	return view_as<int>(CloneHandle(g_Config, plugin));
-}
-
 public int Native_GetLogger(Handle plugin, int numParams)
 {
 	return view_as<int>(CloneHandle(g_Logger, plugin));
@@ -90,9 +92,77 @@ public int Native_IsRulesInit(Handle plugin, int numParams)
 	return IsRulesInit();
 }
 
-public int Native_IsConfigInit(Handle plugin, int numParams)
+public int Native_Config_IsInit(Handle plugin, int numParams)
 {
 	return IsConfigInit();
+}
+
+public int Native_Config_HasVariable(Handle plugin, int numParams)
+{
+	char variable[MAX_CONFIG_VARIABLE_NAME];
+	GetNativeString(1, variable, sizeof(variable));
+
+	char dummy[1];
+	return g_Config.Vars.GetString(variable, dummy, sizeof(dummy));
+}
+
+public int Native_Config_GetVariable(Handle plugin, int numParams)
+{
+	char variable[MAX_CONFIG_VARIABLE_NAME];
+	GetNativeString(1, variable, sizeof(variable));
+
+	char varValue[MAX_CONFIG_VARIABLE_VALUE];
+	bool result = g_Config.Vars.GetString(variable, varValue, sizeof(varValue));
+
+	if (result)
+	{
+		int maxlength = GetNativeCell(3);
+		SetNativeString(2, varValue, maxlength);
+	}
+
+	return result;
+}
+
+public int Native_Config_GetServiceName(Handle plugin, int numParams)
+{
+	char serviceName[MAX_SERVICE_NAME_LENGTH];
+	g_Config.Service.GetName(serviceName, sizeof(serviceName));
+
+	int maxlength = GetNativeCell(2);
+	return SetNativeString(1, serviceName, maxlength) == SP_ERROR_NONE;
+}
+
+public int Native_Config_GetServiceResponseValue(Handle plugin, int numParams)
+{
+	char value[MAX_RESPONSE_NAME_LENGTH];
+	g_Config.Service.ExpectedResponse.GetValue(value, sizeof(value));
+
+	int maxlength = GetNativeCell(2);
+	return SetNativeString(1, value, maxlength) == SP_ERROR_NONE;
+}
+
+public int Native_Config_GetServiceResponseObject(Handle plugin, int numParams)
+{
+	if (g_Config.Service.ExpectedResponse.Type != ResponseType_JSON)
+	{
+		return false;
+	}
+
+	char objStr[MAX_RESPONSE_OBJECT_LENGTH];
+	g_Config.Service.ExpectedResponse.GetObject(objStr, sizeof(objStr));
+
+	int maxlength = GetNativeCell(2);
+	return SetNativeString(1, objStr, maxlength) == SP_ERROR_NONE;
+}
+
+public int Native_Config_GetServiceResponseType(Handle plugin, int numParams)
+{
+	return view_as<int>(g_Config.Service.ExpectedResponse.Type);
+}
+
+public int Native_Config_GetServiceResponseCompare(Handle plugin, int numParams)
+{
+	return view_as<int>(g_Config.Service.ExpectedResponse.Compare);
 }
 
 // =========================================================== //

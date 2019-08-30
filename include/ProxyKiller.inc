@@ -59,6 +59,11 @@
 #define PROXYKILLER_CONFIG "cfg/sourcemod/ProxyKiller-Config.cfg"
 
 #define MAX_URL_LENGTH 256
+#define MAX_CONFIG_VARIABLE_NAME 64
+#define MAX_CONFIG_VARIABLE_VALUE 256
+#define MAX_RESPONSE_NAME_LENGTH 128
+#define MAX_RESPONSE_VALUE_LENGTH 128
+#define MAX_RESPONSE_OBJECT_LENGTH 64
 #define MAX_PUNISHMENT_LOG_LENGTH 512
 #define MAX_PUNISHMENT_MESSAGE_LENGTH 256
 
@@ -119,13 +124,6 @@ native ProxyCache ProxyKiller_GetCache();
 native ProxyRules ProxyKiller_GetRules();
 
 /**
- * Gets the ProxyConfig used by ProxyKiller
- *
- * @return						ProxyConfig object being used by ProxyKiller
- */
-native ProxyConfig ProxyKiller_GetConfig();
-
-/**
  * Gets the ProxyLogger used by ProxyKiller
  *
  * @return						ProxyLogger object being used by ProxyKiller
@@ -151,7 +149,66 @@ native bool ProxyKiller_IsRulesInit();
  *
  * @return						Whether config was initialized for ProxyKiller
  */
-native bool ProxyKiller_IsConfigInit();
+native bool ProxyKiller_Config_IsInit();
+
+/**
+ * Gets whether a config variable exists
+ *
+ * @param variable				Variable to look existence for
+ * @return						Whether config variable exists
+ */
+native bool ProxyKiller_Config_HasVariable(char[] variable);
+
+/**
+ * Gets the value of a config variable
+ *
+ * @param variable				Variable to get value from
+ * @param buffer				Buffer for the variable value
+ * @param maxlength				Maxlength of the |buffer|
+ * @return						Whether config variable existed
+ */
+native bool ProxyKiller_Config_GetVariable(char[] variable, char[] buffer, int maxlength);
+
+/**
+ * Gets the name of the configured service
+ *
+ * @param buffer				Buffer for the service name
+ * @param maxlength				Maxlength of the |buffer|
+ * @return						True on success, false otherwise
+ */
+native bool ProxyKiller_Config_GetServiceName(char[] buffer, int maxlength);
+
+/**
+ * Gets the response value of the configured service
+ *
+ * @param buffer				Buffer for the service response value
+ * @param maxlength				Maxlength of the |buffer|
+ * @return						True on success, false otherwise
+ */
+native bool ProxyKiller_Config_GetServiceResponseValue(char[] buffer, int maxlength);
+
+/**
+ * Gets the response object of the configured service
+ *
+ * @param buffer				Buffer for the response object
+ * @param maxlength				Maxlength of the |buffer|
+ * @return						True if response type is JSON, false otherwise
+ */
+native bool ProxyKiller_Config_GetServiceResponseObject(char[] buffer, int maxlength);
+
+/**
+ * Gets the response type of the configured service
+ *
+ * @return						ResponseType value from configured service
+ */
+native ResponseType ProxyKiller_Config_GetServiceResponseType();
+
+/**
+ * Gets the response compare type of the configured service
+ *
+ * @return						ResponseCompare value from configured service
+ */
+native ResponseCompare ProxyKiller_Config_GetServiceResponseCompare();
 
 /**
  * Tells ProxyKiller to check the specified client
@@ -304,11 +361,18 @@ public void __pl_ProxyKiller_SetNTVOptional()
 
 	MarkNativeAsOptional("ProxyKiller_GetCache");
 	MarkNativeAsOptional("ProxyKiller_GetRules");
-	MarkNativeAsOptional("ProxyKiller_GetConfig");
 	MarkNativeAsOptional("ProxyKiller_GetLogger");
 	MarkNativeAsOptional("ProxyKiller_IsCacheInit");
 	MarkNativeAsOptional("ProxyKiller_IsRulesInit");
-	MarkNativeAsOptional("ProxyKiller_IsConfigInit");
+	
+	MarkNativeAsOptional("ProxyKiller_Config_IsInit");
+	MarkNativeAsOptional("ProxyKiller_Config_HasVariable");
+	MarkNativeAsOptional("ProxyKiller_Config_GetVariable");
+	MarkNativeAsOptional("ProxyKiller_Config_GetServiceName");
+	MarkNativeAsOptional("ProxyKiller_Config_GetServiceResponseValue");
+	MarkNativeAsOptional("ProxyKiller_Config_GetServiceResponseObject");
+	MarkNativeAsOptional("ProxyKiller_Config_GetServiceResponseType");
+	MarkNativeAsOptional("ProxyKiller_Config_GetServiceResponseCompare");
 };
 #endif
 

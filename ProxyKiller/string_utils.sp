@@ -36,10 +36,10 @@ int ExpandConfigVariables(StringMap variables, char[] buffer, int maxlength)
 
 	for (int i = 0; i < vars.Length; i++)
 	{
-		char varName[64];
+		char varName[MAX_CONFIG_VARIABLE_NAME];
 		vars.GetKey(i, varName, sizeof(varName));
 
-		char varValue[256];
+		char varValue[MAX_CONFIG_VARIABLE_VALUE];
 		variables.GetString(varName, varValue, sizeof(varValue));
 
 		Format(varName, sizeof(varName), "{{%s}}", varName);

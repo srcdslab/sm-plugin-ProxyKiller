@@ -73,7 +73,7 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 
 public void OnConfigsExecuted()
 {
-	if (!ProxyKiller_IsConfigInit())
+	if (!ProxyKiller_Config_IsInit())
 	{
 		g_Config = ParseConfig(PROXYKILLER_CONFIG);
 		Call_OnConfig();

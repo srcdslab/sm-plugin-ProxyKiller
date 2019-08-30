@@ -63,12 +63,12 @@ ProxyConfig ParseConfig(char[] configFile)
 			continue;
 		}
 
-		char key[64];
+		char key[MAX_CONFIG_VARIABLE_NAME];
 		config.GetSectionName(key, sizeof(key));
 
 		if (config.GetDataType(NULL_STRING) == KvData_String)
 		{
-			char value[256];
+			char value[MAX_CONFIG_VARIABLE_VALUE];
 			config.GetString(NULL_STRING, value, sizeof(value));
 
 			ExpandConfigVariables(variables, value, sizeof(value));
