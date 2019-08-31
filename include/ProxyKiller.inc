@@ -58,7 +58,7 @@
 #define PROXYKILLER_DESCRIPTION "Kill them proxies!"
 #define PROXYKILLER_CONFIG "cfg/sourcemod/ProxyKiller-Config.cfg"
 
-#define MAX_URL_LENGTH 256
+#define MAX_HTTP_URL_LENGTH 256
 #define MAX_CONFIG_VARIABLE_NAME 64
 #define MAX_CONFIG_VARIABLE_VALUE 256
 #define MAX_RESPONSE_NAME_LENGTH 128

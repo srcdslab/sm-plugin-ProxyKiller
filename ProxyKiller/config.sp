@@ -88,7 +88,7 @@ ProxyConfig ParseConfig(char[] configFile)
 	char name[MAX_SERVICE_NAME_LENGTH];
 	config.GetSectionName(name, sizeof(name));
 
-	char url[MAX_URL_LENGTH];
+	char url[MAX_HTTP_URL_LENGTH];
 	config.GetString("url", url, sizeof(url));
 
 	char method[10];

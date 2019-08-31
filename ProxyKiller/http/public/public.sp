@@ -4,7 +4,7 @@ bool QueryHTTP(ProxyHTTP http, any data)
 {
 	g_Logger.PrintFrame();
 
-	char url[MAX_URL_LENGTH];
+	char url[MAX_HTTP_URL_LENGTH];
 	http.GetUrl(url, sizeof(url));
 
 	EHTTPMethod method = GetSteamWorksMethod(http.Method);
@@ -51,7 +51,7 @@ public int OnRequest_Completed(Handle request, bool failure, bool requestSuccess
 
 	if (fail)
 	{
-		char requestUrl[MAX_URL_LENGTH];
+		char requestUrl[MAX_HTTP_URL_LENGTH];
 		ctx.HTTP.GetUrl(requestUrl, sizeof(requestUrl));
 		g_Logger.ErrorMessage("Error making http request to \"%s\"", requestUrl);
 	}

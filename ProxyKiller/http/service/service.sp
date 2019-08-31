@@ -4,7 +4,7 @@ bool QueryService(ProxyUser pUser, ProxyService service)
 {
 	g_Logger.PrintFrame();
 
-	char url[MAX_URL_LENGTH];
+	char url[MAX_HTTP_URL_LENGTH];
 	service.GetUrl(url, sizeof(url));
 	ExpandRuntimeVariables(pUser, url, sizeof(url));
 
