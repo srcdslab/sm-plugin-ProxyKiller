@@ -11,7 +11,6 @@ static char Queries[][] =
 
 // =========================================================== //
 
-// EXPLANATION:
 /*
 	- Rename ProxyKiller_Cache `ip` to `IPAddress`
 	- Rename ProxyKiller_Cache `timestamp` to `Timestamp`
