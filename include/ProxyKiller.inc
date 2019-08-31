@@ -110,18 +110,47 @@ typeset ProxyHTTPCallback
 // =========================================================== //
 
 /**
- * Gets the ProxyCache used by ProxyKiller
+ * Tells ProxyKiller to check the specified client
  *
- * @return						ProxyCache object being used by ProxyKiller
+ * @param client				Client index of the client to check
+ * @return						Boolean of whether the client is being checked
+ * @error						Invalid client index passed
  */
-native ProxyCache ProxyKiller_GetCache();
+native bool ProxyKiller_CheckClient(int client);
 
 /**
- * Gets the ProxyRules used by ProxyKiller
+ * Sends a ProxyHTTP request and calls the callback function when done
  *
- * @return						ProxyRules object being used by ProxyKiller
+ * @param http					ProxyHTTP object of http metadata
+ * @param callback				ProxyHTTPCallback to call when request is done
+ * @param data					Optional data to pass to the callback
+ * @return						Boolean of whether the request was successfully made
  */
-native ProxyRules ProxyKiller_GetRules();
+native bool ProxyKiller_SendHTTPRequest(ProxyHTTP http, ProxyHTTPCallback callback = INVALID_FUNCTION, any data = 0);
+
+/**
+ * Creates a ProxyHTTP instance and returns it
+ *
+ * @param url					URI of the http request
+ * @param method				ProxyHTTPMethod of the http request
+ * @param isPersistent			Whether the ProxyHTTP object is persistent (Kept in memory after finish)
+ * @return						A ProxyHTTP object containing the metadata defined
+ */
+native ProxyHTTP ProxyKiller_CreateHTTP(const char[] url, ProxyHTTPMethod method = HTTPMethod_GET, isPersistent = false);
+
+/**
+ * Gets whether cache is initialized for ProxyKiller
+ *
+ * @return						Whether cache was initialized for ProxyKiller
+ */
+native bool ProxyKiller_Cache_IsInit();
+
+/**
+ * Gets whether rules is initialized for ProxyKiller
+ *
+ * @return						Whether rules was initialized for ProxyKiller
+ */
+native bool ProxyKiller_Rules_IsInit();
 
 /**
  * Gets the bitsum of spew mode from the ProxyKiller logger
@@ -166,20 +195,6 @@ native bool ProxyKiller_Logger_ErrorMessage(char[] format, any ...);
  * @return						Boolean of whether the log message was made
  */
 native bool ProxyKiller_Logger_DebugMessage(char[] format, any ...);
-
-/**
- * Gets whether cache is initialized for ProxyKiller
- *
- * @return						Whether cache was initialized for ProxyKiller
- */
-native bool ProxyKiller_IsCacheInit();
-
-/**
- * Gets whether rules is initialized for ProxyKiller
- *
- * @return						Whether rules was initialized for ProxyKiller
- */
-native bool ProxyKiller_IsRulesInit();
 
 /**
  * Gets whether config is initialized for ProxyKiller
@@ -247,35 +262,6 @@ native ResponseType ProxyKiller_Config_GetServiceResponseType();
  */
 native ResponseCompare ProxyKiller_Config_GetServiceResponseCompare();
 
-/**
- * Tells ProxyKiller to check the specified client
- *
- * @param client				Client index of the client to check
- * @return						Boolean of whether the client is being checked
- * @error						Invalid client index passed
- */
-native bool ProxyKiller_CheckClient(int client);
-
-/**
- * Sends a ProxyHTTP request and calls the callback function when done
- *
- * @param http					ProxyHTTP object of http metadata
- * @param callback				ProxyHTTPCallback to call when request is done
- * @param data					Optional data to pass to the callback
- * @return						Boolean of whether the request was successfully made
- */
-native bool ProxyKiller_SendHTTPRequest(ProxyHTTP http, ProxyHTTPCallback callback = INVALID_FUNCTION, any data = 0);
-
-/**
- * Creates a ProxyHTTP instance and returns it
- *
- * @param url					URI of the http request
- * @param method				ProxyHTTPMethod of the http request
- * @param isPersistent			Whether the ProxyHTTP object is persistent (Kept in memory after finish)
- * @return						A ProxyHTTP object containing the metadata defined
- */
-native ProxyHTTP ProxyKiller_CreateHTTP(const char[] url, ProxyHTTPMethod method = HTTPMethod_GET, isPersistent = false);
-
 // =========================================================== //
 
 /**
@@ -293,18 +279,18 @@ forward void ProxyKiller_OnCache();
 forward void ProxyKiller_OnRules();
 
 /**
- * Called when the config is initialized for ProxyKiller
- *
- * @noreturn
- */
-forward void ProxyKiller_OnConfig();
-
-/**
  * Called when the logger is initialized for ProxyKiller
  *
  * @noreturn
  */
 forward void ProxyKiller_OnLogger();
+
+/**
+ * Called when the config is initialized for ProxyKiller
+ *
+ * @noreturn
+ */
+forward void ProxyKiller_OnConfig();
 
 /**
  * Called when a valid ProxyKiller client is connected
@@ -396,11 +382,8 @@ public void __pl_ProxyKiller_SetNTVOptional()
 	MarkNativeAsOptional("ProxyKiller_CheckClient");
 	MarkNativeAsOptional("ProxyKiller_SendHTTPRequest");
 
-	MarkNativeAsOptional("ProxyKiller_GetCache");
-	MarkNativeAsOptional("ProxyKiller_GetRules");
-	MarkNativeAsOptional("ProxyKiller_GetLogger");
-	MarkNativeAsOptional("ProxyKiller_IsCacheInit");
-	MarkNativeAsOptional("ProxyKiller_IsRulesInit");
+	MarkNativeAsOptional("ProxyKiller_Cache_IsInit");
+	MarkNativeAsOptional("ProxyKiller_Rules_IsInit");
 
 	MarkNativeAsOptional("ProxyKiller_Logger_GetSpewMode");
 	MarkNativeAsOptional("ProxyKiller_Logger_GetSpewLevel");

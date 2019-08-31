@@ -24,7 +24,7 @@ static char Queries[][] =
 
 public MigrationResult PKMigration_cache_mysql_1_1_0_to_2_0_0()
 {
-	if (!ProxyKiller_IsCacheInit())
+	if (!ProxyKiller_Cache_IsInit())
 	{
 		return Result_OtherFailure;
 	}

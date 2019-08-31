@@ -79,13 +79,13 @@ public void OnConfigsExecuted()
 		Call_OnConfig();
 	}
 
-	if (!ProxyKiller_IsCacheInit())
+	if (!ProxyKiller_Cache_IsInit())
 	{
 		g_Cache = CreateCache(gCV_CacheMode.IntValue);
 		Call_OnCache();
 	}
 
-	if (!ProxyKiller_IsRulesInit())
+	if (!ProxyKiller_Rules_IsInit())
 	{
 		g_Rules = CreateRules(gCV_RulesMode.IntValue);
 		Call_OnRules();

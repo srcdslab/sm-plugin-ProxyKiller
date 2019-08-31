@@ -6,10 +6,8 @@ void CreateNatives()
 	CreateNative("ProxyKiller_CheckClient", Native_CheckClient);
 	CreateNative("ProxyKiller_SendHTTPRequest", Native_SendHTTPRequest);
 
-	CreateNative("ProxyKiller_GetCache", Native_GetCache);
-	CreateNative("ProxyKiller_GetRules", Native_GetRules);
-	CreateNative("ProxyKiller_IsCacheInit", Native_IsCacheInit);
-	CreateNative("ProxyKiller_IsRulesInit", Native_IsRulesInit);
+	CreateNative("ProxyKiller_Cache_IsInit", Native_Cache_IsInit);
+	CreateNative("ProxyKiller_Rules_IsInit", Native_Rules_IsInit);
 
 	CreateNative("ProxyKiller_Logger_GetSpewMode", Native_Logger_GetSpewMode);
 	CreateNative("ProxyKiller_Logger_GetSpewLevel", Native_Logger_GetSpewLevel);
@@ -72,22 +70,12 @@ public int Native_SendHTTPRequest(Handle plugin, int numParams)
 	return QueryHTTP(http, data);
 }
 
-public int Native_GetCache(Handle plugin, int numParams)
-{
-	return view_as<int>(CloneHandle(g_Cache, plugin));
-}
-
-public int Native_GetRules(Handle plugin, int numParams)
-{
-	return view_as<int>(CloneHandle(g_Rules, plugin));
-}
-
-public int Native_IsCacheInit(Handle plugin, int numParams)
+public int Native_Cache_IsInit(Handle plugin, int numParams)
 {
 	return IsCacheInit();
 }
 
-public int Native_IsRulesInit(Handle plugin, int numParams)
+public int Native_Rules_IsInit(Handle plugin, int numParams)
 {
 	return IsRulesInit();
 }
