@@ -143,7 +143,7 @@ native int ProxyKiller_Logger_GetSpewLevel();
  *
  * @param format				Formatting ruless
  * @param ...					Variable number of format parameters
- * @return						Boolean of whether message was made
+ * @return						Boolean of whether log message was made
  */
 native bool ProxyKiller_Logger_InfoMessage(char[] format, any ...);
 
@@ -153,17 +153,17 @@ native bool ProxyKiller_Logger_InfoMessage(char[] format, any ...);
  *
  * @param format				Formatting ruless
  * @param ...					Variable number of format parameters
- * @return						Boolean of whether message was made
+ * @return						Boolean of whether log message was made
  */
 native bool ProxyKiller_Logger_ErrorMessage(char[] format, any ...);
 
 /**
- * Makes an debugging message through ProxyKiller logger
+ * Makes a debugging message through ProxyKiller logger
  * This function respects the spew mode and level set on ProxyKiller
  *
  * @param format				Formatting ruless
  * @param ...					Variable number of format parameters
- * @return						Boolean of whether message was made
+ * @return						Boolean of whether log message was made
  */
 native bool ProxyKiller_Logger_DebugMessage(char[] format, any ...);
 
