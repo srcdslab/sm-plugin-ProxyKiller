@@ -48,7 +48,7 @@
 #endif
 
 #if !defined PROXYKILLER_SPEWLEVEL
-#define PROXYKILLER_SPEWLEVEL (SPEWLEVEL_ERRORS | SPEWLEVEL_INFO)
+#define PROXYKILLER_SPEWLEVEL (SPEWLEVEL_ERROR | SPEWLEVEL_INFO)
 #endif
 
 // =========================================================== //
@@ -124,11 +124,48 @@ native ProxyCache ProxyKiller_GetCache();
 native ProxyRules ProxyKiller_GetRules();
 
 /**
- * Gets the ProxyLogger used by ProxyKiller
+ * Gets the bitsum of spew mode from the ProxyKiller logger
  *
- * @return						ProxyLogger object being used by ProxyKiller
+ * @return						Bitsum of spew mode from ProxyKiller logger
  */
-native ProxyLogger ProxyKiller_GetLogger();
+native int ProxyKiller_Logger_GetSpewMode();
+
+/**
+ * Gets the bitsum of spew level from the ProxyKiller logger
+ *
+ * @return						Bitsum of spew level from ProxyKiller logger
+ */
+native int ProxyKiller_Logger_GetSpewLevel();
+
+/**
+ * Makes an informational message through ProxyKiller logger
+ * This function respects the spew mode and level set on ProxyKiller
+ *
+ * @param format				Formatting ruless
+ * @param ...					Variable number of format parameters
+ * @return						Boolean of whether message was made
+ */
+native bool ProxyKiller_Logger_InfoMessage(char[] format, any ...);
+
+/**
+ * Makes an error message through ProxyKiller logger
+ * This function respects the spew mode and level set on ProxyKiller
+ *
+ * @param format				Formatting ruless
+ * @param ...					Variable number of format parameters
+ * @return						Boolean of whether message was made
+ */
+native bool ProxyKiller_Logger_ErrorMessage(char[] format, any ...);
+
+/**
+ * Makes an debugging message through ProxyKiller logger
+ * This function respects the spew mode and level set on ProxyKiller
+ *
+ * @param format				Formatting ruless
+ * @param ...					Variable number of format parameters
+ * @return						Boolean of whether message was made
+ */
+native bool ProxyKiller_Logger_DebugMessage(char[] format, any ...);
 
 /**
  * Gets whether cache is initialized for ProxyKiller
@@ -155,7 +192,7 @@ native bool ProxyKiller_Config_IsInit();
  * Gets whether a config variable exists
  *
  * @param variable				Variable to look existence for
- * @return						Whether config variable exists
+ * @return						Boolean of whether config variable exists
  */
 native bool ProxyKiller_Config_HasVariable(char[] variable);
 
@@ -165,7 +202,7 @@ native bool ProxyKiller_Config_HasVariable(char[] variable);
  * @param variable				Variable to get value from
  * @param buffer				Buffer for the variable value
  * @param maxlength				Maxlength of the |buffer|
- * @return						Whether config variable existed
+ * @return						Boolean of whether config variable existed
  */
 native bool ProxyKiller_Config_GetVariable(char[] variable, char[] buffer, int maxlength);
 
@@ -214,7 +251,7 @@ native ResponseCompare ProxyKiller_Config_GetServiceResponseCompare();
  * Tells ProxyKiller to check the specified client
  *
  * @param client				Client index of the client to check
- * @return						Whether the client is being checked
+ * @return						Boolean of whether the client is being checked
  * @error						Invalid client index passed
  */
 native bool ProxyKiller_CheckClient(int client);
@@ -225,7 +262,7 @@ native bool ProxyKiller_CheckClient(int client);
  * @param http					ProxyHTTP object of http metadata
  * @param callback				ProxyHTTPCallback to call when request is done
  * @param data					Optional data to pass to the callback
- * @return						Whether the request was successfully made
+ * @return						Boolean of whether the request was successfully made
  */
 native bool ProxyKiller_SendHTTPRequest(ProxyHTTP http, ProxyHTTPCallback callback = INVALID_FUNCTION, any data = 0);
 
@@ -298,7 +335,7 @@ forward void ProxyKiller_OnCheckClient(ProxyUser pUser);
  *
  * @param pUser					ProxyUser object of the result's client
  * @param result				Boolean of the result
- * @param fromCache				Whether the result was from cache
+ * @param fromCache				Boolean of whether the result was from cache
  * @noreturn
  */
 forward void ProxyKiller_OnClientResult(ProxyUser pUser, bool result, bool fromCache);
@@ -364,7 +401,13 @@ public void __pl_ProxyKiller_SetNTVOptional()
 	MarkNativeAsOptional("ProxyKiller_GetLogger");
 	MarkNativeAsOptional("ProxyKiller_IsCacheInit");
 	MarkNativeAsOptional("ProxyKiller_IsRulesInit");
-	
+
+	MarkNativeAsOptional("ProxyKiller_Logger_GetSpewMode");
+	MarkNativeAsOptional("ProxyKiller_Logger_GetSpewLevel");
+	MarkNativeAsOptional("ProxyKiller_Logger_InfoMessage");
+	MarkNativeAsOptional("ProxyKiller_Logger_ErrorMessage");
+	MarkNativeAsOptional("ProxyKiller_Logger_DebugMessage");
+
 	MarkNativeAsOptional("ProxyKiller_Config_IsInit");
 	MarkNativeAsOptional("ProxyKiller_Config_HasVariable");
 	MarkNativeAsOptional("ProxyKiller_Config_GetVariable");

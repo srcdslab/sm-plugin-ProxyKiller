@@ -21,7 +21,7 @@ enum (<<= 1)
  */
 enum (<<= 1)
 {
-	SPEWLEVEL_ERRORS = 1 << 0,	/**< Spew error messages */
+	SPEWLEVEL_ERROR = 1 << 0,	/**< Spew error messages */
 	SPEWLEVEL_INFO = 1 << 1,	/**< Spew info messages */
 	SPEWLEVEL_DEBUG = 1 << 2	/**< Spew debugging messages */
 };
@@ -48,16 +48,17 @@ methodmap ProxyLogger < StringMapEx
 		public get() { return this.GetInt("spewlevel"); }
 	}
 
-	public void DoSpew(int spewType, char[] format, any ...)
+	public bool DoSpew(int spewType, char[] format, any ...)
 	{
-		if (this.SpewMode == 0) return;
+		if (this.SpewMode == 0) return false;
+		if (!(this.SpewLevel & spewType)) return false;
 
 		char buffer[600];
 		VFormat(buffer, sizeof(buffer), format, 4);
 
 		if (this.SpewMode & SPEWMODE_LOG)
 		{
-			if (spewType == SPEWLEVEL_ERRORS)
+			if (spewType == SPEWLEVEL_ERROR)
 			{
 				LogError("%s", buffer);
 			}
@@ -71,38 +72,29 @@ methodmap ProxyLogger < StringMapEx
 		{
 			PrintToChatAll("%s", buffer);
 		}
+
+		return true;
 	}
 
-	public void InfoMessage(char[] format, any ...)
+	public bool InfoMessage(char[] format, any ...)
 	{
-		if (this.SpewLevel & SPEWLEVEL_INFO)
-		{
-			char buffer[512];
-			VFormat(buffer, sizeof(buffer), format, 3);
-			
-			this.DoSpew(SPEWLEVEL_INFO, "[INFO ] %s", buffer);
-		}
+		char buffer[512];
+		VFormat(buffer, sizeof(buffer), format, 3);
+		return this.DoSpew(SPEWLEVEL_INFO, "[ INFO  ] %s", buffer);
 	}
 
-	public void ErrorMessage(char[] format, any ...)
+	public bool ErrorMessage(char[] format, any ...)
 	{
-		if (this.SpewLevel & SPEWLEVEL_ERRORS)
-		{
-			char buffer[512];
-			VFormat(buffer, sizeof(buffer), format, 3);
-			
-			this.DoSpew(SPEWLEVEL_ERRORS, "[ERROR] %s", buffer);
-		}
+		char buffer[512];
+		VFormat(buffer, sizeof(buffer), format, 3);
+		return this.DoSpew(SPEWLEVEL_ERROR, "[ ERROR ] %s", buffer);
 	}
 
-	public void DebugMessage(char[] format, any ...)
+	public bool DebugMessage(char[] format, any ...)
 	{
-		if (this.SpewLevel & SPEWLEVEL_DEBUG)
-		{
-			char buffer[512];
-			VFormat(buffer, sizeof(buffer), format, 3);
-			this.DoSpew(SPEWLEVEL_DEBUG, "[DEBUG] %s", buffer);
-		}
+		char buffer[512];
+		VFormat(buffer, sizeof(buffer), format, 3);
+		return this.DoSpew(SPEWLEVEL_DEBUG, "[ DEBUG ] %s", buffer);
 	}
 
 	public void PrintFrame(char[] info = "")

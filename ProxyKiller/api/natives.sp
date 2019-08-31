@@ -8,9 +8,14 @@ void CreateNatives()
 
 	CreateNative("ProxyKiller_GetCache", Native_GetCache);
 	CreateNative("ProxyKiller_GetRules", Native_GetRules);
-	CreateNative("ProxyKiller_GetLogger", Native_GetLogger);
 	CreateNative("ProxyKiller_IsCacheInit", Native_IsCacheInit);
 	CreateNative("ProxyKiller_IsRulesInit", Native_IsRulesInit);
+
+	CreateNative("ProxyKiller_Logger_GetSpewMode", Native_Logger_GetSpewMode);
+	CreateNative("ProxyKiller_Logger_GetSpewLevel", Native_Logger_GetSpewLevel);
+	CreateNative("ProxyKiller_Logger_InfoMessage", Native_Logger_InfoMessage);
+	CreateNative("ProxyKiller_Logger_ErrorMessage", Native_Logger_ErrorMessage);
+	CreateNative("ProxyKiller_Logger_DebugMessage", Native_Logger_DebugMessage);
 
 	CreateNative("ProxyKiller_Config_IsInit", Native_Config_IsInit);
 	CreateNative("ProxyKiller_Config_HasVariable", Native_Config_HasVariable);
@@ -77,11 +82,6 @@ public int Native_GetRules(Handle plugin, int numParams)
 	return view_as<int>(CloneHandle(g_Rules, plugin));
 }
 
-public int Native_GetLogger(Handle plugin, int numParams)
-{
-	return view_as<int>(CloneHandle(g_Logger, plugin));
-}
-
 public int Native_IsCacheInit(Handle plugin, int numParams)
 {
 	return IsCacheInit();
@@ -95,6 +95,46 @@ public int Native_IsRulesInit(Handle plugin, int numParams)
 public int Native_Config_IsInit(Handle plugin, int numParams)
 {
 	return IsConfigInit();
+}
+
+public int Native_Logger_GetSpewMode(Handle plugin, int numParams)
+{
+	return g_Logger.SpewMode;
+}
+
+public int Native_Logger_GetSpewLevel(Handle plugin, int numParams)
+{
+	return g_Logger.SpewLevel;
+}
+
+public int Native_Logger_InfoMessage(Handle plugin, int numParams)
+{
+	char buffer[400];
+	FormatNativeString(0, 1, 2, sizeof(buffer), _, buffer);
+
+	char plFile[64];
+	GetPluginFilename(plugin, plFile, sizeof(plFile));
+	return g_Logger.InfoMessage("[%s] \"%s\"", plFile, buffer);
+}
+
+public int Native_Logger_ErrorMessage(Handle plugin, int numParams)
+{
+	char buffer[400];
+	FormatNativeString(0, 1, 2, sizeof(buffer), _, buffer);
+
+	char plFile[64];
+	GetPluginFilename(plugin, plFile, sizeof(plFile));
+	return g_Logger.ErrorMessage("[%s] \"%s\"", plFile, buffer);
+}
+
+public int Native_Logger_DebugMessage(Handle plugin, int numParams)
+{
+	char buffer[400];
+	FormatNativeString(0, 1, 2, sizeof(buffer), _, buffer);
+
+	char plFile[64];
+	GetPluginFilename(plugin, plFile, sizeof(plFile));
+	return g_Logger.DebugMessage("[%s] \"%s\"", plFile, buffer);
 }
 
 public int Native_Config_HasVariable(Handle plugin, int numParams)
