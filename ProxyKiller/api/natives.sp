@@ -2,9 +2,15 @@
 
 void CreateNatives()
 {
-	CreateNative("ProxyKiller_CreateHTTP", Native_CreateHTTP);
 	CreateNative("ProxyKiller_CheckClient", Native_CheckClient);
+	CreateNative("ProxyKiller_CreateHTTP", Native_CreateHTTP);
 	CreateNative("ProxyKiller_SendHTTPRequest", Native_SendHTTPRequest);
+
+	CreateNative("ProxyKiller_GetRawVersion", Native_GetRawVersion);
+	CreateNative("ProxyKiller_GetSemVersion", Native_GetSemVersion);
+	CreateNative("ProxyKiller_GetMajorVersion", Native_GetMajorVersion);
+	CreateNative("ProxyKiller_GetMinorVersion", Native_GetMinorVersion);
+	CreateNative("ProxyKiller_GetPatchVersion", Native_GetPatchVersion);
 
 	CreateNative("ProxyKiller_Cache_IsInit", Native_Cache_IsInit);
 	CreateNative("ProxyKiller_Rules_IsInit", Native_Rules_IsInit);
@@ -68,6 +74,110 @@ public int Native_SendHTTPRequest(Handle plugin, int numParams)
 
 	http.Callback = fwd;
 	return QueryHTTP(http, data);
+}
+
+public int Native_GetRawVersion(Handle plugin, int numParams)
+{
+	char ver[64];
+	if (!GetPluginInfo(null, PlInfo_Version, ver, sizeof(ver)))
+	{
+		return false;
+	}
+
+	int maxlength = GetNativeCell(2);
+	return SetNativeString(1, ver, maxlength) == SP_ERROR_NONE;
+}
+
+public int Native_GetSemVersion(Handle plugin, int numParams)
+{
+	char ver[64];
+	GetNativeString(1, ver, sizeof(ver));
+
+	if (IsNativeParamNullString(1))
+	{
+		ProxyKiller_GetRawVersion(ver, sizeof(ver));
+	}
+
+	bool validSemVer = false;
+	Regex regex = new Regex("^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)");
+
+	if (regex.Match(ver) >= 1)
+	{
+		validSemVer = true;
+		regex.GetSubString(0, ver, sizeof(ver));
+	}
+
+	if (validSemVer)
+	{
+		int maxlength = GetNativeCell(3);
+		SetNativeString(2, ver, maxlength);
+	}
+
+	delete regex;
+	return validSemVer;
+}
+
+public int Native_GetMajorVersion(Handle plugin, int numParams)
+{
+	char ver[64];
+	GetNativeString(1, ver, sizeof(ver));
+
+	if (IsNativeParamNullString(1))
+	{
+		ProxyKiller_GetRawVersion(ver, sizeof(ver));
+	}
+
+	if (!ProxyKiller_GetSemVersion(ver, ver, sizeof(ver)))
+	{
+		return -1;
+	}
+
+	char vers[3][22];
+	ExplodeString(ver, ".", vers, sizeof(vers), sizeof(vers[]));
+
+	return StringToInt(vers[0]);
+}
+
+public int Native_GetMinorVersion(Handle plugin, int numParams)
+{
+	char ver[64];
+	GetNativeString(1, ver, sizeof(ver));
+
+	if (IsNativeParamNullString(1))
+	{
+		ProxyKiller_GetRawVersion(ver, sizeof(ver));
+	}
+
+	if (!ProxyKiller_GetSemVersion(ver, ver, sizeof(ver)))
+	{
+		return -1;
+	}
+
+	char vers[3][22];
+	ExplodeString(ver, ".", vers, sizeof(vers), sizeof(vers[]));
+
+	return StringToInt(vers[1]);
+}
+
+public int Native_GetPatchVersion(Handle plugin, int numParams)
+{
+	char ver[64];
+	GetNativeString(1, ver, sizeof(ver));
+
+	if (IsNativeParamNullString(1))
+	{
+		ProxyKiller_GetRawVersion(ver, sizeof(ver));
+	}
+
+	if (!ProxyKiller_GetSemVersion(ver, ver, sizeof(ver)))
+	{
+		return -1;
+	}
+
+	char vers[3][22];
+	ExplodeString(ver, ".", vers, sizeof(vers), sizeof(vers[]));
+
+	return StringToInt(vers[2]);
 }
 
 public int Native_Cache_IsInit(Handle plugin, int numParams)

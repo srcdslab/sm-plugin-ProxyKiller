@@ -119,6 +119,16 @@ typeset ProxyHTTPCallback
 native bool ProxyKiller_CheckClient(int client);
 
 /**
+ * Creates a ProxyHTTP instance and returns it
+ *
+ * @param url					URI of the http request
+ * @param method				ProxyHTTPMethod of the http request
+ * @param isPersistent			Whether the ProxyHTTP object is persistent (Kept in memory after finish)
+ * @return						A ProxyHTTP object containing the metadata defined
+ */
+native ProxyHTTP ProxyKiller_CreateHTTP(const char[] url, ProxyHTTPMethod method = HTTPMethod_GET, isPersistent = false);
+
+/**
  * Sends a ProxyHTTP request and calls the callback function when done
  *
  * @param http					ProxyHTTP object of http metadata
@@ -129,14 +139,51 @@ native bool ProxyKiller_CheckClient(int client);
 native bool ProxyKiller_SendHTTPRequest(ProxyHTTP http, ProxyHTTPCallback callback = INVALID_FUNCTION, any data = 0);
 
 /**
- * Creates a ProxyHTTP instance and returns it
+ * Gets the raw version string from ProxyKiller
  *
- * @param url					URI of the http request
- * @param method				ProxyHTTPMethod of the http request
- * @param isPersistent			Whether the ProxyHTTP object is persistent (Kept in memory after finish)
- * @return						A ProxyHTTP object containing the metadata defined
+ * @param buffer				Buffer for the raw version
+ * @param maxlength				Maxlength of the |buffer|
+ * @return						Boolean of whether `PlInfo_Version` property exists
  */
-native ProxyHTTP ProxyKiller_CreateHTTP(const char[] url, ProxyHTTPMethod method = HTTPMethod_GET, isPersistent = false);
+native bool ProxyKiller_GetRawVersion(char[] buffer, int maxlength);
+
+/**
+ * Gets the semantic version string from |version|
+ * Pass "NULL_STRING" to get the semantic version from ProxyKiller
+ *
+ * @param version				Version string to get semantic version from
+ * @param buffer				Buffer for the semantic version
+ * @param maxlength				Maxlength of the |buffer|
+ * @return						Whether |version| was valid semantic version format
+ */
+native bool ProxyKiller_GetSemVersion(const char[] version, char[] buffer, int maxlength);
+
+/**
+ * Gets the major semantic version from |version|
+ * Pass "NULL_STRING" to get the major semantic version from ProxyKiller
+ *
+ * @param version				Version string to get major semantic version from
+ * @return						-1 if |version| was invalid semantic version format, otherwise major semantic version
+ */
+native int ProxyKiller_GetMajorVersion(const char[] version);
+
+/**
+ * Gets the minor semantic version from |version|
+ * Pass "NULL_STRING" to get the minor semantic version from ProxyKiller
+ *
+ * @param version				Version string to get minor semantic version from
+ * @return						-1 if |version| was invalid semantic version format, otherwise minor semantic version
+ */
+native int ProxyKiller_GetMinorVersion(const char[] version);
+
+/**
+ * Gets the patch semantic version from |version|
+ * Pass "NULL_STRING" to get the patch semantic version from ProxyKiller
+ *
+ * @param version				Version string to get patch semantic version from
+ * @return						-1 if |version| was invalid semantic version format, otherwise patch semantic version
+ */
+native int ProxyKiller_GetPatchVersion(const char[] version);
 
 /**
  * Gets whether cache is initialized for ProxyKiller
@@ -378,9 +425,15 @@ public SharedPlugin __pl_ProxyKiller =
 #if !defined REQUIRE_PLUGIN
 public void __pl_ProxyKiller_SetNTVOptional()
 {
-	MarkNativeAsOptional("ProxyKiller_CreateHTTP");
 	MarkNativeAsOptional("ProxyKiller_CheckClient");
+	MarkNativeAsOptional("ProxyKiller_CreateHTTP");
 	MarkNativeAsOptional("ProxyKiller_SendHTTPRequest");
+
+	MarkNativeAsOptional("ProxyKiller_GetRawVersion");
+	MarkNativeAsOptional("ProxyKiller_GetSemVersion");
+	MarkNativeAsOptional("ProxyKiller_GetMajorVersion");
+	MarkNativeAsOptional("ProxyKiller_GetMinorVersion");
+	MarkNativeAsOptional("ProxyKiller_GetPatchVersion");
 
 	MarkNativeAsOptional("ProxyKiller_Cache_IsInit");
 	MarkNativeAsOptional("ProxyKiller_Rules_IsInit");

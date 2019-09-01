@@ -1,6 +1,7 @@
 // =========================================================== //
 
 #include <json>
+#include <regex>
 #include <SteamWorks>
 #include <ProxyKiller>
 
