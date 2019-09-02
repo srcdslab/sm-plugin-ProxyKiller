@@ -221,7 +221,7 @@ native int ProxyKiller_Logger_GetSpewLevel();
  * @param ...					Variable number of format parameters
  * @return						Boolean of whether the log message was made
  */
-native bool ProxyKiller_Logger_InfoMessage(char[] format, any ...);
+native bool ProxyKiller_Logger_InfoMessage(const char[] format, any ...);
 
 /**
  * Makes an error message through ProxyKiller logger
@@ -231,7 +231,7 @@ native bool ProxyKiller_Logger_InfoMessage(char[] format, any ...);
  * @param ...					Variable number of format parameters
  * @return						Boolean of whether the log message was made
  */
-native bool ProxyKiller_Logger_ErrorMessage(char[] format, any ...);
+native bool ProxyKiller_Logger_ErrorMessage(const char[] format, any ...);
 
 /**
  * Makes a debugging message through ProxyKiller logger
@@ -241,7 +241,7 @@ native bool ProxyKiller_Logger_ErrorMessage(char[] format, any ...);
  * @param ...					Variable number of format parameters
  * @return						Boolean of whether the log message was made
  */
-native bool ProxyKiller_Logger_DebugMessage(char[] format, any ...);
+native bool ProxyKiller_Logger_DebugMessage(const char[] format, any ...);
 
 /**
  * Gets whether config is initialized for ProxyKiller
@@ -256,7 +256,7 @@ native bool ProxyKiller_Config_IsInit();
  * @param variable				Variable to look existence for
  * @return						Boolean of whether config variable exists
  */
-native bool ProxyKiller_Config_HasVariable(char[] variable);
+native bool ProxyKiller_Config_HasVariable(const char[] variable);
 
 /**
  * Gets the value of a config variable
@@ -266,7 +266,7 @@ native bool ProxyKiller_Config_HasVariable(char[] variable);
  * @param maxlength				Maxlength of the |buffer|
  * @return						Boolean of whether config variable existed
  */
-native bool ProxyKiller_Config_GetVariable(char[] variable, char[] buffer, int maxlength);
+native bool ProxyKiller_Config_GetVariable(const char[] variable, char[] buffer, int maxlength);
 
 /**
  * Gets the name of the configured service
