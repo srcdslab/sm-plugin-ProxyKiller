@@ -31,15 +31,10 @@ methodmap ProxyHTTP < StringMapEx
 		StringMapEx http = new StringMapEx();
 		http.SetString("url", url);
 		http.SetValue("method", method);
-		http.SetValue("isPersistent", isPersistent);
+		http.SetValue("persistent", isPersistent);
 		http.SetValue("params", new ProxyHTTPParams());
 		http.SetValue("headers", new ProxyHTTPHeaders());
 		return view_as<ProxyHTTP>(http);
-	}
-
-	public void GetUrl(char[] buffer, int maxlength)
-	{
-		this.GetString("url", buffer, maxlength);
 	}
 
 	public void SetRawBody(char[] body, char[] type = "application/json")
@@ -47,20 +42,45 @@ methodmap ProxyHTTP < StringMapEx
 		this.SetString("rawbody", body);
 		this.SetString("rawbody_type", type);
 	}
-	
+
+	public void SetResponseFile(char[] file)
+	{
+		this.SetString("responsefile", file);
+	}
+
+	public void GetUrl(char[] buffer, int maxlength)
+	{
+		this.GetString("url", buffer, maxlength);
+	}
+
 	public void GetRawBody(char[] buffer, int maxlength)
 	{
 		this.GetString("rawbody", buffer, maxlength);
 	}
-	
+
 	public void GetRawBodyType(char[] buffer, int maxlength)
 	{
 		this.GetString("rawbody_type", buffer, maxlength);
 	}
 
+	public void GetResponseFile(char[] buffer, int maxlength)
+	{
+		this.GetString("responsefile", buffer, maxlength);
+	}
+
 	property bool IsPersistent
 	{
-		public get() { return this.GetBool("isPersistent"); }
+		public get() { return this.GetBool("persistent"); }
+	}
+
+	property bool HasRawBody
+	{
+		public get() { return this.HasKeyWithString("rawbody"); }
+	}
+
+	property bool HasResponseFile
+	{
+		public get() { return this.HasKeyWithString("responsefile"); }
 	}
 
 	property Handle Callback
@@ -68,7 +88,12 @@ methodmap ProxyHTTP < StringMapEx
 		public get() { return this.GetAny("callback"); }
 		public set(Handle fwd) { this.SetValue("callback", fwd); }
 	}
-	
+
+	property ProxyHTTPMethod Method
+	{
+		public get() { return this.GetAny("method"); }
+	}
+
 	property ProxyHTTPParams Params
 	{
 		public get() { return this.GetAny("params"); }
@@ -83,11 +108,6 @@ methodmap ProxyHTTP < StringMapEx
 	{
 		public get() { return this.GetAny("response"); }
 		public set(ProxyHTTPResponse response) { this.SetValue("response", response); }
-	}
-
-	property ProxyHTTPMethod Method
-	{
-		public get() { return this.GetAny("method"); }
 	}
 
 	public void Dispose()

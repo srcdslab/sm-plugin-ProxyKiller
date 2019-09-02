@@ -74,6 +74,13 @@ public int OnRequest_DataReceived(Handle request, bool failure, int offset, int 
 		}
 		else
 		{
+			if (ctx.HTTP.HasResponseFile)
+			{
+				char responseFile[PLATFORM_MAX_PATH];
+				ctx.HTTP.GetResponseFile(responseFile, sizeof(responseFile));
+				SteamWorks_WriteHTTPResponseBodyToFile(request, responseFile);
+			}
+
 			SteamWorks_GetHTTPResponseBodyCallback(request, OnRequest_Data, ctx);
 		}
 	}

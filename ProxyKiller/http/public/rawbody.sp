@@ -7,14 +7,14 @@
 
 bool SetRawBody(Handle request, ProxyHTTP http)
 {
-	if (!http.HasKeyWithString("rawbody"))
+	if (!http.HasRawBody)
 	{
 		return false;
 	}
 
 	char bodyValue[MAX_RAWBODY_VALUE_LENGTH];
 	http.GetRawBody(bodyValue, sizeof(bodyValue));
-	
+
 	char bodyType[MAX_RAWBODY_TYPE_LENGTH];
 	http.GetRawBodyType(bodyType, sizeof(bodyType));
 
