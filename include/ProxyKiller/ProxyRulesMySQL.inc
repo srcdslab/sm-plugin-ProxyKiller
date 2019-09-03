@@ -14,7 +14,8 @@ static char CREATE_TABLE[] =
 ..."("
 ..."`Expression` VARCHAR(32) NOT NULL, "
 ..."`Type` TINYINT NOT NULL, "
-..."`Timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, "
+..."`Timestamp` TIMESTAMP NOT NULL DEFAULT "
+..."CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, "
 ..."PRIMARY KEY (`Expression`)"
 ...")";
 
@@ -31,8 +32,7 @@ static char INSERT_RECORD[] =
 ..."(`Expression`, `Type`) "
 ..."VALUES ('%s', '%d') "
 ..."ON DUPLICATE KEY UPDATE "
-..."`Type` = VALUES(`Type`), "
-..."`Timestamp` = CURRENT_TIMESTAMP";
+..."`Type` = VALUES(`Type`)";
 
 static char DELETE_RECORD[] =
 "DELETE FROM `%s_Rules` "

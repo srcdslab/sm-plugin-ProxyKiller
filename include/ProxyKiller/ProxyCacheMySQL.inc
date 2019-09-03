@@ -32,8 +32,7 @@ static char INSERT_RECORD[] =
 ..."(`IPAddress`, `ServiceName`, `Result`) "
 ..."VALUES ('%s', '%s', '%d') "
 ..."ON DUPLICATE KEY UPDATE "
-..."`Result` = VALUES(`Result`), "
-..."`Timestamp` = CURRENT_TIMESTAMP";
+..."`Result` = VALUES(`Result`)";
 
 // =========================================================== //
 
