@@ -14,6 +14,7 @@ enum ProxyCacheMode
 {
 	CacheMode_None = 0,	/**< No caching */
 	CacheMode_MySQL,	/**< Use MySQL */
+	CacheMode_SQLite,	/**< Use SQLite */
 	CacheMode_COUNT
 };
 

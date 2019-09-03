@@ -3,6 +3,7 @@
 static bool CacheInit = false;
 
 #define Cache_MySQL(%1) view_as<ProxyCacheMySQL>(%1)
+#define Cache_SQLite(%1) view_as<ProxyCacheSQLite>(%1)
 
 // =========================================================== //
 
@@ -38,6 +39,15 @@ ProxyCache CreateCache(int mode)
 			cache = new ProxyCacheMySQL(prefix);
 			Cache_MySQL(cache).Initialize();
 		}
+		case CacheMode_SQLite:
+		{
+			char prefix[64];
+			gCV_DatabaseTablePrefix.GetString(prefix, sizeof(prefix));
+			
+			g_Logger.PrintFrame("SQLite");
+			cache = new ProxyCacheSQLite(prefix);
+			Cache_SQLite(cache).Initialize();
+		}
 	}
 
 	CacheInit = true;
@@ -58,6 +68,10 @@ void TryGetCache(ProxyUser pUser)
 		{
 			Cache_MySQL(g_Cache).TryGetCache(pUser, g_Config.Service, MySQL_OnCache);
 		}
+		case CacheMode_SQLite:
+		{
+			Cache_SQLite(g_Cache).TryGetCache(pUser, g_Config.Service, SQLite_OnCache);
+		}
 		default:
 		{
 			g_Logger.DebugMessage("Cache mode %d has no implementation for TryGetCache", g_Cache.Mode);
@@ -74,6 +88,10 @@ void TryPushCache(ProxyUser pUser, ProxyService service, any result)
 		case CacheMode_MySQL:
 		{
 			Cache_MySQL(g_Cache).TryPushCache(pUser, service, result, MySQL_OnCached);
+		}
+		case CacheMode_SQLite:
+		{
+			Cache_SQLite(g_Cache).TryPushCache(pUser, service, result, SQLite_OnCached);
 		}
 		default:
 		{

@@ -27,6 +27,7 @@
 
 #include <ProxyKiller/ProxyCache>
 #include <ProxyKiller/ProxyCacheMySQL>
+#include <ProxyKiller/ProxyCacheSQLite>
 
 #include <ProxyKiller/ProxyRules>
 #include <ProxyKiller/ProxyRulesMySQL>
