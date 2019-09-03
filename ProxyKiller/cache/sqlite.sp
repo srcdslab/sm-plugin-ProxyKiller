@@ -22,8 +22,6 @@ public void SQLite_OnCache(Database db, DBResultSet results, const char[] error,
 		{
 			bool result = !!results.FetchInt(2);
 			int timestamp = results.FetchInt(3);
-			
-			PrintToServer("Timestamp: %d", timestamp);
 
 			char ipAddress[24];
 			results.FetchString(0, ipAddress, sizeof(ipAddress));
