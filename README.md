@@ -1,4 +1,5 @@
 
+
 # ProxyKiller
 #### Plugin designed to literally kill proxy users!  
 Please see the [Wiki](https://bitbucket.org/Sikarii/proxykiller/wiki) for a featured documentation of the plugin.
@@ -14,11 +15,13 @@ In case you wanna support development, heres an [incredibly optional donate link
 	 - Decide what logging messages you want to see and where
 - **Extensive plugin api**
 	 - Tons of natives and forwards available for third-party plugins
-- **Caching of IP Addresses**
-  	 - Configurable caching time
  - **Admin flags & app owners whitelisting**
 	 - Configure clients with admin flags to be ignored
 	 - Configure clients with steam apps to be ignored
+ - **Configurable caching**
+	 - Configurable caching mode
+	 - Configurable caching lifetime
+	 - None/MySQL/SQLite providers available
  - **Configurable rules**
 	 - 	Supports adding and removing rules in-game
 	 - Could be expanded to more complex rules in the future
@@ -43,11 +46,11 @@ In case you wanna support development, heres an [incredibly optional donate link
 
 
 ## **Installation**
-- **TODO**
 
----
-
-## **Known Limitations**
-- Caching/rules layer limited to MySQL only (No implementation for other providers yet)
+ 1. Make sure the above requiremens are met
+ 2. Download the [latest binary](https://bitbucket.org/Sikarii/proxykiller/downloads/ProxyKiller-latest.smx) and drop it to `/csgo/addons/sourcemod/plugins/`
+ 3. Configure ProxyKiller service [example config](https://google.com) - `/csgo/cfg/sourcemod/ProxyKiller-Config.cfg`
+ 4. **Optional but recommended** - Depending on your configuration, add an "**ProxyKiller**" entry    
+ to `/csgo/addons/sourcemod/configs/databases.cfg`, the driver can be either "sqlite" or "mysql"
 
 ---
