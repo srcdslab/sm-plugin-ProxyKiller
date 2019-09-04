@@ -15,6 +15,7 @@ enum ProxyRulesMode
 	RulesMode_Inherit = -1,	/**< Inherit mode from ProxyCache */
 	RulesMode_None,			/**< No whitelist */
 	RulesMode_MySQL,		/**< Use MySQL */
+	RulesMode_SQLite,		/**< Use SQLite */
 	RulesMode_COUNT
 };
 

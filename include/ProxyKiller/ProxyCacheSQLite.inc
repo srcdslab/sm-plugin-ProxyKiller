@@ -21,7 +21,8 @@ static char CREATE_TABLE[] =
 
 static char SELECT_RECORD[] =
 "SELECT `IPAddress`, `ServiceName`, "
-..."`Result`, strftime('%%s', `Timestamp`) "
+..."`Result`, "
+..."strftime('%%s', `Timestamp`) "
 ..."FROM `%s_Cache` "
 ..."WHERE `IPAddress` = '%s' "
 ..."AND `ServiceName` = '%s'";

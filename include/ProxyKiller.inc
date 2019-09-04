@@ -31,6 +31,7 @@
 
 #include <ProxyKiller/ProxyRules>
 #include <ProxyKiller/ProxyRulesMySQL>
+#include <ProxyKiller/ProxyRulesSQLite>
 
 // =========================================================== //
 

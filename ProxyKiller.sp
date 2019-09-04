@@ -38,6 +38,7 @@ ProxyConfig g_Config = null;
 
 #include "ProxyKiller/rules/rules.sp"
 #include "ProxyKiller/rules/mysql.sp"
+#include "ProxyKiller/rules/sqlite.sp"
 
 #include "ProxyKiller/helpers.sp"
 #include "ProxyKiller/migrations.sp"
