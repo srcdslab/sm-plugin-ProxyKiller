@@ -42,7 +42,7 @@ methodmap ProxyCacheSQLite < ProxyCache
 
 		if (db == null)
 		{
-			SetFailState("<Cache-SQLite> Error connecting to configuration(s) \"%s\" \n%s", DB_CONF_NAME, error);
+			SetFailState("<Cache-SQLite> Error connecting to configuration \"%s\" \n%s", DB_CONF_NAME, error);
 		}
 		else
 		{
