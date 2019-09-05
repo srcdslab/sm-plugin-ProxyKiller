@@ -21,7 +21,7 @@ ConVar gCV_RulesMode = null;
 void CreateConVars()
 {
 	gCV_Enable = CreateConVar("ProxyKiller_Enable", "1", "Enable/disable ProxyKiller\n0 = Disable - 1 = Enable", _, true, 0.0, true, 1.0);
-	gCV_IgnoreFlags = CreateConVar("ProxyKiller_IgnoreFlags", "z", "Ignore clients with these admin flags when checking for proxies\nChecking will occur if a client does not have any of these flags");
+	gCV_IgnoreFlags = CreateConVar("ProxyKiller_IgnoreFlags", "", "Ignore clients with these admin flags when checking for proxies\nChecking will occur if a client does not have any of these flags");
 	gCV_IgnoreAppOwners = CreateConVar("ProxyKiller_IgnoreAppOwners", "", "Ignore owners of these appids when checking for proxies\nChecking will occur if a client does not have any of these appids\nSeparate appids by a comma ex: \"123, 4444\"");
 
 	gCV_PunishmentType = CreateConVar("ProxyKiller_Punishment_Mode", "1", "Type of punishment to apply to clients\n0 = None\n1 = Kick\n2 = Ban", _, true, 0.0, true, float(Punishment_COUNT - 1));

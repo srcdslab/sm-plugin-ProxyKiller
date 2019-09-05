@@ -35,6 +35,11 @@ void DoPunishment(ProxyUser pUser, bool fromCache)
 	Call_OnClientPunishment(pUser, fromCache);
 }
 
+bool HasOverride(int client)
+{
+	return (HasFlag(client, ADMFLAG_ROOT));
+}
+
 bool HasFlag(int client, int flag)
 {
 	return (CheckCommandAccess(client, "ProxyKiller_Bypass", flag));

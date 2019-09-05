@@ -102,8 +102,8 @@ public void OnClientPostAdminCheck(int client)
 		return;
 	}
 
-	bool shouldIgnore = false;
 	Call_OnValidClient(client);
+	bool shouldIgnore = HasOverride(client);
 
 	char ignoreFlags[64];
 	gCV_IgnoreFlags.GetString(ignoreFlags, sizeof(ignoreFlags));
