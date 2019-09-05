@@ -49,7 +49,7 @@ In case you wanna support development, heres an [incredibly optional donate link
 
  1. Make sure the above requiremens are met
  2. Download the [latest binary](https://bitbucket.org/Sikarii/proxykiller/downloads/ProxyKiller-latest.smx) and drop it to `/csgo/addons/sourcemod/plugins/`
- 3. Configure ProxyKiller service [example config](https://google.com) - `/csgo/cfg/sourcemod/ProxyKiller-Config.cfg`
+ 3. Configure ProxyKiller service [(example config)](https://google.com) into `/csgo/cfg/sourcemod/ProxyKiller-Config.cfg`
  4. **Optional but recommended** - Depending on your configuration, add an "**ProxyKiller**" entry    
  to `/csgo/addons/sourcemod/configs/databases.cfg`, the driver can be either "sqlite" or "mysql"
 
