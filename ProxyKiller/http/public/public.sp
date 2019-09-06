@@ -33,6 +33,7 @@ bool QueryHTTP(ProxyHTTP http, any data)
 	ctx.Data = data;
 
 	SteamWorks_SetHTTPCallbacks(request, OnRequest_Completed, _, OnRequest_DataReceived);
+	SteamWorks_SetHTTPRequestUserAgentInfo(request, " ProxyKiller");
 	SteamWorks_SetHTTPRequestContextValue(request, ctx);
 	SteamWorks_SendHTTPRequest(request);
 	return true;
@@ -53,7 +54,7 @@ public int OnRequest_Completed(Handle request, bool failure, bool requestSuccess
 	{
 		char requestUrl[MAX_HTTP_URL_LENGTH];
 		ctx.HTTP.GetUrl(requestUrl, sizeof(requestUrl));
-		g_Logger.ErrorMessage("Error making http request to \"%s\"", requestUrl);
+		g_Logger.ErrorMessage("Error making http request to \"%s\" - Status: %d", requestUrl, status);
 	}
 }
 
