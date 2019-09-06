@@ -95,6 +95,11 @@ ProxyConfig ParseConfig(char[] configFile)
 	config.GetString("method", method, sizeof(method));
 
 	ProxyServiceResponse response = ParseResponse(config);
+	if (response == null)
+	{
+		SetFailState("Service response not configured!");
+	}
+
 	config.Rewind();
 	config.JumpToKey(name);
 
