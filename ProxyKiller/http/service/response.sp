@@ -87,7 +87,32 @@ static void Internal_Handle_JSON(const char[] response, ProxyServiceContext ctx,
 		{
 			if (currentObj != null)
 			{
-				currentObj.GetString(objs[i], responseValue, sizeof(responseValue));
+				switch (currentObj.GetKeyType(objs[i]))
+				{
+					case Type_String:
+					{
+						currentObj.GetString(objs[i], responseValue, sizeof(responseValue));
+					}
+					case Type_Int:
+					{
+						int val = currentObj.GetInt(objs[i]);
+						IntToString(val, responseValue, sizeof(responseValue));
+					}
+					case Type_Float:
+					{
+						float val = currentObj.GetFloat(objs[i]);
+						FloatToString(val, responseValue, sizeof(responseValue));
+					}
+					case Type_Bool:
+					{
+						int val = currentObj.GetBool(objs[i]) ? 1 : 0;
+						IntToString(val, responseValue, sizeof(responseValue));
+					}
+					default:
+					{
+						g_Logger.DebugMessage("Invalid key type for %s (%s)", objs[i], obj);
+					}
+				}
 			}
 		}
 	}
