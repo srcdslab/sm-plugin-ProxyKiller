@@ -62,10 +62,12 @@ public Action Command_ApplyMigration(int client, int args)
 	{
 		case Result_LookupFailure:
 		{
+			g_Logger.ErrorMessage("Failed to lookup migration by name \"%s\"", migration);
 			ReplyToCommand(client, "Failed to lookup migration by name \"%s\"", migration);
 		}
 		case Result_ProviderMismatch:
 		{
+			g_Logger.ErrorMessage("Failed to apply migration \"%s\" as providers mismatch", migration);
 			ReplyToCommand(client, "Failed to apply migration \"%s\" as providers mismatch", migration);
 		}
 	}
