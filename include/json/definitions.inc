@@ -4,15 +4,15 @@
  * sm-json
  * Provides a pure SourcePawn implementation of JSON encoding and decoding.
  * https://github.com/clugg/sm-json
- * 
- * sm-json (C)2018 James D. (clug)
+ *
+ * sm-json (C)2018 James Dickens. (clug)
  * SourceMod (C)2004-2008 AlliedModders LLC.  All rights reserved.
  * =============================================================================
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, version 3.0, as published by the
  * Free Software Foundation.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
@@ -40,15 +40,19 @@
 #include <json/string_helpers>
 
 // you may need to tinker with these for large objects/floating point numbers
-#define JSON_BUFFER_SIZE 8192
 #define JSON_FLOAT_BUFFER_SIZE 32
-#define JSON_INDEX_BUFFER_LENGTH 16
+#define JSON_INDEX_BUFFER_SIZE 16
 
 // meta-key defines
 #define JSON_ARRAY_INDEX_KEY "__array_index"
 #define JSON_META_TYPE_KEY   ":type"
 #define JSON_META_LENGTH_KEY ":length"
 #define JSON_META_HIDDEN_KEY ":hidden"
+
+// pretty print constants
+#define JSON_PP_AFTER_COLON " "
+#define JSON_PP_INDENT "    "
+#define JSON_PP_NEWLINE "\n"
 
 /**
  * Types of cells within a JSON object
@@ -66,8 +70,8 @@ enum JSON_CELL_TYPE {
 /**
  * Multi-dimensional char array mapping characters to their escaped form
  */
-char JSON_STRING_NORMAL[][]  = {"\"",   "\\",   "/",   "\b",  "\f",  "\n",  "\r",  "\t" };
-char JSON_STRING_ESCAPED[][] = {"\\\"", "\\\\", "\\/", "\\b", "\\f", "\\n", "\\r", "\\t"};
+char JSON_STRING_NORMAL[][]  = {"\\",   "\"",   "/",   "\b",  "\f",  "\n",  "\r",  "\t" };
+char JSON_STRING_ESCAPED[][] = {"\\\\", "\\\"", "\\/", "\\b", "\\f", "\\n", "\\r", "\\t"};
 
 /**
  * Escapes a string based on the rules defined in json/definitions.inc
@@ -98,11 +102,11 @@ public void json_unescape_string(char[] buffer, int maxlen) {
  * should only be used internally.
  *
  * @param key   Key to check.
- * @return      True when it is a meta-key, false otherwise.
+ * @returns     True when it is a meta-key, false otherwise.
  */
 stock bool json_is_meta_key(char[] key) {
-    return json_string_endswith(key, JSON_META_TYPE_KEY) ||
-            json_string_endswith(key, JSON_META_LENGTH_KEY) ||
-            json_string_endswith(key, JSON_META_HIDDEN_KEY) ||
-            StrEqual(key, JSON_ARRAY_INDEX_KEY);
+    return json_string_endswith(key, JSON_META_TYPE_KEY)
+        || json_string_endswith(key, JSON_META_LENGTH_KEY)
+        || json_string_endswith(key, JSON_META_HIDDEN_KEY)
+        || StrEqual(key, JSON_ARRAY_INDEX_KEY);
 }

@@ -4,15 +4,15 @@
  * sm-json
  * Provides a pure SourcePawn implementation of JSON encoding and decoding.
  * https://github.com/clugg/sm-json
- * 
- * sm-json (C)2018 James D. (clug)
+ *
+ * sm-json (C)2018 James Dickens. (clug)
  * SourceMod (C)2004-2008 AlliedModders LLC.  All rights reserved.
  * =============================================================================
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, version 3.0, as published by the
  * Free Software Foundation.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
@@ -47,7 +47,7 @@
  * store the JSON cell representation of a string.
  *
  * @param maxlen    The string's current length or buffer size.
- * @return          Maximum buffer length.
+ * @returns         Maximum buffer length.
  */
 stock int json_cell_string_size(int maxlen) {
     return (maxlen * 2) + 3;  // * 2 for potential escaping, + 2 for surrounding quotes + NULL
@@ -58,7 +58,7 @@ stock int json_cell_string_size(int maxlen) {
  * store the JSON cell representation of an int.
  *
  * @param input    The int.
- * @return          Maximum buffer length.
+ * @returns         Maximum buffer length.
  */
 stock int json_cell_int_size(int input) {
     if (input == 0) {
@@ -72,7 +72,7 @@ stock int json_cell_int_size(int input) {
  * Calculates the maximum buffer length required to
  * store the JSON cell representation of a float.
  *
- * @return          Maximum buffer length.
+ * @returns         Maximum buffer length.
  */
 stock int json_cell_float_size() {
     return JSON_FLOAT_BUFFER_SIZE;  // fixed-length
@@ -82,7 +82,7 @@ stock int json_cell_float_size() {
  * Calculates the maximum buffer length required to
  * store the JSON cell representation of a bool.
  *
- * @return          Maximum buffer length.
+ * @returns         Maximum buffer length.
  */
 stock int json_cell_bool_size() {
     return 6;  // "true|false" + NULL
@@ -92,7 +92,7 @@ stock int json_cell_bool_size() {
  * Calculates the maximum buffer length required to
  * store the JSON cell representation of null.
  *
- * @return          Maximum buffer length.
+ * @returns         Maximum buffer length.
  */
 stock int json_cell_null_size() {
     return 5;  // "null" + NULL
@@ -110,10 +110,9 @@ stock int json_cell_null_size() {
  * @param maxlen    Maximum size of string buffer.
  */
 stock void json_cell_string(const char[] input, char[] output, int maxlen) {
-    strcopy(output, maxlen, "_"); // add dummy char at start so first quotation isn't escaped
-    StrCat(output, maxlen, input); // add input string to output
-    // escape everything according to JSON spec
-    json_escape_string(output, maxlen);
+    strcopy(output, maxlen, "?");  // add dummy char at start so we can replace it with a quote later
+    StrCat(output, maxlen, input);  // add input string to output
+    json_escape_string(output, maxlen);  // run basic escapes on the string
 
     // surround string with quotations
     output[0] = '"';
@@ -140,6 +139,11 @@ stock void json_cell_int(int input, char[] output, int maxlen) {
  */
 stock void json_cell_float(float input, char[] output, int maxlen) {
     FloatToString(input, output, maxlen);
+    // trim trailing 0s from float output
+    int last_char = strlen(output) - 1;
+    while (output[last_char] == '0' && output[last_char - 1] != '.') {
+        output[last_char--] = '\0';
+    }
 }
 
 /**
