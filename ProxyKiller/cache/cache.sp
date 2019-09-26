@@ -100,4 +100,22 @@ void TryPushCache(ProxyUser pUser, ProxyService service, any result)
 	}
 }
 
+public Action Timer_DeleteOldCacheEntries(Handle timer)
+{
+	if (g_Cache.Provider != INVALID_HANDLE)
+	{
+		switch (g_Cache.Mode)
+		{
+			case CacheMode_MySQL:
+			{
+				Cache_MySQL(g_Cache).TryDeleteOldEntries(gCV_CacheLifetime.IntValue, MySQL_OnOldEntriesDeleted);
+			}
+			case CacheMode_SQLite:
+			{
+				Cache_SQLite(g_Cache).TryDeleteOldEntries(gCV_CacheLifetime.IntValue, SQLite_OnOldEntriesDeleted);
+			}
+		}
+	}
+}
+
 // =========================================================== //

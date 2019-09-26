@@ -34,6 +34,10 @@ static char INSERT_RECORD[] =
 ..."ON DUPLICATE KEY UPDATE "
 ..."`Result` = VALUES(`Result`)";
 
+static char DELETE_OLD_RECORDS[] =
+"DELETE FROM `%s_Cache` "
+..."WHERE (UNIX_TIMESTAMP() - UNIX_TIMESTAMP(`Timestamp`)) > %d"
+
 // =========================================================== //
 
 methodmap ProxyCacheMySQL < ProxyCache
@@ -118,6 +122,17 @@ methodmap ProxyCacheMySQL < ProxyCache
 		this.Provider.Format(query, sizeof(query), INSERT_RECORD, prefix, ipAddress, serviceName, result);
 
 		this.Provider.Query(callback, query); 
+	}
+
+	public void TryDeleteOldEntries(int cacheLifeTime, SQLQueryCallback callback)
+	{
+		char prefix[64];
+		this.GetTablePrefix(prefix, sizeof(prefix));
+		
+		char query[256];
+		this.Provider.Format(query, sizeof(query), DELETE_OLD_RECORDS, prefix, cacheLifeTime);
+		
+		this.Provider.Query(callback, query);
 	}
 }
 

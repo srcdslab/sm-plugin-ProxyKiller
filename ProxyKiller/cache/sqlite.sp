@@ -65,4 +65,23 @@ public void SQLite_OnCached(Database db, DBResultSet results, const char[] error
 	}
 }
 
+public void SQLite_OnOldEntriesDeleted(Database db, DBResultSet results, const char[] error, any data)
+{
+	g_Logger.PrintFrame();
+
+	if (strlen(error) > 0)
+	{
+		g_Logger.ErrorMessage("<Cache-SQLite> Uh oh! Encountered a SQL error! - \"%s\"", error);
+		return;
+	}
+
+	int deletedRows = 0;
+	if (results != null)
+	{
+		deletedRows = results.AffectedRows;
+	}
+
+	g_Logger.InfoMessage("<Cache-SQLite> Removed %d old cache entries from database", deletedRows);
+}
+
 // =========================================================== //

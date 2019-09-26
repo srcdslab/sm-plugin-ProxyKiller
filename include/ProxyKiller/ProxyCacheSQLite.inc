@@ -32,6 +32,11 @@ static char INSERT_RECORD[] =
 ..."(`IPAddress`, `ServiceName`, `Result`, `Timestamp`) "
 ..."VALUES ('%s', '%s', '%d', CURRENT_TIMESTAMP) ";
 
+static char DELETE_OLD_RECORDS[] =
+"DELETE FROM `%s_Cache` "
+..."WHERE (strftime('%%s', CURRENT_TIMESTAMP) "
+..."- strftime('%%s', `Timestamp`)) > %d"
+
 // =========================================================== //
 
 methodmap ProxyCacheSQLite < ProxyCache
@@ -115,6 +120,17 @@ methodmap ProxyCacheSQLite < ProxyCache
 		char query[512];
 		this.Provider.Format(query, sizeof(query), INSERT_RECORD, prefix, ipAddress, serviceName, result);
 
+		this.Provider.Query(callback, query);
+	}
+	
+	public void TryDeleteOldEntries(int cacheLifeTime, SQLQueryCallback callback)
+	{
+		char prefix[64];
+		this.GetTablePrefix(prefix, sizeof(prefix));
+
+		char query[256];
+		this.Provider.Format(query, sizeof(query), DELETE_OLD_RECORDS, prefix, cacheLifeTime);
+		
 		this.Provider.Query(callback, query);
 	}
 }

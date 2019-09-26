@@ -136,4 +136,14 @@ public void OnClientPostAdminCheck(int client)
 	}
 }
 
+public void ProxyKiller_OnCache()
+{
+	// Every hour and immediately fired once
+	Handle timer = CreateTimer(3600.0, Timer_DeleteOldCacheEntries, _, TIMER_REPEAT);
+	if (timer != null)
+	{
+		TriggerTimer(timer);
+	}
+}
+
 // =========================================================== //
