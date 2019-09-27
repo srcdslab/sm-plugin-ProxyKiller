@@ -81,7 +81,10 @@ public void SQLite_OnOldEntriesDeleted(Database db, DBResultSet results, const c
 		deletedRows = results.AffectedRows;
 	}
 
-	g_Logger.InfoMessage("<Cache-SQLite> Removed %d old cache entries from database", deletedRows);
+	if (deletedRows > 0)
+	{
+		g_Logger.InfoMessage("<Cache-SQLite> Removed %d old cache entries from database", deletedRows);
+	}
 }
 
 // =========================================================== //

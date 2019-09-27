@@ -81,7 +81,10 @@ public void MySQL_OnOldEntriesDeleted(Database db, DBResultSet results, const ch
 		deletedRows = results.AffectedRows;
 	}
 
-	g_Logger.InfoMessage("<Cache-MySQL> Removed %d old cache entries from database", deletedRows);
+	if (deletedRows > 0)
+	{
+		g_Logger.InfoMessage("<Cache-MySQL> Removed %d old cache entries from database", deletedRows);
+	}
 }
 
 // =========================================================== //
