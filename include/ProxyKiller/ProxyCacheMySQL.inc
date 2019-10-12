@@ -32,7 +32,8 @@ static char INSERT_RECORD[] =
 ..."(`IPAddress`, `ServiceName`, `Result`) "
 ..."VALUES ('%s', '%s', '%d') "
 ..."ON DUPLICATE KEY UPDATE "
-..."`Result` = VALUES(`Result`)";
+..."`Result` = VALUES(`Result`), "
+..."`Timestamp` = CURRENT_TIMESTAMP";
 
 static char DELETE_OLD_RECORDS[] =
 "DELETE FROM `%s_Cache` "
