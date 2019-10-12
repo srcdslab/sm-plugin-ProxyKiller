@@ -32,7 +32,8 @@ static char INSERT_RECORD[] =
 ..."(`Expression`, `Type`) "
 ..."VALUES ('%s', '%d') "
 ..."ON DUPLICATE KEY UPDATE "
-..."`Type` = VALUES(`Type`)";
+..."`Type` = VALUES(`Type`), ";
+..."`Timestamp` = CURRENT_TIMESTAMP";
 
 static char DELETE_RECORD[] =
 "DELETE FROM `%s_Rules` "
