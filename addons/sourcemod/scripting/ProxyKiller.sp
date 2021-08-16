@@ -68,7 +68,7 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 	CreateCommands();
 
 	RegPluginLibrary(PROXYKILLER_NAME);
-	AutoExecConfig(true, PROXYKILLER_NAME ... "-Convars");
+	AutoExecConfig(true);
 
 	g_Logger = new ProxyLogger(PROXYKILLER_SPEWMODE, PROXYKILLER_SPEWLEVEL);
 	Call_OnLogger();
@@ -126,6 +126,7 @@ public void OnClientPostAdminCheck(int client)
 	if (shouldIgnore)
 	{
 		// FUTURE FEATURE -> Check for blacklisted user
+		LogMessage("Ignoring client %d", client)
 	}
 	else
 	{

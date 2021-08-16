@@ -12,7 +12,7 @@ enum MigrationResult
 
 // =========================================================== //
 
-#include "ProxyKiller/migrations/cache_mysql_1_1_0_to_2_0_0.sp"
+#include "migrations/cache_mysql_1_1_0_to_2_0_0.sp"
 
 // =========================================================== //
 
