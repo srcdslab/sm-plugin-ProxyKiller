@@ -72,6 +72,8 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 
 	g_Logger = new ProxyLogger(PROXYKILLER_SPEWMODE, PROXYKILLER_SPEWLEVEL);
 	Call_OnLogger();
+
+	return APLRes_Success;
 }
 
 public void OnConfigsExecuted()

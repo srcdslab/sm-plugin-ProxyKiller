@@ -116,6 +116,7 @@ public Action Timer_DeleteOldCacheEntries(Handle timer)
 			}
 		}
 	}
+	return Plugin_Continue;
 }
 
 // =========================================================== //

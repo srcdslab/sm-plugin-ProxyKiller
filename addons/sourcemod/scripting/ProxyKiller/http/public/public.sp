@@ -41,7 +41,7 @@ bool QueryHTTP(ProxyHTTP http, any data)
 
 // =========================================================== //
 
-public int OnRequest_Completed(Handle request, bool failure, bool requestSuccessful, EHTTPStatusCode statusCode, ProxyHTTPContext ctx)
+public void OnRequest_Completed(Handle request, bool failure, bool requestSuccessful, EHTTPStatusCode statusCode, ProxyHTTPContext ctx)
 {
 	g_Logger.PrintFrame();
 
@@ -60,7 +60,7 @@ public int OnRequest_Completed(Handle request, bool failure, bool requestSuccess
 
 // =========================================================== //
 
-public int OnRequest_DataReceived(Handle request, bool failure, int offset, int bytesReceived, ProxyHTTPContext ctx)
+public void OnRequest_DataReceived(Handle request, bool failure, int offset, int bytesReceived, ProxyHTTPContext ctx)
 {
 	g_Logger.PrintFrame();
 
@@ -100,7 +100,7 @@ public int OnRequest_DataReceived(Handle request, bool failure, int offset, int 
 
 // =========================================================== //
 
-public int OnRequest_Data(const char[] responseData, ProxyHTTPContext ctx)
+public void OnRequest_Data(const char[] responseData, ProxyHTTPContext ctx)
 {
 	g_Logger.PrintFrame();
 	DoCallback(ctx.HTTP.Callback, ctx.HTTP.Response, responseData, ctx.Data);
