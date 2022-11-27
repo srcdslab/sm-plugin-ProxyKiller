@@ -124,7 +124,9 @@ JSON_Object GetObjectSafe(JSON_Object obj, char[] key = "", int index = -1)
 	}
 	else
 	{
-		return obj.GetObjectIndexed(index);
+		char sKey[1024];
+		obj.GetKey(index, sKey, sizeof(sKey))
+		return obj.GetObject(sKey);
 	}
 }
 
