@@ -1,19 +1,18 @@
 #include <sourcemod>
 #include <ProxyKiller>
-#include <Discord>
-
-#define PLUGIN_VERSION "1.0.3"
+#include <discordWebhookAPI>
 
 #pragma newdecls required
 
 ConVar g_cSteamProfileURLPrefix, g_cIPDetailURLPrefix, g_cCountBots;
+ConVar g_cvWebhook;
 
 public Plugin myinfo = 
 {
     name = "ProxyKillerDiscord",
     author = "maxime1907, Sikari, .Rushaway",
     description = "Sends detected vpn players info to discord",
-    version = PLUGIN_VERSION,
+    version = "1.1.0",
     url = ""
 };
 
@@ -22,6 +21,7 @@ public void OnPluginStart()
     g_cSteamProfileURLPrefix = CreateConVar("sm_proxykiller_discord_steam_profile_url", "https://steamcommunity.com/profiles/", "URL of the steam profile");
     g_cIPDetailURLPrefix = CreateConVar("sm_proxykiller_discord_ip_details_url", "http://geoiplookup.net/ip/", "URL of the website that analyses the IP");
     g_cCountBots = CreateConVar("sm_proxykiller_discord_count_bots", "1", "Should we count bots as players ?[0 = No, 1 = Yes]", FCVAR_NOTIFY, true, 0.0, true, 1.0);
+    g_cvWebhook = CreateConVar("sm_proxykiller_discord_webhook", "", "The webhook URL of your Discord channel.", FCVAR_PROTECTED);
 
     AutoExecConfig(true);
 }
@@ -68,14 +68,27 @@ public void ProxyKiller_OnClientResult(ProxyUser pUser, bool result, bool fromCa
     int iConnected = GetClientCountEx(g_cCountBots.BoolValue);
     Format(sCount, sizeof(sCount), "Players : %d/%d", iConnected, iMaxPlayers);
 
-    char sWebhook[64];
-    Format(sWebhook, sizeof(sWebhook), "proxykiller");
+    char sPluginVersion[256];
+    GetPluginInfo(INVALID_HANDLE, PlInfo_Version, sPluginVersion, sizeof(sPluginVersion));
 
     char sMessage[4096];
-    Format(sMessage, sizeof(sMessage), "```%s [%s] \nDetected IP : %s \nCurrent map : %s \n%s \n%s \nV.%s```%s \n%s", sPlayerName, sSteamID2, sIP, sCurrentMap, sTime, sCount, PLUGIN_VERSION, sSteamProfileURL, sIPLocationURL);
+    Format(sMessage, sizeof(sMessage), "```%s [%s] \nDetected IP : %s \nCurrent map : %s \n%s \n%s \nV.%s```%s \n%s", sPlayerName, sSteamID2, sIP, sCurrentMap, sTime, sCount, sPluginVersion, sSteamProfileURL, sIPLocationURL);
     ReplaceString(sMessage, sizeof(sMessage), "\\n", "\n");
 
-    Discord_SendMessage(sWebhook, sMessage);
+    char szWebhookURL[1000];
+    g_cvWebhook.GetString(szWebhookURL, sizeof szWebhookURL);
+
+    Webhook webhook = new Webhook(sMessage);
+    webhook.Execute(szWebhookURL, OnWebHookExecuted);
+    delete webhook;
+}
+
+public void OnWebHookExecuted(HTTPResponse response, DataPack pack)
+{
+    if (response.Status != HTTPStatus_OK)
+    {
+        LogError("Failed to send proxykiller webhook");
+    }
 }
 
 stock int GetClientCountEx(bool countBots)
