@@ -1,4 +1,4 @@
-# ProxyKiller + Discord support
+# ProxyKiller
 #### Plugin designed to literally kill proxy users!  
 Please see the [Wiki](https://bitbucket.org/Sikarii/proxykiller/wiki) for a featured documentation of the plugin.
 
@@ -40,6 +40,5 @@ Please see the [Wiki](https://bitbucket.org/Sikarii/proxykiller/wiki) for a feat
  4. **Optional but recommended** - Depending on your configuration, add an "**ProxyKiller**" entry    
  to `/addons/sourcemod/configs/databases.cfg`, the driver can be either "sqlite" or "mysql"
 
-## **Discord Preview**
-
-![Preview](https://i.imgur.com/Gd7YL3A.png)
+## **Discord Support**
+For discord support : [Proxy Killer Discord repository](https://github.com/srcdslab/sm-plugin-ProxyKiller-Discord)
