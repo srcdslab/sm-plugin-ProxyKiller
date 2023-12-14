@@ -5,9 +5,6 @@
 char g_sUserAuthWhitelist[MAX_USERS_IN_LIST_FILE][MAX_AUTHID_LENGTH];
 char g_sUserAuthBlacklist[MAX_USERS_IN_LIST_FILE][MAX_AUTHID_LENGTH];
 
-static bool WhitelistInit = false;
-static bool BlacklistInit = false;
-
 // =========================================================== //
 
 void CreateLists()
@@ -83,11 +80,6 @@ void ReadLists(bool blacklist = false)
 		LogError("Could not read from: %s", sDataFile);
 		return;
 	}
-
-	if (!blacklist)
-		WhitelistInit = true;
-	else
-		BlacklistInit = true;
 
 	char sAuth[MAX_AUTHID_LENGTH];
 	int iIndex = 0;
