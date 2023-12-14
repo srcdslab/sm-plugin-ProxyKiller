@@ -16,16 +16,6 @@ void CreateLists()
 	CreateBlacklist(PROXYKILLER_BLACKLIST);
 }
 
-bool IsWhitelistInit()
-{
-	return WhitelistInit;
-}
-
-bool IsBlacklistInit()
-{
-	return BlacklistInit;
-}
-
 bool IsUserWhitelisted(int client)
 {
 	return CheckUserInLists(client, false);
