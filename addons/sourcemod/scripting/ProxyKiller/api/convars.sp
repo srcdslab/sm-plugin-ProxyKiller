@@ -16,6 +16,10 @@ ConVar gCV_CacheLifetime = null;
 
 ConVar gCV_RulesMode = null;
 
+#if defined _vip_core_included
+ConVar gCV_CheckMethod = null;
+#endif
+
 // =========================================================== //
 
 void CreateConVars()
@@ -35,6 +39,10 @@ void CreateConVars()
 	gCV_CacheLifetime = CreateConVar("ProxyKiller_Cache_Lifetime", "43200", "Time in second(s) when to invalidate cache entries and re-query ip addresses\nIt is recommended that you set this to at least 1 hour (3600 seconds)", _, true, 0.0, false);
 
 	gCV_RulesMode = CreateConVar("ProxyKiller_Rules_Mode", "-1", "Rules mode used for ProxyKiller\n-1 = Inherit from cache\n0 = Disabled\n1 = MySQL\n2 = SQLite", _, true, -1.0, true, float(view_as<int>(RulesMode_COUNT) - 1));
+
+	#if defined _vip_core_included
+	gCV_CheckMethod = CreateConVar("ProxyKiller_CheckMethod", "1", "When should we start check player\n0 = OnClientPostAdminCheck - 1 = VIP_OnClientLoaded", _, true, 0.0, true, 1.0);
+	#endif
 }
 
 // =========================================================== //
