@@ -56,9 +56,11 @@
 // =========================================================== //
 
 #define PROXYKILLER_NAME "ProxyKiller"
-#define PROXYKILLER_AUTHOR "Sikari"
+#define PROXYKILLER_AUTHOR "Sikari, .Rushaway, maxime1907"
 #define PROXYKILLER_DESCRIPTION "Kill them proxies!"
 #define PROXYKILLER_CONFIG "addons/sourcemod/configs/proxykiller.cfg"
+#define PROXYKILLER_WHITELIST "addons/sourcemod/configs/proxykiller_whitelist.ini"
+#define PROXYKILLER_BLACKLIST "addons/sourcemod/configs/proxykiller_blacklist.ini"
 
 #define MAX_HTTP_URL_LENGTH 256
 #define MAX_CONFIG_VARIABLE_NAME 64

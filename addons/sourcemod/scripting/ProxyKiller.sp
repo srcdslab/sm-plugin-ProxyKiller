@@ -5,6 +5,10 @@
 #include <SteamWorks>
 #include <ProxyKiller>
 
+#undef REQUIRE_PLUGIN
+#tryinclude <vip_core>
+#define REQUIRE_PLUGIN
+
 // ====================== FORMATTING ========================= //
 
 #pragma dynamic 131072
@@ -46,6 +50,7 @@ ProxyConfig g_Config = null;
 
 #include "ProxyKiller/config.sp"
 #include "ProxyKiller/commands.sp"
+#include "ProxyKiller/lists.sp"
 
 // ====================== PLUGIN INFO ======================== //
 
@@ -62,6 +67,7 @@ public Plugin myinfo =
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
 {
+	CreateLists();
 	CreateNatives();
 	CreateConVars();
 	CreateForwards();
@@ -95,6 +101,9 @@ public void OnConfigsExecuted()
 		g_Rules = CreateRules(gCV_RulesMode.IntValue);
 		Call_OnRules();
 	}
+
+	LoadWhitelist();
+	LoadBlacklist();
 }
 
 public void OnClientPostAdminCheck(int client)
@@ -104,6 +113,28 @@ public void OnClientPostAdminCheck(int client)
 		return;
 	}
 
+#if defined _vip_core_included
+	if (gCV_CheckMethod.BoolValue)
+	{
+		return;
+	}
+#endif
+
+	VerifyClient(client);
+}
+
+#if defined _vip_core_included
+public void VIP_OnClientLoaded(int client, bool bIsVIP)
+{
+	if (!IsFakeClient(client) && gCV_Enable.BoolValue && gCV_CheckMethod.BoolValue && !bIsVIP)
+	{
+		VerifyClient(client);
+	}
+}
+#endif
+
+void VerifyClient(int client)
+{
 	Call_OnValidClient(client);
 	bool shouldIgnore = HasOverride(client);
 
@@ -125,17 +156,26 @@ public void OnClientPostAdminCheck(int client)
 		shouldIgnore = HasAppFromAppString(client, ignoreApps);
 	}
 
+	if (!shouldIgnore)
+	{
+		shouldIgnore = IsUserWhitelisted(client);
+	}
+
+	if (IsUserBlacklisted(client))
+	{
+		LogMessage("Blacklisted client %L", client);
+		shouldIgnore = false;
+	}
+
 	if (shouldIgnore)
 	{
-		// FUTURE FEATURE -> Check for blacklisted user
-		LogMessage("Ignoring client %d", client)
+		LogMessage("Ignoring client %L", client)
+		return;
 	}
-	else
+
+	if (Call_DoCheckClient(client))
 	{
-		if (Call_DoCheckClient(client))
-		{
-			ProxyKiller_CheckClient(client);
-		}
+		ProxyKiller_CheckClient(client);
 	}
 }
 
