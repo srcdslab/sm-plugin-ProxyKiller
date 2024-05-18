@@ -5,16 +5,16 @@
 #include <SteamWorks>
 #include <ProxyKiller>
 
-#undef REQUIRE_PLUGIN
-#tryinclude <vip_core>
-#define REQUIRE_PLUGIN
-
 // ====================== FORMATTING ========================= //
 
 #pragma dynamic 131072
 #pragma newdecls required
 
 // ====================== VARIABLES ========================== //
+
+bool g_bBlackListed[MAXPLAYERS + 1] = {false};
+Handle g_min;
+Handle g_max;
 
 ProxyCache g_Cache = null;
 ProxyRules g_Rules = null;
@@ -69,17 +69,25 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 {
 	CreateLists();
 	CreateNatives();
-	CreateConVars();
 	CreateForwards();
-	CreateCommands();
 
 	RegPluginLibrary(PROXYKILLER_NAME);
-	AutoExecConfig(true);
 
 	g_Logger = new ProxyLogger(PROXYKILLER_SPEWMODE, PROXYKILLER_SPEWLEVEL);
 	Call_OnLogger();
 
 	return APLRes_Success;
+}
+
+public void OnPluginStart()
+{
+	CreateConVars();
+	CreateCommands();
+
+	AutoExecConfig(true);
+
+	g_min = CreateArray();
+	g_max = CreateArray();
 }
 
 public void OnConfigsExecuted()
@@ -113,25 +121,8 @@ public void OnClientPostAdminCheck(int client)
 		return;
 	}
 
-#if defined _vip_core_included
-	if (gCV_CheckMethod.BoolValue)
-	{
-		return;
-	}
-#endif
-
 	VerifyClient(client);
 }
-
-#if defined _vip_core_included
-public void VIP_OnClientLoaded(int client, bool bIsVIP)
-{
-	if (!IsFakeClient(client) && gCV_Enable.BoolValue && gCV_CheckMethod.BoolValue && !bIsVIP)
-	{
-		VerifyClient(client);
-	}
-}
-#endif
 
 void VerifyClient(int client)
 {
@@ -164,12 +155,13 @@ void VerifyClient(int client)
 	if (IsUserBlacklisted(client))
 	{
 		LogMessage("Blacklisted client %L", client);
+		g_bBlackListed[client] = true;
 		shouldIgnore = false;
 	}
 
 	if (shouldIgnore)
 	{
-		LogMessage("Ignoring client %L", client)
+		LogMessage("Ignoring client %L", client);
 		return;
 	}
 

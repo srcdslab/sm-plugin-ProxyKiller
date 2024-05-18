@@ -37,10 +37,6 @@ Please see the [Wiki](https://bitbucket.org/Sikarii/proxykiller/wiki) for a feat
 ## **Requirements**
 - [SteamWorks](https://forums.alliedmods.net/showthread.php?t=229556)
 
-## **Optional plugins**
-- [VIP_Core](https://github.com/srcdslab/sm-plugin-VIP-Core) - Allow active VIP users to skip the check (cvar: ProxyKiller_CheckMethod)
-
-
 ## **Installation**
 
  1. Make sure the above requiremens are met

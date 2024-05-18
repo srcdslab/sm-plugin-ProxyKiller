@@ -24,13 +24,6 @@ project:
       - source: /addons/sourcemod/scripting/include
         dest: /addons/sourcemod/scripting/include
 
-    - name: vip_core
-      type: git
-      repo: https://github.com/srcdslab/sm-plugin-VIP-Core
-      unpack:
-      - source: /addons/sourcemod/scripting/include
-        dest: /addons/sourcemod/scripting/include
-
   root: /
   output: /addons/sourcemod/plugins
   targets:
