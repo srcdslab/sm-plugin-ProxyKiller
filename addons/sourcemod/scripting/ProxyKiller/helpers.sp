@@ -16,17 +16,15 @@ void DoPunishment(ProxyUser pUser, bool fromCache)
 	{
 		char msg[MAX_PUNISHMENT_MESSAGE_LENGTH];
 		gCV_PunishmentMessage.GetString(msg, sizeof(msg));
+		ExpandRuntimeVariables(pUser, msg, sizeof(msg));
 
 		int punishType = gCV_PunishmentType.IntValue;
 		if (punishType == Punishment_Kick)
 		{
-			ExpandRuntimeVariables(pUser, msg, sizeof(msg));
 			KickClient(client, "%s", msg);
 		}
 		else if (punishType == Punishment_Ban)
 		{
-			ExpandRuntimeVariables(pUser, msg, sizeof(msg));
-
 			int banLength = gCV_PunishmentBanLength.IntValue;
 			BanClient(client, banLength, BANFLAG_AUTO, msg, msg);
 		}

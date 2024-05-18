@@ -6,6 +6,9 @@ void CreateCommands()
 	RegAdminCmd("sm_proxykiller_rules_delete", Command_RulesDelete, ADMFLAG_RCON, "Deletes an expression from ProxyKiller Rules");
 
 	RegAdminCmd("sm_proxykiller_apply_migration", Command_ApplyMigration, ADMFLAG_RCON, "Applies a migration to ProxyKiller");
+
+	RegAdminCmd("sm_proxykiller_reload_whitelist", Command_ReloadWhitelist, ADMFLAG_RCON, "Reloads the whitelist");
+	RegAdminCmd("sm_proxykiller_reload_blacklist", Command_ReloadBlacklist, ADMFLAG_RCON, "Reloads the blacklist");
 }
 
 // =========================================================== //
@@ -72,6 +75,22 @@ public Action Command_ApplyMigration(int client, int args)
 		}
 	}
 
+	return Plugin_Handled;
+}
+
+public Action Command_ReloadWhitelist(int client, int args)
+{
+	LoadWhitelist();
+	ReplyToCommand(client, "Whitelist cache refreshed", client);
+	LogAction(client, -1, "[ProxyKiller] \"%L\" has refreshed Whitelist cache.", client);
+	return Plugin_Handled;
+}
+
+public Action Command_ReloadBlacklist(int client, int args)
+{
+	LoadBlacklist();
+	ReplyToCommand(client, "Blacklist cache refreshed", client);
+	LogAction(client, -1, "[ProxyKiller] \"%L\" has refreshed Blacklist cache.", client);
 	return Plugin_Handled;
 }
 
