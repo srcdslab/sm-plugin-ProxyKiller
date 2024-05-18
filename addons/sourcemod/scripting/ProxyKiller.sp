@@ -12,6 +12,10 @@
 
 // ====================== VARIABLES ========================== //
 
+bool g_bBlackListed[MAXPLAYERS + 1] = {false};
+Handle g_min;
+Handle g_max;
+
 ProxyCache g_Cache = null;
 ProxyRules g_Rules = null;
 ProxyLogger g_Logger = null;
@@ -46,6 +50,7 @@ ProxyConfig g_Config = null;
 
 #include "ProxyKiller/config.sp"
 #include "ProxyKiller/commands.sp"
+#include "ProxyKiller/lists.sp"
 
 // ====================== PLUGIN INFO ======================== //
 
@@ -62,18 +67,27 @@ public Plugin myinfo =
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
 {
+	CreateLists();
 	CreateNatives();
-	CreateConVars();
 	CreateForwards();
-	CreateCommands();
 
 	RegPluginLibrary(PROXYKILLER_NAME);
-	AutoExecConfig(true);
 
 	g_Logger = new ProxyLogger(PROXYKILLER_SPEWMODE, PROXYKILLER_SPEWLEVEL);
 	Call_OnLogger();
 
 	return APLRes_Success;
+}
+
+public void OnPluginStart()
+{
+	CreateConVars();
+	CreateCommands();
+
+	AutoExecConfig(true);
+
+	g_min = CreateArray();
+	g_max = CreateArray();
 }
 
 public void OnConfigsExecuted()
@@ -95,6 +109,9 @@ public void OnConfigsExecuted()
 		g_Rules = CreateRules(gCV_RulesMode.IntValue);
 		Call_OnRules();
 	}
+
+	LoadWhitelist();
+	LoadBlacklist();
 }
 
 public void OnClientPostAdminCheck(int client)
@@ -104,6 +121,11 @@ public void OnClientPostAdminCheck(int client)
 		return;
 	}
 
+	VerifyClient(client);
+}
+
+void VerifyClient(int client)
+{
 	Call_OnValidClient(client);
 	bool shouldIgnore = HasOverride(client);
 
@@ -125,17 +147,27 @@ public void OnClientPostAdminCheck(int client)
 		shouldIgnore = HasAppFromAppString(client, ignoreApps);
 	}
 
+	if (!shouldIgnore)
+	{
+		shouldIgnore = IsUserWhitelisted(client);
+	}
+
+	if (IsUserBlacklisted(client))
+	{
+		LogMessage("Blacklisted client %L", client);
+		g_bBlackListed[client] = true;
+		shouldIgnore = false;
+	}
+
 	if (shouldIgnore)
 	{
-		// FUTURE FEATURE -> Check for blacklisted user
-		LogMessage("Ignoring client %d", client)
+		LogMessage("Ignoring client %L", client);
+		return;
 	}
-	else
+
+	if (Call_DoCheckClient(client))
 	{
-		if (Call_DoCheckClient(client))
-		{
-			ProxyKiller_CheckClient(client);
-		}
+		ProxyKiller_CheckClient(client);
 	}
 }
 

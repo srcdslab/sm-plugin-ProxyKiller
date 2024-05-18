@@ -28,6 +28,11 @@ Please see the [Wiki](https://bitbucket.org/Sikarii/proxykiller/wiki) for a feat
 	- Choose from inequality or equality comparisations
 	- Choose what response value is considered as a Proxy/VPN
 	- GET, HEAD, POST, PUT, DELETE, OPTIONS, PATCH request methods supported
+- **Whitelist & Blacklist (SteamID only)**
+	- Whitelist: to don't perform check on your whitelisted users
+	- Blacklist: to always perform a check on your blacklisted users
+
+	*Note: If users are on both the Whitelist and Blacklist, the Blacklist will always be the final outcome.*
 
 ## **Requirements**
 - [SteamWorks](https://forums.alliedmods.net/showthread.php?t=229556)
