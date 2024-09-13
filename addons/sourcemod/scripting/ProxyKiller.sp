@@ -13,8 +13,6 @@
 // ====================== VARIABLES ========================== //
 
 bool g_bBlackListed[MAXPLAYERS + 1] = {false};
-Handle g_min;
-Handle g_max;
 
 ProxyCache g_Cache = null;
 ProxyRules g_Rules = null;
@@ -22,6 +20,8 @@ ProxyLogger g_Logger = null;
 ProxyConfig g_Config = null;
 
 // ======================= INCLUDES ========================== //
+
+#include "ProxyKiller/databases.sp"
 
 #include "ProxyKiller/api/natives.sp"
 #include "ProxyKiller/api/convars.sp"
@@ -57,17 +57,16 @@ ProxyConfig g_Config = null;
 public Plugin myinfo =
 {
 	name = PROXYKILLER_NAME,
-	author = PROXYKILLER_AUTHOR,
-	description = PROXYKILLER_DESCRIPTION,
-	version = PROXYKILLER_VERSION,
-	url = PROXYKILLER_URL
+	author = "Sikari, .Rushaway, maxime1907",
+	description = "Kill them proxies!",
+	version = "2.3",
+	url = "https://github.com/srcdslab/sm-plugin-ProxyKiller"
 };
 
 // ======================= MAIN CODE ========================= //
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
 {
-	CreateLists();
 	CreateNatives();
 	CreateForwards();
 
@@ -85,9 +84,11 @@ public void OnPluginStart()
 	CreateCommands();
 
 	AutoExecConfig(true);
+}
 
-	g_min = CreateArray();
-	g_max = CreateArray();
+public void OnAllPluginsLoaded()
+{
+	CreateLists();
 }
 
 public void OnConfigsExecuted()
