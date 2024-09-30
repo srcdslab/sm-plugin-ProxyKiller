@@ -35,16 +35,6 @@
 
 // =========================================================== //
 
-#tryinclude <ProxyKiller_Version>
-
-#if !defined PROXYKILLER_URL
-#define PROXYKILLER_URL "Unknown source"
-#endif
-
-#if !defined PROXYKILLER_VERSION
-#define PROXYKILLER_VERSION "Unknown version"
-#endif
-
 #if !defined PROXYKILLER_SPEWMODE
 #define PROXYKILLER_SPEWMODE (SPEWMODE_LOG)
 #endif
@@ -56,8 +46,6 @@
 // =========================================================== //
 
 #define PROXYKILLER_NAME "ProxyKiller"
-#define PROXYKILLER_AUTHOR "Sikari, .Rushaway, maxime1907"
-#define PROXYKILLER_DESCRIPTION "Kill them proxies!"
 #define PROXYKILLER_CONFIG "addons/sourcemod/configs/proxykiller.cfg"
 #define PROXYKILLER_WHITELIST "addons/sourcemod/configs/proxykiller_whitelist.ini"
 #define PROXYKILLER_BLACKLIST "addons/sourcemod/configs/proxykiller_blacklist.ini"

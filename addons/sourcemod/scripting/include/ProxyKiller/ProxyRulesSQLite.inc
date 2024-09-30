@@ -7,8 +7,6 @@
 
 // =========================================================== //
 
-static char DB_CONF_NAME[] = "ProxyKiller";
-
 static char CREATE_TABLE[] =
 "CREATE TABLE `%s_Rules` "
 ..."("
@@ -42,25 +40,7 @@ methodmap ProxyRulesSQLite < ProxyRules
 {
 	public ProxyRulesSQLite(char[] tablePrefix)
 	{
-		char error[256] = "Unknown";
-		Database db = SQL_Connect(DB_CONF_NAME, true, error, sizeof(error));
-
-		if (db == null)
-		{
-			SetFailState("<Rules-SQLite> Error connecting to configuration \"%s\" \n%s", DB_CONF_NAME, error);
-		}
-		else
-		{
-			char driver[16];
-			SQL_ReadDriver(db, driver, sizeof(driver));
-			
-			if (!StrEqual(driver, "sqlite", false))
-			{
-				SetFailState("<Rules-SQLite> Invalid database driver for \"%s\", expecting \"sqlite\"", DB_CONF_NAME);
-			}
-		}
-
-		ProxyRules rules = new ProxyRules(RulesMode_SQLite, db);
+		ProxyRules rules = new ProxyRules(RulesMode_SQLite);
 		rules.SetString("table_prefix", tablePrefix);
 		return view_as<ProxyRulesSQLite>(rules);
 	}
