@@ -4,7 +4,7 @@ public void SQLite_OnCache(Database db, DBResultSet results, const char[] error,
 {
 	g_Logger.PrintFrame();
 
-	if (strlen(error) > 0 || results == null || !results.HasResults)
+	if (Cache_DB_Conn_Lost(results) || strlen(error) > 0 || results == null || !results.HasResults)
 	{
 		g_Logger.ErrorMessage("<Cache-SQLite> Uh oh! Encountered a SQL error! - \"%s\"", error);
 		delete pUser;
@@ -69,7 +69,7 @@ public void SQLite_OnOldEntriesDeleted(Database db, DBResultSet results, const c
 {
 	g_Logger.PrintFrame();
 
-	if (strlen(error) > 0)
+	if (Cache_DB_Conn_Lost(results) || strlen(error) > 0)
 	{
 		g_Logger.ErrorMessage("<Cache-SQLite> Uh oh! Encountered a SQL error! - \"%s\"", error);
 		return;

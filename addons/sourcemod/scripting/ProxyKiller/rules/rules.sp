@@ -38,6 +38,8 @@ ProxyRules CreateRules(int mode)
 		}
 		case RulesMode_MySQL:
 		{
+			ProxyRulesMySQL_DB_Connect();
+
 			char prefix[64];
 			gCV_DatabaseTablePrefix.GetString(prefix, sizeof(prefix));
 			
@@ -47,6 +49,8 @@ ProxyRules CreateRules(int mode)
 		}
 		case RulesMode_SQLite:
 		{
+			ProxyRulesSQLite_DB_Connect();
+
 			char prefix[64];
 			gCV_DatabaseTablePrefix.GetString(prefix, sizeof(prefix));
 
@@ -121,6 +125,25 @@ void TryDeleteRule(char[] expression, ProxyRulesType type = RulesType_Whitelist)
 		default:
 		{
 			g_Logger.DebugMessage("Rules mode %d has no implementation for TryDeleteRule", g_Rules.Mode);
+		}
+	}
+}
+
+public void Rules_DB_Conn_Lost(DBResultSet results)
+{
+	switch (g_Rules.Mode)
+	{
+		case RulesMode_MySQL:
+		{
+			ProxyRulesMySQL_DB_Conn_Lost(results);
+		}
+		case RulesMode_SQLite:
+		{
+			ProxyRulesSQLite_DB_Conn_Lost(results);
+		}
+		default:
+		{
+			g_Logger.DebugMessage("Rules mode %d has no implementation for DB_Conn_Lost", g_Rules.Mode);
 		}
 	}
 }

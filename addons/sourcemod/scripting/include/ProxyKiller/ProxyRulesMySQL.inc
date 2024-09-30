@@ -7,8 +7,6 @@
 
 // =========================================================== //
 
-static char DB_CONF_NAME[] = "ProxyKiller";
-
 static char CREATE_TABLE[] =
 "CREATE TABLE `%s_Rules` "
 ..."("
@@ -46,25 +44,7 @@ methodmap ProxyRulesMySQL < ProxyRules
 {
 	public ProxyRulesMySQL(char[] tablePrefix)
 	{
-		char error[256] = "Unknown";
-		Database db = SQL_Connect(DB_CONF_NAME, true, error, sizeof(error));
-
-		if (db == null)
-		{
-			SetFailState("<Rules-MySQL> Error connecting to configuration \"%s\" \n%s", DB_CONF_NAME, error);
-		}
-		else
-		{
-			char driver[16];
-			SQL_ReadDriver(db, driver, sizeof(driver));
-			
-			if (!StrEqual(driver, "mysql", false))
-			{
-				SetFailState("<Rules-MySQL> Invalid database driver for \"%s\", expecting \"mysql\"", DB_CONF_NAME);
-			}
-		}
-		
-		ProxyRules rules = new ProxyRules(RulesMode_MySQL, db);
+		ProxyRules rules = new ProxyRules(RulesMode_MySQL);
 		rules.SetString("table_prefix", tablePrefix);
 		return view_as<ProxyRulesMySQL>(rules);
 	}

@@ -32,6 +32,8 @@ ProxyCache CreateCache(int mode)
 		}
 		case CacheMode_MySQL:
 		{
+			ProxyCacheMySQL_DB_Connect();
+
 			char prefix[64];
 			gCV_DatabaseTablePrefix.GetString(prefix, sizeof(prefix));
 			
@@ -41,6 +43,8 @@ ProxyCache CreateCache(int mode)
 		}
 		case CacheMode_SQLite:
 		{
+			ProxyCacheSQLite_DB_Connect();
+
 			char prefix[64];
 			gCV_DatabaseTablePrefix.GetString(prefix, sizeof(prefix));
 			
@@ -96,6 +100,25 @@ void TryPushCache(ProxyUser pUser, ProxyService service, any result)
 		default:
 		{
 			g_Logger.DebugMessage("Cache mode %d has no implementation for TryPushCache", g_Cache.Mode);
+		}
+	}
+}
+
+public void Cache_DB_Conn_Lost(DBResultSet results)
+{
+	switch (g_Cache.Mode)
+	{
+		case CacheMode_MySQL:
+		{
+			ProxyCacheMySQL_DB_Conn_Lost(results);
+		}
+		case CacheMode_SQLite:
+		{
+			ProxyCacheSQLite_DB_Conn_Lost(results);
+		}
+		default:
+		{
+			g_Logger.DebugMessage("Cache mode %d has no implementation for DB_Conn_Lost", g_Cache.Mode);
 		}
 	}
 }

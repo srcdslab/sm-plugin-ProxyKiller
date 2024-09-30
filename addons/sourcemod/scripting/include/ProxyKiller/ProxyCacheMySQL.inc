@@ -7,8 +7,6 @@
 
 // =========================================================== //
 
-static char DB_CONF_NAME[] = "ProxyKiller";
-
 static char CREATE_TABLE[] =
 "CREATE TABLE `%s_Cache` "
 ..."("
@@ -39,31 +37,11 @@ static char DELETE_OLD_RECORDS[] =
 "DELETE FROM `%s_Cache` "
 ..."WHERE (UNIX_TIMESTAMP() - UNIX_TIMESTAMP(`Timestamp`)) > %d"
 
-// =========================================================== //
-
 methodmap ProxyCacheMySQL < ProxyCache
 {
 	public ProxyCacheMySQL(char[] tablePrefix)
 	{
-		char error[256] = "Unknown";
-		Database db = SQL_Connect(DB_CONF_NAME, true, error, sizeof(error));
-
-		if (db == null)
-		{
-			SetFailState("<Cache-MySQL> Error connecting to configuration \"%s\" \n%s", DB_CONF_NAME, error);
-		}
-		else
-		{
-			char driver[16];
-			SQL_ReadDriver(db, driver, sizeof(driver));
-			
-			if (!StrEqual(driver, "mysql", false))
-			{
-				SetFailState("<Cache-MySQL> Invalid database driver for \"%s\", expecting \"mysql\"", DB_CONF_NAME);
-			}
-		}
-
-		ProxyCache cache = new ProxyCache(CacheMode_MySQL, db);
+		ProxyCache cache = new ProxyCache(CacheMode_MySQL);
 		cache.SetString("table_prefix", tablePrefix);
 		return view_as<ProxyCacheMySQL>(cache);
 	}

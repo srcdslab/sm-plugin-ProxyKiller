@@ -1,1 +1,0 @@
-#define PROXYKILLER_VERSION "2.2"
