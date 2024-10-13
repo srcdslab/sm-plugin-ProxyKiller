@@ -33,11 +33,11 @@ bool GetResultFromResponse(const char[] response, ProxyServiceContext ctx)
 
 	if (ctx.Service.ExpectedResponse.Compare == ResponseCompare_EQUAL)
 	{
-		return StrEqual(responseValue, expectValue);
+		return StrEqual(responseValue, expectValue, false);
 	}
 	else
 	{
-		return !StrEqual(responseValue, expectValue);
+		return !StrEqual(responseValue, expectValue, false);
 	}
 }
 
