@@ -59,7 +59,7 @@ public Plugin myinfo =
 	name = PROXYKILLER_NAME,
 	author = "Sikari, .Rushaway, maxime1907",
 	description = "Kill them proxies!",
-	version = "2.3.1",
+	version = "2.3.2",
 	url = "https://github.com/srcdslab/sm-plugin-ProxyKiller"
 };
 
@@ -127,6 +127,8 @@ public void OnClientPostAdminCheck(int client)
 
 void VerifyClient(int client)
 {
+	g_bBlackListed[client] = false;
+
 	Call_OnValidClient(client);
 	bool shouldIgnore = HasOverride(client);
 

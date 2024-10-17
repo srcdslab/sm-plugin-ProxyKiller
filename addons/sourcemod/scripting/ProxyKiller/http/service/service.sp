@@ -36,6 +36,9 @@ public void OnService(ProxyHTTPResponse response, const char[] responseStr, Prox
 	}
 
 	bool result = GetResultFromResponse(responseStr, ctx);
+
+	int client = GetClientOfUserId(ctx.User.UserId);
+
 	Call_OnClientResult(ctx.User, result, false);
 
 	if (Call_DoClientResultCache(ctx.User, result))
@@ -43,11 +46,11 @@ public void OnService(ProxyHTTPResponse response, const char[] responseStr, Prox
 		TryPushCache(ctx.User, ctx.Service, result);
 	}
 
-	if (result)
+	if (result || g_bBlackListed[client])
 	{
-		if (Call_DoClientPunishment(ctx.User, false))
+		if (Call_DoClientPunishment(ctx.User, false, g_bBlackListed[client]))
 		{
-			DoPunishment(ctx.User, false);
+			DoPunishment(ctx.User, false, g_bBlackListed[client]);
 		}
 	}
 

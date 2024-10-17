@@ -388,18 +388,20 @@ forward void ProxyKiller_OnClientResultCache(ProxyUser pUser, bool result);
  *
  * @param pUser					ProxyUser object of the client about to be punished
  * @param fromCache				Whether the result that triggered this was from cache
+ * @param fromBlacklist			Whether the result that triggered this was from blacklist
  * @return						Return Plugin_Continue (or nothing) to proceed, any other return value indicates that we want to block execution
  */
-forward Action ProxyKiller_DoClientPunishment(ProxyUser pUser, bool fromCache);
+forward Action ProxyKiller_DoClientPunishment(ProxyUser pUser, bool fromCache, bool fromBlacklist);
 
 /**
  * Called when a client is being punished
  *
  * @param pUser					ProxyUser object of the client being punished
  * @param fromCache				Whether the result that triggered this was from cache
+ * @param fromBlacklist			Whether the result that triggered this was from blacklist
  * @noreturn
  */
-forward void ProxyKiller_OnClientPunishment(ProxyUser pUser, bool fromCache);
+forward void ProxyKiller_OnClientPunishment(ProxyUser pUser, bool fromCache, bool fromBlacklist);
 
 // =========================================================== //
 

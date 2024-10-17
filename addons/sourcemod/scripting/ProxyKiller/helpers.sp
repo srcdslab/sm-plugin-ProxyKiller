@@ -1,6 +1,6 @@
 // =========================================================== //
 
-void DoPunishment(ProxyUser pUser, bool fromCache)
+void DoPunishment(ProxyUser pUser, bool fromCache, bool fromBlacklist = false)
 {
 	char log[MAX_PUNISHMENT_LOG_LENGTH];
 	gCV_PunishmentLogFormat.GetString(log, sizeof(log));
@@ -30,7 +30,7 @@ void DoPunishment(ProxyUser pUser, bool fromCache)
 		}
 	}
 
-	Call_OnClientPunishment(pUser, fromCache);
+	Call_OnClientPunishment(pUser, fromCache, fromBlacklist);
 }
 
 bool HasOverride(int client)
