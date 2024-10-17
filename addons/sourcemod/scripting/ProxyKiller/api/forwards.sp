@@ -35,8 +35,8 @@ void CreateForwards()
 	H_DoClientResultCache = CreateGlobalForward("ProxyKiller_DoClientResultCache", ET_Hook, Param_Cell, Param_Cell);
 	H_OnClientResultCache = CreateGlobalForward("ProxyKiller_OnClientResultCache", ET_Ignore, Param_Cell, Param_Cell);
 
-	H_DoClientPunishment = CreateGlobalForward("ProxyKiller_DoClientPunishment", ET_Hook, Param_Cell, Param_Cell);
-	H_OnClientPunishment = CreateGlobalForward("ProxyKiller_OnClientPunishment", ET_Ignore, Param_Cell, Param_Cell);
+	H_DoClientPunishment = CreateGlobalForward("ProxyKiller_DoClientPunishment", ET_Hook, Param_Cell, Param_Cell, Param_Cell);
+	H_OnClientPunishment = CreateGlobalForward("ProxyKiller_OnClientPunishment", ET_Ignore, Param_Cell, Param_Cell, Param_Cell);
 }
 
 // =========================================================== //
@@ -115,21 +115,23 @@ void Call_OnClientResultCache(ProxyUser pUser, bool result)
 	Call_Finish();
 }
 
-bool Call_DoClientPunishment(ProxyUser pUser, bool fromCache)
+bool Call_DoClientPunishment(ProxyUser pUser, bool fromCache, bool fromBlacklist)
 {
 	Action retval = Plugin_Continue;
 	Call_StartForward(H_DoClientPunishment);
 	Call_PushCell(pUser);
 	Call_PushCell(fromCache);
+	Call_PushCell(fromBlacklist);
 	Call_Finish(retval);
 	return retval == Plugin_Continue;
 }
 
-void Call_OnClientPunishment(ProxyUser pUser, bool fromCache)
+void Call_OnClientPunishment(ProxyUser pUser, bool fromCache, bool fromBlacklist)
 {
 	Call_StartForward(H_OnClientPunishment);
 	Call_PushCell(pUser);
 	Call_PushCell(fromCache);
+	Call_PushCell(fromBlacklist);
 	Call_Finish();
 }
 
