@@ -89,8 +89,6 @@ public void OnPluginStart()
 public void OnAllPluginsLoaded()
 {
 	SendForward_Available();
-
-	OnAllPluginsLoaded_3rdParty();
 	CreateLists();
 }
 
