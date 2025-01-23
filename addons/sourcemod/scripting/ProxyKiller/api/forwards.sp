@@ -1,5 +1,8 @@
 // =========================================================== //
 
+GlobalForward g_hForward_StatusOK;
+GlobalForward g_hForward_StatusNotOK;
+
 static Handle H_OnCache = null;
 static Handle H_OnRules = null;
 static Handle H_OnConfig = null;
@@ -21,6 +24,9 @@ static Handle H_OnClientPunishment = null;
 
 void CreateForwards()
 {
+	g_hForward_StatusOK = CreateGlobalForward("ProxyKiller_OnPluginOK", ET_Ignore);
+	g_hForward_StatusNotOK = CreateGlobalForward("ProxyKiller_OnPluginNotOK", ET_Ignore);
+
 	H_OnCache = CreateGlobalForward("ProxyKiller_OnCache", ET_Ignore);
 	H_OnRules = CreateGlobalForward("ProxyKiller_OnRules", ET_Ignore);
 	H_OnConfig = CreateGlobalForward("ProxyKiller_OnConfig", ET_Ignore);
@@ -40,6 +46,18 @@ void CreateForwards()
 }
 
 // =========================================================== //
+
+stock void SendForward_Available()
+{
+	Call_StartForward(g_hForward_StatusOK);
+	Call_Finish();
+}
+
+stock void SendForward_NotAvailable()
+{
+	Call_StartForward(g_hForward_StatusNotOK);
+	Call_Finish();
+}
 
 void Call_OnCache()
 {
