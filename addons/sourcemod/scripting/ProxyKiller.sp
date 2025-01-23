@@ -59,7 +59,7 @@ public Plugin myinfo =
 	name = PROXYKILLER_NAME,
 	author = "Sikari, .Rushaway, maxime1907",
 	description = "Kill them proxies!",
-	version = "2.3.2",
+	version = ProxyKiller_VERSION,
 	url = "https://github.com/srcdslab/sm-plugin-ProxyKiller"
 };
 
@@ -88,7 +88,23 @@ public void OnPluginStart()
 
 public void OnAllPluginsLoaded()
 {
+	SendForward_Available();
+
+	OnAllPluginsLoaded_3rdParty();
 	CreateLists();
+}
+
+public void OnPluginPauseChange(bool pause)
+{
+	if (pause)
+		SendForward_NotAvailable();
+	else
+		SendForward_Available();
+}
+
+public void OnPluginEnd()
+{
+	SendForward_NotAvailable();
 }
 
 public void OnConfigsExecuted()

@@ -5,6 +5,12 @@
 #endif
 #define _ProxyKiller_included_
 
+#define ProxyKiller_V_MAJOR   2
+#define ProxyKiller_V_MINOR   4
+#define ProxyKiller_V_PATCH   0
+
+#define ProxyKiller_VERSION   "2.4.0"
+
 // =========================================================== //
 
 #include <StringMapEx>
@@ -302,6 +308,21 @@ native ResponseType ProxyKiller_Config_GetServiceResponseType();
 native ResponseCompare ProxyKiller_Config_GetServiceResponseCompare();
 
 // =========================================================== //
+
+/**
+ * Called when the plugin becomes available.
+ * 
+ * @noreturn
+ */
+forward void ProxyKiller_OnPluginOK();
+
+/**
+ * Called when the plugin becomes unavailable.
+ * This can happen when the plugin is reloaded or unloaded.
+ * 
+ * @noreturn
+ */
+forward void ProxyKiller_OnPluginNotOK();
 
 /**
  * Called when the cache is initialized for ProxyKiller
