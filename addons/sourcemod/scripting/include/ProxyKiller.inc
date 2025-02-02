@@ -446,7 +446,7 @@ public void __pl_ProxyKiller_SetNTVOptional()
 	MarkNativeAsOptional("ProxyKiller_Config_GetServiceResponseObject");
 	MarkNativeAsOptional("ProxyKiller_Config_GetServiceResponseType");
 	MarkNativeAsOptional("ProxyKiller_Config_GetServiceResponseCompare");
-};
+}
 #endif
 
 // =========================================================== //
