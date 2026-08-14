@@ -129,23 +129,25 @@ void TryDeleteRule(char[] expression, ProxyRulesType type = RulesType_Whitelist)
 	}
 }
 
-public void Rules_DB_Conn_Lost(DBResultSet results)
+public bool Rules_DB_Conn_Lost(DBResultSet results)
 {
 	switch (g_Rules.Mode)
 	{
 		case RulesMode_MySQL:
 		{
-			ProxyRulesMySQL_DB_Conn_Lost(results);
+			return ProxyRulesMySQL_DB_Conn_Lost(results);
 		}
 		case RulesMode_SQLite:
 		{
-			ProxyRulesSQLite_DB_Conn_Lost(results);
+			return ProxyRulesSQLite_DB_Conn_Lost(results);
 		}
 		default:
 		{
 			g_Logger.DebugMessage("Rules mode %d has no implementation for DB_Conn_Lost", g_Rules.Mode);
 		}
 	}
+
+	return false;
 }
 
 // =========================================================== //

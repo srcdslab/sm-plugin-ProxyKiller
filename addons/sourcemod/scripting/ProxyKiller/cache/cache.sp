@@ -104,23 +104,25 @@ void TryPushCache(ProxyUser pUser, ProxyService service, any result)
 	}
 }
 
-public void Cache_DB_Conn_Lost(DBResultSet results)
+public bool Cache_DB_Conn_Lost(DBResultSet results)
 {
 	switch (g_Cache.Mode)
 	{
 		case CacheMode_MySQL:
 		{
-			ProxyCacheMySQL_DB_Conn_Lost(results);
+			return ProxyCacheMySQL_DB_Conn_Lost(results);
 		}
 		case CacheMode_SQLite:
 		{
-			ProxyCacheSQLite_DB_Conn_Lost(results);
+			return ProxyCacheSQLite_DB_Conn_Lost(results);
 		}
 		default:
 		{
 			g_Logger.DebugMessage("Cache mode %d has no implementation for DB_Conn_Lost", g_Cache.Mode);
 		}
 	}
+
+	return false;
 }
 
 public Action Timer_DeleteOldCacheEntries(Handle timer)
