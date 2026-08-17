@@ -27,8 +27,8 @@ This repository contains **ProxyKiller**, a SourceMod plugin designed to detect 
 - **Database**: MySQL or SQLite (optional, for caching)
 
 ### Build System
-- **Primary Tool**: SourceKnight (sourceknight.yaml configuration)
-- **Compiler**: SourcePawn compiler (spcomp) - bundled with SourceMod
+- **Primary Tool**: Native GitHub Actions (rumblefrog/setup-sp)
+- **Compiler**: SourcePawn compiler (spcomp)
 - **CI/CD**: GitHub Actions (.github/workflows/ci.yml)
 - **Output**: Compiled .smx files in `/addons/sourcemod/plugins/`
 
@@ -60,16 +60,12 @@ This repository contains **ProxyKiller**, a SourceMod plugin designed to detect 
 ### Building the Plugin
 
 ```bash
-# Using SourceKnight (recommended)
-sourceknight build
-
-# Manual compilation (if needed)
+# Manual compilation
 spcomp -i addons/sourcemod/scripting/include addons/sourcemod/scripting/ProxyKiller.sp
 ```
 
 ### Key Build Files
-- `sourceknight.yaml`: Build configuration and dependencies
-- `.github/workflows/ci.yml`: Automated building and releases
+- `.github/workflows/ci.yml`: Automated building and releases (native GitHub Actions, dependencies cloned directly from their repos)
 - `ProxyKiller.sp`: Main plugin entry point
 
 ### Testing Changes
@@ -249,11 +245,10 @@ bool isProxy = ProxyKiller_IsUserProxy(client);
 
 ### Configuration Files
 - **proxykiller.cfg**: Runtime plugin configuration
-- **sourceknight.yaml**: Build system and dependencies
 - **ci.yml**: Build automation and releases
 
 ### Testing Changes
-1. Build locally with SourceKnight
+1. Build locally with spcomp
 2. Deploy to test server
 3. Verify functionality with different scenarios
 4. Check error logs for issues
