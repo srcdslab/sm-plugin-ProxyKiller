@@ -22,6 +22,7 @@ DatabaseState g_DatabaseStates[4];
 Database g_hDatabases[4];
 int g_iConnectLocks[4];
 int g_iSequences[4];
+bool g_bDbInitialized[4];
 
 // Database indices for easy access
 #define Idx_ProxyCacheMySQL 0
@@ -104,6 +105,61 @@ public void DB_GotDatabase(Database db, const char[] error, any data)
 	g_iConnectLocks[dbIndex] = 0;
 	g_DatabaseStates[dbIndex] = DatabaseState_Connected;
 	g_hDatabases[dbIndex] = db;
+
+	// The provider handle is only known once the async connection succeeds,
+	// so wire it into the matching Cache/Rules object here and run its
+	// one-time schema setup instead of doing it eagerly at creation time.
+	switch (dbIndex)
+	{
+		case Idx_ProxyCacheMySQL:
+		{
+			if (g_Cache != null)
+			{
+				g_Cache.Provider = db;
+				if (!g_bDbInitialized[dbIndex])
+				{
+					view_as<ProxyCacheMySQL>(g_Cache).Initialize();
+					g_bDbInitialized[dbIndex] = true;
+				}
+			}
+		}
+		case Idx_ProxyCacheSQLite:
+		{
+			if (g_Cache != null)
+			{
+				g_Cache.Provider = db;
+				if (!g_bDbInitialized[dbIndex])
+				{
+					view_as<ProxyCacheSQLite>(g_Cache).Initialize();
+					g_bDbInitialized[dbIndex] = true;
+				}
+			}
+		}
+		case Idx_ProxyRulesMySQL:
+		{
+			if (g_Rules != null)
+			{
+				g_Rules.Provider = db;
+				if (!g_bDbInitialized[dbIndex])
+				{
+					view_as<ProxyRulesMySQL>(g_Rules).Initialize();
+					g_bDbInitialized[dbIndex] = true;
+				}
+			}
+		}
+		case Idx_ProxyRulesSQLite:
+		{
+			if (g_Rules != null)
+			{
+				g_Rules.Provider = db;
+				if (!g_bDbInitialized[dbIndex])
+				{
+					view_as<ProxyRulesSQLite>(g_Rules).Initialize();
+					g_bDbInitialized[dbIndex] = true;
+				}
+			}
+		}
+	}
 }
 
 public bool DB_Conn_Lost(int dbIndex, DBResultSet db)

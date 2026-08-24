@@ -45,7 +45,6 @@ ProxyRules CreateRules(int mode)
 			
 			g_Logger.PrintFrame("MySQL");
 			rules = new ProxyRulesMySQL(prefix);
-			Rules_MySQL(rules).Initialize();
 		}
 		case RulesMode_SQLite:
 		{
@@ -56,7 +55,6 @@ ProxyRules CreateRules(int mode)
 
 			g_Logger.PrintFrame("SQLite");
 			rules = new ProxyRulesSQLite(prefix);
-			Rules_SQLite(rules).Initialize();
 		}
 		default:
 		{

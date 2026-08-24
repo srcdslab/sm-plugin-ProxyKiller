@@ -20,6 +20,11 @@ methodmap StringMapEx < StringMap
 		this.GetValue(key, value);
 		return value;
 	}
+
+	public void SetAny(char[] key, any value)
+	{
+		this.SetValue(key, value);
+	}
 	
 	public int GetInt(char[] key)
 	{
