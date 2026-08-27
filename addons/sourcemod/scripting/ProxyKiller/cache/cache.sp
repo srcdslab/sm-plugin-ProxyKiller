@@ -39,7 +39,6 @@ ProxyCache CreateCache(int mode)
 			
 			g_Logger.PrintFrame("MySQL");
 			cache = new ProxyCacheMySQL(prefix);
-			Cache_MySQL(cache).Initialize();
 		}
 		case CacheMode_SQLite:
 		{
@@ -47,10 +46,9 @@ ProxyCache CreateCache(int mode)
 
 			char prefix[64];
 			gCV_DatabaseTablePrefix.GetString(prefix, sizeof(prefix));
-			
+
 			g_Logger.PrintFrame("SQLite");
 			cache = new ProxyCacheSQLite(prefix);
-			Cache_SQLite(cache).Initialize();
 		}
 	}
 

@@ -38,6 +38,7 @@ methodmap ProxyCache < StringMapEx
 	property any Provider
 	{
 		public get() { return this.GetAny("provider"); }
+		public set(any provider) { this.SetAny("provider", provider); }
 	}
 }
 
