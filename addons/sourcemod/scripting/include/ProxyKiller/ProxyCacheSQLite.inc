@@ -48,7 +48,10 @@ methodmap ProxyCacheSQLite < ProxyCache
 
 	property Database Provider
 	{
-		public get() { return this.GetAny("provider"); }
+		// Resolves to the live, shared handle owned by databases.sp rather
+		// than a handle of this instance's own, so it stays valid across
+		// async (re)connects.
+		public get() { return ProxyCacheSQLite_DB_GetHandle(); }
 	}
 
 	public void GetTablePrefix(char[] buffer, int maxlength)
@@ -58,15 +61,20 @@ methodmap ProxyCacheSQLite < ProxyCache
 
 	public void Initialize()
 	{
+		Database db = this.Provider;
+		if (db == null)
+		{
+			CreateTimer(1.0, Timer_ProxyCacheSQLite_Initialize, this, TIMER_FLAG_NO_MAPCHANGE);
+			return;
+		}
+
 		char prefix[64];
 		this.GetTablePrefix(prefix, sizeof(prefix));
 
 		char query[sizeof(CREATE_TABLE) + sizeof(prefix)];
-		this.Provider.Format(query, sizeof(query), CREATE_TABLE, prefix);
+		db.Format(query, sizeof(query), CREATE_TABLE, prefix);
 
-		SQL_LockDatabase(this.Provider);
-		SQL_Query(this.Provider, query);
-		SQL_UnlockDatabase(this.Provider);
+		db.Query(OnProxyCacheSQLiteTableCreated, query);
 	}
 
 	public void TryGetCache(ProxyUser pUser, ProxyService service, SQLQueryCallback callback)
@@ -112,6 +120,20 @@ methodmap ProxyCacheSQLite < ProxyCache
 		this.Provider.Format(query, sizeof(query), DELETE_OLD_RECORDS, prefix, cacheLifeTime);
 		
 		this.Provider.Query(callback, query);
+	}
+}
+
+public Action Timer_ProxyCacheSQLite_Initialize(Handle timer, any data)
+{
+	view_as<ProxyCacheSQLite>(data).Initialize();
+	return Plugin_Continue;
+}
+
+public void OnProxyCacheSQLiteTableCreated(Database db, DBResultSet results, const char[] error, any data)
+{
+	if (results == null)
+	{
+		LogError("<Cache-SQLite> Failed to create cache table: %s", error);
 	}
 }
 

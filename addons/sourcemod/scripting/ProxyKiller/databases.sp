@@ -249,3 +249,23 @@ public bool ProxyRulesSQLite_DB_Conn_Lost(DBResultSet db)
 {
 	return DB_Conn_Lost(Idx_ProxyRulesSQLite, db);
 }
+
+public Database ProxyCacheMySQL_DB_GetHandle()
+{
+	return g_hDatabases[Idx_ProxyCacheMySQL];
+}
+
+public Database ProxyCacheSQLite_DB_GetHandle()
+{
+	return g_hDatabases[Idx_ProxyCacheSQLite];
+}
+
+public Database ProxyRulesMySQL_DB_GetHandle()
+{
+	return g_hDatabases[Idx_ProxyRulesMySQL];
+}
+
+public Database ProxyRulesSQLite_DB_GetHandle()
+{
+	return g_hDatabases[Idx_ProxyRulesSQLite];
+}
