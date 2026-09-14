@@ -25,14 +25,6 @@
 #include <ProxyKiller/ProxyConfig>
 #include <ProxyKiller/ProxyLogger>
 
-#include <ProxyKiller/ProxyCache>
-#include <ProxyKiller/ProxyCacheMySQL>
-#include <ProxyKiller/ProxyCacheSQLite>
-
-#include <ProxyKiller/ProxyRules>
-#include <ProxyKiller/ProxyRulesMySQL>
-#include <ProxyKiller/ProxyRulesSQLite>
-
 // =========================================================== //
 
 #if !defined PROXYKILLER_SPEWMODE

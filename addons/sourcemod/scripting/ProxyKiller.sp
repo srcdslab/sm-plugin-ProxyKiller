@@ -21,6 +21,14 @@ ProxyConfig g_Config = null;
 
 // ======================= INCLUDES ========================== //
 
+#include "include/ProxyKiller/ProxyCache"
+#include "include/ProxyKiller/ProxyCacheMySQL"
+#include "include/ProxyKiller/ProxyCacheSQLite"
+
+#include "include/ProxyKiller/ProxyRules"
+#include "include/ProxyKiller/ProxyRulesMySQL"
+#include "include/ProxyKiller/ProxyRulesSQLite"
+
 #include "ProxyKiller/databases.sp"
 
 #include "ProxyKiller/api/natives.sp"
@@ -59,7 +67,7 @@ public Plugin myinfo =
 	name = PROXYKILLER_NAME,
 	author = "Sikari, .Rushaway, maxime1907",
 	description = "Kill them proxies!",
-	version = "2.3.5",
+	version = "2.4.0",
 	url = "https://github.com/srcdslab/sm-plugin-ProxyKiller"
 };
 
