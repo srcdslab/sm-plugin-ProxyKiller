@@ -21,9 +21,6 @@ ProxyConfig g_Config = null;
 
 // ======================= INCLUDES ========================== //
 
-// Internal-only types: their Provider getters call helper functions
-// defined below in databases.sp, so they must not be part of the
-// public ProxyKiller.inc (see include/ProxyKiller.inc for details).
 #include "include/ProxyKiller/ProxyCache"
 #include "include/ProxyKiller/ProxyCacheMySQL"
 #include "include/ProxyKiller/ProxyCacheSQLite"
@@ -70,7 +67,7 @@ public Plugin myinfo =
 	name = PROXYKILLER_NAME,
 	author = "Sikari, .Rushaway, maxime1907",
 	description = "Kill them proxies!",
-	version = "2.3.5",
+	version = "2.3.6",
 	url = "https://github.com/srcdslab/sm-plugin-ProxyKiller"
 };
 

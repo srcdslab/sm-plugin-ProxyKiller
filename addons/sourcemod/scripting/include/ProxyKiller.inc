@@ -26,14 +26,6 @@
 #include <ProxyKiller/ProxyLogger>
 
 // =========================================================== //
-// NOTE: ProxyCache/ProxyRules (and their MySQL/SQLite subtypes) are
-// intentionally NOT included here. They are internal implementation
-// details whose Provider getters call helper functions that only
-// exist inside the compiled ProxyKiller plugin (see databases.sp).
-// Pulling them into this public include breaks compilation for any
-// third-party plugin that does #include <ProxyKiller>. They are
-// included directly by ProxyKiller.sp instead.
-// =========================================================== //
 
 #if !defined PROXYKILLER_SPEWMODE
 #define PROXYKILLER_SPEWMODE (SPEWMODE_LOG)
