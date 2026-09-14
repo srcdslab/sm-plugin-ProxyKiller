@@ -21,6 +21,17 @@ ProxyConfig g_Config = null;
 
 // ======================= INCLUDES ========================== //
 
+// Internal-only types: their Provider getters call helper functions
+// defined below in databases.sp, so they must not be part of the
+// public ProxyKiller.inc (see include/ProxyKiller.inc for details).
+#include "include/ProxyKiller/ProxyCache"
+#include "include/ProxyKiller/ProxyCacheMySQL"
+#include "include/ProxyKiller/ProxyCacheSQLite"
+
+#include "include/ProxyKiller/ProxyRules"
+#include "include/ProxyKiller/ProxyRulesMySQL"
+#include "include/ProxyKiller/ProxyRulesSQLite"
+
 #include "ProxyKiller/databases.sp"
 
 #include "ProxyKiller/api/natives.sp"
