@@ -67,7 +67,7 @@ public Plugin myinfo =
 	name = PROXYKILLER_NAME,
 	author = "Sikari, .Rushaway, maxime1907",
 	description = "Kill them proxies!",
-	version = "2.3.6",
+	version = "2.4.0",
 	url = "https://github.com/srcdslab/sm-plugin-ProxyKiller"
 };
 
