@@ -13,9 +13,6 @@
 // ====================== VARIABLES ========================== //
 
 bool g_bBlackListed[MAXPLAYERS + 1] = {false};
-
-ProxyCache g_Cache = null;
-ProxyRules g_Rules = null;
 ProxyLogger g_Logger = null;
 ProxyConfig g_Config = null;
 
@@ -25,9 +22,13 @@ ProxyConfig g_Config = null;
 #include "include/ProxyKiller/ProxyCacheMySQL"
 #include "include/ProxyKiller/ProxyCacheSQLite"
 
+ProxyCache g_Cache = null;
+
 #include "include/ProxyKiller/ProxyRules"
 #include "include/ProxyKiller/ProxyRulesMySQL"
 #include "include/ProxyKiller/ProxyRulesSQLite"
+
+ProxyRules g_Rules = null;
 
 #include "ProxyKiller/databases.sp"
 
@@ -67,7 +68,7 @@ public Plugin myinfo =
 	name = PROXYKILLER_NAME,
 	author = "Sikari, .Rushaway, maxime1907",
 	description = "Kill them proxies!",
-	version = "2.4.0",
+	version = "2.4.1",
 	url = "https://github.com/srcdslab/sm-plugin-ProxyKiller"
 };
 
