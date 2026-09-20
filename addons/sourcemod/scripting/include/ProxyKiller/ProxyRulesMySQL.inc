@@ -84,55 +84,39 @@ methodmap ProxyRulesMySQL < ProxyRules
 	{
 		char steamId2[32];
 		pUser.GetSteamId2(steamId2, sizeof(steamId2));
-
+		
 		char ipAddress[16];
 		pUser.GetIPAddress(ipAddress, sizeof(ipAddress));
-
+		
 		char prefix[64];
 		this.GetTablePrefix(prefix, sizeof(prefix));
 
-		Database db = this.Provider;
-
-		char steamId2Esc[32 * 2 + 1], ipAddressEsc[16 * 2 + 1];
-		db.Escape(steamId2, steamId2Esc, sizeof(steamId2Esc));
-		db.Escape(ipAddress, ipAddressEsc, sizeof(ipAddressEsc));
-
 		char query[512];
-		db.Format(query, sizeof(query), SELECT_RECORD, prefix, steamId2Esc, ipAddressEsc, type);
+		this.Provider.Format(query, sizeof(query), SELECT_RECORD, prefix, steamId2, ipAddress, type);
 
-		db.Query(callback, query, pUser);
+		this.Provider.Query(callback, query, pUser);
 	}
-
+	
 	public void TryPushRule(char[] expression, ProxyRulesType type, SQLQueryCallback callback)
 	{
 		char prefix[64];
 		this.GetTablePrefix(prefix, sizeof(prefix));
 
-		Database db = this.Provider;
-
-		char expressionEsc[64 * 2 + 1];
-		db.Escape(expression, expressionEsc, sizeof(expressionEsc));
-
 		char query[512];
-		db.Format(query, sizeof(query), INSERT_RECORD, prefix, expressionEsc, type);
+		this.Provider.Format(query, sizeof(query), INSERT_RECORD, prefix, expression, type);
 
-		db.Query(callback, query);
+		this.Provider.Query(callback, query);
 	}
-
+	
 	public void TryDeleteRule(char[] expression, ProxyRulesType type, SQLQueryCallback callback)
 	{
 		char prefix[64];
-		this.GetTablePrefix(prefix, sizeof(prefix));
-
-		Database db = this.Provider;
-
-		char expressionEsc[64 * 2 + 1];
-		db.Escape(expression, expressionEsc, sizeof(expressionEsc));
+		this.GetTablePrefix(prefix, sizeof(prefix));		
 
 		char query[512];
-		db.Format(query, sizeof(query), DELETE_RECORD, prefix, expressionEsc, type);
+		this.Provider.Format(query, sizeof(query), DELETE_RECORD, prefix, expression, type);
 
-		db.Query(callback, query);
+		this.Provider.Query(callback, query);
 	}
 }
 
