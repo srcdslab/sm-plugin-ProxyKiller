@@ -50,7 +50,13 @@ public bool DB_Connect(int dbIndex, DatabaseType dbType, const char[] dbName)
 
 		g_DatabaseStates[dbIndex] = DatabaseState_Connecting;
 		g_iConnectLocks[dbIndex] = g_iSequences[dbIndex]++;
-		Database.Connect(DB_GotDatabase, dbName, dbIndex);
+
+		// Pack both the slot index and the connect-attempt sequence number
+		// into a single data cell: dbIndex in the low byte, sequence in the
+		// rest. DB_GotDatabase needs both - dbIndex to know which slot the
+		// callback is for, and the sequence to detect whether a newer
+		// connect attempt has since superseded this one.
+		Database.Connect(DB_GotDatabase, dbName, (g_iConnectLocks[dbIndex] << 8) | dbIndex);
 	}
 
 	return false;
@@ -58,7 +64,8 @@ public bool DB_Connect(int dbIndex, DatabaseType dbType, const char[] dbName)
 
 public void DB_GotDatabase(Database db, const char[] error, any data)
 {
-	int dbIndex = view_as<int>(data);
+	int dbIndex = data & 0xFF;
+	int sequence = data >> 8;
 
 	if (db == null)
 	{
@@ -83,7 +90,7 @@ public void DB_GotDatabase(Database db, const char[] error, any data)
 	LogMessage("<ProxyKiller-%s> Connected to database.", sType);
 
 	// If it's an old connection request, ignore it
-	if (g_iConnectLocks[dbIndex] != data || (g_hDatabases[dbIndex] != null && g_DatabaseStates[dbIndex] == DatabaseState_Connected))
+	if (g_iConnectLocks[dbIndex] != sequence || (g_hDatabases[dbIndex] != null && g_DatabaseStates[dbIndex] == DatabaseState_Connected))
 	{
 		if (db)
 			delete db;

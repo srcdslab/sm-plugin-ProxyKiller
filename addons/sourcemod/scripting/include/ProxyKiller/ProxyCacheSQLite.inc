@@ -81,34 +81,46 @@ methodmap ProxyCacheSQLite < ProxyCache
 	{
 		char ipAddress[24];
 		pUser.GetIPAddress(ipAddress, sizeof(ipAddress));
-		
+
 		char serviceName[MAX_SERVICE_NAME_LENGTH];
 		service.GetName(serviceName, sizeof(serviceName));
 
 		char prefix[64];
 		this.GetTablePrefix(prefix, sizeof(prefix));
 
-		char query[512];
-		this.Provider.Format(query, sizeof(query), SELECT_RECORD, prefix, ipAddress, serviceName);
+		Database db = this.Provider;
 
-		this.Provider.Query(callback, query, pUser);
+		char ipAddressEsc[24 * 2 + 1], serviceNameEsc[MAX_SERVICE_NAME_LENGTH * 2 + 1];
+		db.Escape(ipAddress, ipAddressEsc, sizeof(ipAddressEsc));
+		db.Escape(serviceName, serviceNameEsc, sizeof(serviceNameEsc));
+
+		char query[512];
+		db.Format(query, sizeof(query), SELECT_RECORD, prefix, ipAddressEsc, serviceNameEsc);
+
+		db.Query(callback, query, pUser);
 	}
 
 	public void TryPushCache(ProxyUser pUser, ProxyService service, any result, SQLQueryCallback callback)
 	{
 		char ipAddress[24];
 		pUser.GetIPAddress(ipAddress, sizeof(ipAddress));
-		
+
 		char serviceName[MAX_SERVICE_NAME_LENGTH];
 		service.GetName(serviceName, sizeof(serviceName));
 
 		char prefix[64];
 		this.GetTablePrefix(prefix, sizeof(prefix));
 
-		char query[512];
-		this.Provider.Format(query, sizeof(query), INSERT_RECORD, prefix, ipAddress, serviceName, result);
+		Database db = this.Provider;
 
-		this.Provider.Query(callback, query);
+		char ipAddressEsc[24 * 2 + 1], serviceNameEsc[MAX_SERVICE_NAME_LENGTH * 2 + 1];
+		db.Escape(ipAddress, ipAddressEsc, sizeof(ipAddressEsc));
+		db.Escape(serviceName, serviceNameEsc, sizeof(serviceNameEsc));
+
+		char query[512];
+		db.Format(query, sizeof(query), INSERT_RECORD, prefix, ipAddressEsc, serviceNameEsc, result);
+
+		db.Query(callback, query);
 	}
 	
 	public void TryDeleteOldEntries(int cacheLifeTime, SQLQueryCallback callback)
