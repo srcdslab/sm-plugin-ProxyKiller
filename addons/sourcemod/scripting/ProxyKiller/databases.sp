@@ -30,6 +30,15 @@ bool g_bDbInitialized[4];
 #define Idx_ProxyRulesMySQL 2
 #define Idx_ProxyRulesSQLite 3
 
+// Database.Connect() only carries a single data cell, so DB_Connect packs the
+// slot index (low bits) and the connect-attempt sequence number (the rest)
+// into it, and DB_GotDatabase unpacks both.
+#define DB_DATA_INDEX_BITS 8
+#define DB_DATA_INDEX_MASK ((1 << DB_DATA_INDEX_BITS) - 1)
+
+// Delay before retrying after a lost or failed connection
+#define DB_RETRY_DELAY 10.0
+
 // =========================================================== //
 // Generic Database Connection Logic
 // =========================================================== //
@@ -50,13 +59,7 @@ public bool DB_Connect(int dbIndex, DatabaseType dbType, const char[] dbName)
 
 		g_DatabaseStates[dbIndex] = DatabaseState_Connecting;
 		g_iConnectLocks[dbIndex] = g_iSequences[dbIndex]++;
-
-		// Pack both the slot index and the connect-attempt sequence number
-		// into a single data cell: dbIndex in the low byte, sequence in the
-		// rest. DB_GotDatabase needs both - dbIndex to know which slot the
-		// callback is for, and the sequence to detect whether a newer
-		// connect attempt has since superseded this one.
-		Database.Connect(DB_GotDatabase, dbName, (g_iConnectLocks[dbIndex] << 8) | dbIndex);
+		Database.Connect(DB_GotDatabase, dbName, (g_iConnectLocks[dbIndex] << DB_DATA_INDEX_BITS) | dbIndex);
 	}
 
 	return false;
@@ -64,12 +67,22 @@ public bool DB_Connect(int dbIndex, DatabaseType dbType, const char[] dbName)
 
 public void DB_GotDatabase(Database db, const char[] error, any data)
 {
-	int dbIndex = data & 0xFF;
-	int sequence = data >> 8;
+	int dbIndex = data & DB_DATA_INDEX_MASK;
+	int sequence = data >> DB_DATA_INDEX_BITS;
 
 	if (db == null)
 	{
-		LogError("Connecting to database failed: %s", error);
+		// Only the current attempt may schedule the retry: a stale failure must
+		// not touch the state of a slot that a newer attempt now owns.
+		if (g_DatabaseStates[dbIndex] == DatabaseState_Connecting && g_iConnectLocks[dbIndex] == sequence)
+		{
+			LogError("Connecting to database failed: %s. Retry after delay of %0.f seconds.", error, DB_RETRY_DELAY);
+			DB_ScheduleReconnect(dbIndex);
+		}
+		else
+		{
+			LogError("Connecting to database failed: %s", error);
+		}
 		return;
 	}
 
@@ -100,7 +113,7 @@ public void DB_GotDatabase(Database db, const char[] error, any data)
 	char sDriver[16];
 	SQL_GetDriverIdent(db.Driver, sDriver, sizeof(sDriver));
 
-	if ((dbIndex == Idx_ProxyCacheMySQL || dbIndex == Idx_ProxyCacheSQLite) && !StrEqual(sDriver, "mysql", false))
+	if ((dbIndex == Idx_ProxyCacheMySQL || dbIndex == Idx_ProxyRulesMySQL) && !StrEqual(sDriver, "mysql", false))
 	{
 		SetFailState("Invalid database driver for MySQL, expecting \"mysql\"");
 	}
@@ -173,24 +186,29 @@ public bool DB_Conn_Lost(int dbIndex, DBResultSet db)
 {
 	if (db == null)
 	{
-		float fRetryTime = 10.0;
 		if (g_hDatabases[dbIndex] != null)
 		{
-			LogError("Lost connection to DB. Reconnect after delay of %0.f seconds.", fRetryTime);
+			LogError("Lost connection to DB. Reconnect after delay of %0.f seconds.", DB_RETRY_DELAY);
 			delete g_hDatabases[dbIndex];
 			g_hDatabases[dbIndex] = null;
 		}
 
 		if (g_DatabaseStates[dbIndex] != DatabaseState_Wait && g_DatabaseStates[dbIndex] != DatabaseState_Connecting)
-		{
-			g_DatabaseStates[dbIndex] = DatabaseState_Wait;
-			CreateTimer(fRetryTime, DB_TimerDB_Reconnect, dbIndex, TIMER_FLAG_NO_MAPCHANGE);
-		}
+			DB_ScheduleReconnect(dbIndex);
 
 		return true;
 	}
 
 	return false;
+}
+
+public void DB_ScheduleReconnect(int dbIndex)
+{
+	// DB_Connect refuses to start a new attempt while the slot is in Wait, so
+	// this timer must survive a map change: TIMER_FLAG_NO_MAPCHANGE would
+	// leave the slot stuck in Wait forever.
+	g_DatabaseStates[dbIndex] = DatabaseState_Wait;
+	CreateTimer(DB_RETRY_DELAY, DB_TimerDB_Reconnect, dbIndex);
 }
 
 public Action DB_TimerDB_Reconnect(Handle timer, any data)
