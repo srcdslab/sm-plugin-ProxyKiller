@@ -125,7 +125,7 @@ public bool Cache_DB_Conn_Lost(DBResultSet results)
 
 public Action Timer_DeleteOldCacheEntries(Handle timer)
 {
-	if (g_Cache.Provider != INVALID_HANDLE)
+	if (view_as<Handle>(g_Cache.Provider) != null)
 	{
 		switch (g_Cache.Mode)
 		{

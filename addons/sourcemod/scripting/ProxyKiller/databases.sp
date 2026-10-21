@@ -111,7 +111,7 @@ public void DB_GotDatabase(Database db, const char[] error, any data)
 	}
 
 	char sDriver[16];
-	SQL_GetDriverIdent(db.Driver, sDriver, sizeof(sDriver));
+	db.Driver.GetIdentifier(sDriver, sizeof(sDriver));
 
 	if ((dbIndex == Idx_ProxyCacheMySQL || dbIndex == Idx_ProxyRulesMySQL) && !StrEqual(sDriver, "mysql", false))
 	{
@@ -190,7 +190,6 @@ public bool DB_Conn_Lost(int dbIndex, DBResultSet db)
 		{
 			LogError("Lost connection to DB. Reconnect after delay of %0.f seconds.", DB_RETRY_DELAY);
 			delete g_hDatabases[dbIndex];
-			g_hDatabases[dbIndex] = null;
 		}
 
 		if (g_DatabaseStates[dbIndex] != DatabaseState_Wait && g_DatabaseStates[dbIndex] != DatabaseState_Connecting)
