@@ -1,42 +1,42 @@
 // =========================================================== //
 
-static Handle H_OnCache = null;
-static Handle H_OnRules = null;
-static Handle H_OnConfig = null;
-static Handle H_OnLogger = null;
-static Handle H_OnValidClient = null;
+static GlobalForward H_OnCache = null;
+static GlobalForward H_OnRules = null;
+static GlobalForward H_OnConfig = null;
+static GlobalForward H_OnLogger = null;
+static GlobalForward H_OnValidClient = null;
 
-static Handle H_DoCheckClient = null;
-static Handle H_OnCheckClient = null;
+static GlobalForward H_DoCheckClient = null;
+static GlobalForward H_OnCheckClient = null;
 
-static Handle H_OnClientResult = null;
+static GlobalForward H_OnClientResult = null;
 
-static Handle H_DoClientResultCache = null;
-static Handle H_OnClientResultCache = null;
+static GlobalForward H_DoClientResultCache = null;
+static GlobalForward H_OnClientResultCache = null;
 
-static Handle H_DoClientPunishment = null;
-static Handle H_OnClientPunishment = null;
+static GlobalForward H_DoClientPunishment = null;
+static GlobalForward H_OnClientPunishment = null;
 
 // =========================================================== //
 
 void CreateForwards()
 {
-	H_OnCache = CreateGlobalForward("ProxyKiller_OnCache", ET_Ignore);
-	H_OnRules = CreateGlobalForward("ProxyKiller_OnRules", ET_Ignore);
-	H_OnConfig = CreateGlobalForward("ProxyKiller_OnConfig", ET_Ignore);
-	H_OnLogger = CreateGlobalForward("ProxyKiller_OnLogger", ET_Ignore);
-	H_OnValidClient = CreateGlobalForward("ProxyKiller_OnValidClient", ET_Ignore, Param_Cell);
+	H_OnCache = new GlobalForward("ProxyKiller_OnCache", ET_Ignore);
+	H_OnRules = new GlobalForward("ProxyKiller_OnRules", ET_Ignore);
+	H_OnConfig = new GlobalForward("ProxyKiller_OnConfig", ET_Ignore);
+	H_OnLogger = new GlobalForward("ProxyKiller_OnLogger", ET_Ignore);
+	H_OnValidClient = new GlobalForward("ProxyKiller_OnValidClient", ET_Ignore, Param_Cell);
 
-	H_DoCheckClient = CreateGlobalForward("ProxyKiller_DoCheckClient", ET_Hook, Param_Cell);
-	H_OnCheckClient = CreateGlobalForward("ProxyKiller_OnCheckClient", ET_Ignore, Param_Cell);
+	H_DoCheckClient = new GlobalForward("ProxyKiller_DoCheckClient", ET_Hook, Param_Cell);
+	H_OnCheckClient = new GlobalForward("ProxyKiller_OnCheckClient", ET_Ignore, Param_Cell);
 
-	H_OnClientResult = CreateGlobalForward("ProxyKiller_OnClientResult", ET_Ignore, Param_Cell, Param_Cell, Param_Cell);
+	H_OnClientResult = new GlobalForward("ProxyKiller_OnClientResult", ET_Ignore, Param_Cell, Param_Cell, Param_Cell);
 
-	H_DoClientResultCache = CreateGlobalForward("ProxyKiller_DoClientResultCache", ET_Hook, Param_Cell, Param_Cell);
-	H_OnClientResultCache = CreateGlobalForward("ProxyKiller_OnClientResultCache", ET_Ignore, Param_Cell, Param_Cell);
+	H_DoClientResultCache = new GlobalForward("ProxyKiller_DoClientResultCache", ET_Hook, Param_Cell, Param_Cell);
+	H_OnClientResultCache = new GlobalForward("ProxyKiller_OnClientResultCache", ET_Ignore, Param_Cell, Param_Cell);
 
-	H_DoClientPunishment = CreateGlobalForward("ProxyKiller_DoClientPunishment", ET_Hook, Param_Cell, Param_Cell, Param_Cell);
-	H_OnClientPunishment = CreateGlobalForward("ProxyKiller_OnClientPunishment", ET_Ignore, Param_Cell, Param_Cell, Param_Cell);
+	H_DoClientPunishment = new GlobalForward("ProxyKiller_DoClientPunishment", ET_Hook, Param_Cell, Param_Cell, Param_Cell);
+	H_OnClientPunishment = new GlobalForward("ProxyKiller_OnClientPunishment", ET_Ignore, Param_Cell, Param_Cell, Param_Cell);
 }
 
 // =========================================================== //

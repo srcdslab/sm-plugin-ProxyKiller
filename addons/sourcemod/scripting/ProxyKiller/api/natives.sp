@@ -69,8 +69,8 @@ public int Native_SendHTTPRequest(Handle plugin, int numParams)
 	Function callback = GetNativeCell(2);
 	any data = GetNativeCell(3);
 
-	Handle fwd = CreateForward(ET_Ignore, Param_Cell, Param_String, Param_Cell);
-	AddToForward(fwd, plugin, callback);
+	PrivateForward fwd = new PrivateForward(ET_Ignore, Param_Cell, Param_String, Param_Cell);
+	fwd.AddFunction(plugin, callback);
 
 	http.Callback = fwd;
 	return QueryHTTP(http, data);

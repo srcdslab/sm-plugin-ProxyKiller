@@ -83,10 +83,10 @@ methodmap ProxyHTTP < StringMapEx
 		public get() { return this.HasKeyWithString("responsefile"); }
 	}
 
-	property Handle Callback
+	property PrivateForward Callback
 	{
 		public get() { return this.GetAny("callback"); }
-		public set(Handle fwd) { this.SetValue("callback", fwd); }
+		public set(PrivateForward fwd) { this.SetValue("callback", fwd); }
 	}
 
 	property ProxyHTTPMethod Method

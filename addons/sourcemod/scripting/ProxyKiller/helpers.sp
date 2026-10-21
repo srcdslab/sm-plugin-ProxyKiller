@@ -98,7 +98,7 @@ EHTTPMethod GetSteamWorksMethod(ProxyHTTPMethod method)
 	return k_EHTTPMethodGET;
 }
 
-void DoCallback(Handle fwd, ProxyHTTPResponse response, const char[] responseData, any data = 0)
+void DoCallback(PrivateForward fwd, ProxyHTTPResponse response, const char[] responseData, any data = 0)
 {
 	if (fwd != null)
 	{
