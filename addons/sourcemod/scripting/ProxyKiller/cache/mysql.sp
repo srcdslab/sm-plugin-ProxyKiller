@@ -4,7 +4,14 @@ public void MySQL_OnCache(Database db, DBResultSet results, const char[] error, 
 {
 	g_Logger.PrintFrame();
 
-	if (Cache_DB_Conn_Lost(results) || strlen(error) > 0 || results == null || !results.HasResults)
+	if (Cache_DB_Conn_Lost(results, error))
+	{
+		g_Logger.ErrorMessage("<Cache-MySQL> Lost connection, retrying client check later - \"%s\"", error);
+		DB_DeferClientCheck(pUser, false);
+		return;
+	}
+
+	if (strlen(error) > 0 || results == null || !results.HasResults)
 	{
 		g_Logger.ErrorMessage("<Cache-MySQL> Uh oh! Encountered a SQL error! - \"%s\"", error);
 		delete pUser;
@@ -69,7 +76,7 @@ public void MySQL_OnOldEntriesDeleted(Database db, DBResultSet results, const ch
 {
 	g_Logger.PrintFrame();
 	
-	if (Cache_DB_Conn_Lost(results) || strlen(error) > 0)
+	if (Cache_DB_Conn_Lost(results, error) || strlen(error) > 0)
 	{
 		g_Logger.ErrorMessage("<Cache-MySQL> Uh oh! Encountered a SQL error! - \"%s\"", error);
 		return;

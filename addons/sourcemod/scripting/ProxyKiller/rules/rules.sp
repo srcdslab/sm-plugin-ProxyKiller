@@ -76,11 +76,17 @@ void TryGetRules(ProxyUser pUser, ProxyRulesType type = RulesType_Whitelist)
 		}
 		case RulesMode_MySQL:
 		{
-			Rules_MySQL(g_Rules).TryGetRules(pUser, type, MySQL_OnRules);
+			if (!Rules_MySQL(g_Rules).TryGetRules(pUser, type, MySQL_OnRules))
+			{
+				DB_DeferClientCheck(pUser, true);
+			}
 		}
 		case RulesMode_SQLite:
 		{
-			Rules_SQLite(g_Rules).TryGetRules(pUser, type, SQLite_OnRules);
+			if (!Rules_SQLite(g_Rules).TryGetRules(pUser, type, SQLite_OnRules))
+			{
+				DB_DeferClientCheck(pUser, true);
+			}
 		}
 		default:
 		{
@@ -95,11 +101,17 @@ void TryPushRule(char[] expression, ProxyRulesType type = RulesType_Whitelist)
 	{
 		case RulesMode_MySQL:
 		{
-			Rules_MySQL(g_Rules).TryPushRule(expression, type, MySQL_OnRuleGeneric);
+			if (!Rules_MySQL(g_Rules).TryPushRule(expression, type, MySQL_OnRuleGeneric))
+			{
+				g_Logger.ErrorMessage("<Rules-MySQL> Database not connected, rule \"%s\" not added", expression);
+			}
 		}
 		case RulesMode_SQLite:
 		{
-			Rules_SQLite(g_Rules).TryPushRule(expression, type, SQLite_OnRuleGeneric);
+			if (!Rules_SQLite(g_Rules).TryPushRule(expression, type, SQLite_OnRuleGeneric))
+			{
+				g_Logger.ErrorMessage("<Rules-SQLite> Database not connected, rule \"%s\" not added", expression);
+			}
 		}
 		default:
 		{
@@ -114,11 +126,17 @@ void TryDeleteRule(char[] expression, ProxyRulesType type = RulesType_Whitelist)
 	{
 		case RulesMode_MySQL:
 		{
-			Rules_MySQL(g_Rules).TryDeleteRule(expression, type, MySQL_OnRuleGeneric);
+			if (!Rules_MySQL(g_Rules).TryDeleteRule(expression, type, MySQL_OnRuleGeneric))
+			{
+				g_Logger.ErrorMessage("<Rules-MySQL> Database not connected, rule \"%s\" not deleted", expression);
+			}
 		}
 		case RulesMode_SQLite:
 		{
-			Rules_SQLite(g_Rules).TryDeleteRule(expression, type, SQLite_OnRuleGeneric);
+			if (!Rules_SQLite(g_Rules).TryDeleteRule(expression, type, SQLite_OnRuleGeneric))
+			{
+				g_Logger.ErrorMessage("<Rules-SQLite> Database not connected, rule \"%s\" not deleted", expression);
+			}
 		}
 		default:
 		{
@@ -127,17 +145,17 @@ void TryDeleteRule(char[] expression, ProxyRulesType type = RulesType_Whitelist)
 	}
 }
 
-public bool Rules_DB_Conn_Lost(DBResultSet results)
+public bool Rules_DB_Conn_Lost(DBResultSet results, const char[] error)
 {
 	switch (g_Rules.Mode)
 	{
 		case RulesMode_MySQL:
 		{
-			return ProxyRulesMySQL_DB_Conn_Lost(results);
+			return ProxyRulesMySQL_DB_Conn_Lost(results, error);
 		}
 		case RulesMode_SQLite:
 		{
-			return ProxyRulesSQLite_DB_Conn_Lost(results);
+			return ProxyRulesSQLite_DB_Conn_Lost(results, error);
 		}
 		default:
 		{

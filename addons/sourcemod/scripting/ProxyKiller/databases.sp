@@ -39,6 +39,11 @@ bool g_bDbInitialized[4];
 // Delay before retrying after a lost or failed connection
 #define DB_RETRY_DELAY 10.0
 
+// A client check that finds its database not connected is retried this often,
+// up to this many times, instead of being dropped
+#define DB_CHECK_RETRY_DELAY 5.0
+#define DB_CHECK_RETRY_MAX 12
+
 // =========================================================== //
 // Generic Database Connection Logic
 // =========================================================== //
@@ -182,9 +187,19 @@ public void DB_GotDatabase(Database db, const char[] error, any data)
 	}
 }
 
-public bool DB_Conn_Lost(int dbIndex, DBResultSet db)
+public bool DB_IsConnectionError(const char[] error)
 {
-	if (db == null)
+	return StrContains(error, "Lost connection", false) != -1
+		|| StrContains(error, "gone away", false) != -1
+		|| StrContains(error, "Can't connect", false) != -1
+		|| StrContains(error, "Broken pipe", false) != -1;
+}
+
+public bool DB_Conn_Lost(int dbIndex, DBResultSet results, const char[] error)
+{
+	// Only a real connection failure invalidates the handle: a plain SQL
+	// error (syntax, constraint, ...) must not tear the connection down.
+	if (results == null && DB_IsConnectionError(error))
 	{
 		if (g_hDatabases[dbIndex] != null)
 		{
@@ -231,6 +246,53 @@ public void DB_Reconnect(int dbIndex)
 }
 
 // =========================================================== //
+// Deferred client checks
+// =========================================================== //
+
+// Called while the rules/cache database is still connecting or reconnecting:
+// keep the ProxyUser and retry the same stage later instead of skipping the
+// proxy check. Takes ownership of pUser.
+void DB_DeferClientCheck(ProxyUser pUser, bool fromRules)
+{
+	int retries = pUser.GetInt("db_retries");
+	if (retries >= DB_CHECK_RETRY_MAX)
+	{
+		char name[MAX_NAME_LENGTH];
+		pUser.GetName(name, sizeof(name));
+		g_Logger.ErrorMessage("Database still not connected, skipping proxy check for \"%s\"", name);
+		delete pUser;
+		return;
+	}
+
+	pUser.SetValue("db_retries", retries + 1);
+	pUser.SetValue("db_from_rules", fromRules);
+	CreateTimer(DB_CHECK_RETRY_DELAY, DB_Timer_RetryClientCheck, pUser);
+}
+
+public Action DB_Timer_RetryClientCheck(Handle timer, any data)
+{
+	ProxyUser pUser = view_as<ProxyUser>(data);
+
+	// Client left in the meantime
+	if (pUser.Client == 0)
+	{
+		delete pUser;
+		return Plugin_Stop;
+	}
+
+	if (pUser.GetBool("db_from_rules"))
+	{
+		TryGetRules(pUser);
+	}
+	else
+	{
+		QueryCache(pUser);
+	}
+
+	return Plugin_Stop;
+}
+
+// =========================================================== //
 // Wrapper Functions for Each Database
 // =========================================================== //
 
@@ -254,24 +316,24 @@ public bool ProxyRulesSQLite_DB_Connect()
 	return DB_Connect(Idx_ProxyRulesSQLite, DBType_SQLite, DB_CONF_NAME);
 }
 
-public bool ProxyCacheMySQL_DB_Conn_Lost(DBResultSet db)
+public bool ProxyCacheMySQL_DB_Conn_Lost(DBResultSet db, const char[] error)
 {
-	return DB_Conn_Lost(Idx_ProxyCacheMySQL, db);
+	return DB_Conn_Lost(Idx_ProxyCacheMySQL, db, error);
 }
 
-public bool ProxyCacheSQLite_DB_Conn_Lost(DBResultSet db)
+public bool ProxyCacheSQLite_DB_Conn_Lost(DBResultSet db, const char[] error)
 {
-	return DB_Conn_Lost(Idx_ProxyCacheSQLite, db);
+	return DB_Conn_Lost(Idx_ProxyCacheSQLite, db, error);
 }
 
-public bool ProxyRulesMySQL_DB_Conn_Lost(DBResultSet db)
+public bool ProxyRulesMySQL_DB_Conn_Lost(DBResultSet db, const char[] error)
 {
-	return DB_Conn_Lost(Idx_ProxyRulesMySQL, db);
+	return DB_Conn_Lost(Idx_ProxyRulesMySQL, db, error);
 }
 
-public bool ProxyRulesSQLite_DB_Conn_Lost(DBResultSet db)
+public bool ProxyRulesSQLite_DB_Conn_Lost(DBResultSet db, const char[] error)
 {
-	return DB_Conn_Lost(Idx_ProxyRulesSQLite, db);
+	return DB_Conn_Lost(Idx_ProxyRulesSQLite, db, error);
 }
 
 public Database ProxyCacheMySQL_DB_GetHandle()

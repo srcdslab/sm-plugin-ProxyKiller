@@ -8,15 +8,21 @@
 // =========================================================== //
 
 static char CREATE_TABLE[] =
-"CREATE TABLE `%s_Cache` "
+"CREATE TABLE IF NOT EXISTS `%s_Cache` "
 ..."("
 ..."`IPAddress` VARCHAR(24) NOT NULL, "
 ..."`ServiceName` VARCHAR(128) NOT NULL, "
 ..."`Result` TINYINT(1) NOT NULL, "
 ..."`Timestamp` TIMESTAMP NOT NULL DEFAULT "
 ..."CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, "
-..."PRIMARY KEY (`IPAddress`, `ServiceName`)"
+..."PRIMARY KEY (`IPAddress`, `ServiceName`), "
+..."KEY `idx_timestamp` (`Timestamp`)"
 ...")"
+
+// Existing installs: the cache cleanup filters on `Timestamp`
+static char ADD_TIMESTAMP_INDEX[] =
+"ALTER TABLE `%s_Cache` "
+..."ADD INDEX `idx_timestamp` (`Timestamp`)";
 
 static char SELECT_RECORD[] =
 "SELECT `IPAddress`, `ServiceName`, "
@@ -35,7 +41,7 @@ static char INSERT_RECORD[] =
 
 static char DELETE_OLD_RECORDS[] =
 "DELETE FROM `%s_Cache` "
-..."WHERE (UNIX_TIMESTAMP() - UNIX_TIMESTAMP(`Timestamp`)) > %d"
+..."WHERE `Timestamp` < NOW() - INTERVAL %d SECOND"
 
 methodmap ProxyCacheMySQL < ProxyCache
 {
@@ -75,9 +81,14 @@ methodmap ProxyCacheMySQL < ProxyCache
 		db.Format(query, sizeof(query), CREATE_TABLE, prefix);
 
 		db.Query(OnProxyCacheMySQLTableCreated, query);
+
+		char indexQuery[sizeof(ADD_TIMESTAMP_INDEX) + sizeof(prefix)];
+		db.Format(indexQuery, sizeof(indexQuery), ADD_TIMESTAMP_INDEX, prefix);
+
+		db.Query(OnProxyCacheMySQLIndexCreated, indexQuery);
 	}
 
-	public void TryGetCache(ProxyUser pUser, ProxyService service, SQLQueryCallback callback)
+	public bool TryGetCache(ProxyUser pUser, ProxyService service, SQLQueryCallback callback)
 	{
 		char ipAddress[24];
 		pUser.GetIPAddress(ipAddress, sizeof(ipAddress));
@@ -88,13 +99,20 @@ methodmap ProxyCacheMySQL < ProxyCache
 		char prefix[64];
 		this.GetTablePrefix(prefix, sizeof(prefix));
 
-		char query[512];
-		this.Provider.Format(query, sizeof(query), SELECT_RECORD, prefix, ipAddress, serviceName);
+		Database db = this.Provider;
+		if (db == null)
+		{
+			return false;
+		}
 
-		this.Provider.Query(callback, query, pUser);
+		char query[512];
+		db.Format(query, sizeof(query), SELECT_RECORD, prefix, ipAddress, serviceName);
+
+		db.Query(callback, query, pUser);
+		return true;
 	}
 
-	public void TryPushCache(ProxyUser pUser, ProxyService service, any result, SQLQueryCallback callback)
+	public bool TryPushCache(ProxyUser pUser, ProxyService service, any result, SQLQueryCallback callback)
 	{
 		char ipAddress[24];
 		pUser.GetIPAddress(ipAddress, sizeof(ipAddress));
@@ -105,21 +123,35 @@ methodmap ProxyCacheMySQL < ProxyCache
 		char prefix[64];
 		this.GetTablePrefix(prefix, sizeof(prefix));
 
-		char query[512];
-		this.Provider.Format(query, sizeof(query), INSERT_RECORD, prefix, ipAddress, serviceName, result);
+		Database db = this.Provider;
+		if (db == null)
+		{
+			return false;
+		}
 
-		this.Provider.Query(callback, query); 
+		char query[512];
+		db.Format(query, sizeof(query), INSERT_RECORD, prefix, ipAddress, serviceName, result);
+
+		db.Query(callback, query);
+		return true;
 	}
 
-	public void TryDeleteOldEntries(int cacheLifeTime, SQLQueryCallback callback)
+	public bool TryDeleteOldEntries(int cacheLifeTime, SQLQueryCallback callback)
 	{
 		char prefix[64];
 		this.GetTablePrefix(prefix, sizeof(prefix));
 		
+		Database db = this.Provider;
+		if (db == null)
+		{
+			return false;
+		}
+
 		char query[256];
-		this.Provider.Format(query, sizeof(query), DELETE_OLD_RECORDS, prefix, cacheLifeTime);
+		db.Format(query, sizeof(query), DELETE_OLD_RECORDS, prefix, cacheLifeTime);
 		
-		this.Provider.Query(callback, query);
+		db.Query(callback, query);
+		return true;
 	}
 }
 
@@ -134,6 +166,15 @@ public void OnProxyCacheMySQLTableCreated(Database db, DBResultSet results, cons
 	if (results == null)
 	{
 		LogError("<Cache-MySQL> Failed to create cache table: %s", error);
+	}
+}
+
+public void OnProxyCacheMySQLIndexCreated(Database db, DBResultSet results, const char[] error, any data)
+{
+	// Error 1061 "Duplicate key name": the index already exists
+	if (results == null && StrContains(error, "Duplicate key name", false) == -1)
+	{
+		LogError("<Cache-MySQL> Failed to add cache timestamp index: %s", error);
 	}
 }
 

@@ -8,7 +8,7 @@
 // =========================================================== //
 
 static char CREATE_TABLE[] =
-"CREATE TABLE `%s_Cache` "
+"CREATE TABLE IF NOT EXISTS `%s_Cache` "
 ..."("
 ..."`IPAddress` VARCHAR(24) NOT NULL, "
 ..."`ServiceName` VARCHAR(128) NOT NULL, "
@@ -16,6 +16,11 @@ static char CREATE_TABLE[] =
 ..."`Timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, "
 ..."PRIMARY KEY (`IPAddress`, `ServiceName`)"
 ...")"
+
+// The cache cleanup filters on `Timestamp`
+static char CREATE_TIMESTAMP_INDEX[] =
+"CREATE INDEX IF NOT EXISTS `idx_%s_Cache_timestamp` "
+..."ON `%s_Cache` (`Timestamp`)";
 
 static char SELECT_RECORD[] =
 "SELECT `IPAddress`, `ServiceName`, "
@@ -32,8 +37,7 @@ static char INSERT_RECORD[] =
 
 static char DELETE_OLD_RECORDS[] =
 "DELETE FROM `%s_Cache` "
-..."WHERE (strftime('%%s', CURRENT_TIMESTAMP) "
-..."- strftime('%%s', `Timestamp`)) > %d"
+..."WHERE `Timestamp` < datetime('now', '-%d seconds')"
 
 // =========================================================== //
 
@@ -75,9 +79,14 @@ methodmap ProxyCacheSQLite < ProxyCache
 		db.Format(query, sizeof(query), CREATE_TABLE, prefix);
 
 		db.Query(OnProxyCacheSQLiteTableCreated, query);
+
+		char indexQuery[sizeof(CREATE_TIMESTAMP_INDEX) + 2 * sizeof(prefix)];
+		db.Format(indexQuery, sizeof(indexQuery), CREATE_TIMESTAMP_INDEX, prefix, prefix);
+
+		db.Query(OnProxyCacheSQLiteIndexCreated, indexQuery);
 	}
 
-	public void TryGetCache(ProxyUser pUser, ProxyService service, SQLQueryCallback callback)
+	public bool TryGetCache(ProxyUser pUser, ProxyService service, SQLQueryCallback callback)
 	{
 		char ipAddress[24];
 		pUser.GetIPAddress(ipAddress, sizeof(ipAddress));
@@ -88,13 +97,20 @@ methodmap ProxyCacheSQLite < ProxyCache
 		char prefix[64];
 		this.GetTablePrefix(prefix, sizeof(prefix));
 
-		char query[512];
-		this.Provider.Format(query, sizeof(query), SELECT_RECORD, prefix, ipAddress, serviceName);
+		Database db = this.Provider;
+		if (db == null)
+		{
+			return false;
+		}
 
-		this.Provider.Query(callback, query, pUser);
+		char query[512];
+		db.Format(query, sizeof(query), SELECT_RECORD, prefix, ipAddress, serviceName);
+
+		db.Query(callback, query, pUser);
+		return true;
 	}
 
-	public void TryPushCache(ProxyUser pUser, ProxyService service, any result, SQLQueryCallback callback)
+	public bool TryPushCache(ProxyUser pUser, ProxyService service, any result, SQLQueryCallback callback)
 	{
 		char ipAddress[24];
 		pUser.GetIPAddress(ipAddress, sizeof(ipAddress));
@@ -105,21 +121,35 @@ methodmap ProxyCacheSQLite < ProxyCache
 		char prefix[64];
 		this.GetTablePrefix(prefix, sizeof(prefix));
 
-		char query[512];
-		this.Provider.Format(query, sizeof(query), INSERT_RECORD, prefix, ipAddress, serviceName, result);
+		Database db = this.Provider;
+		if (db == null)
+		{
+			return false;
+		}
 
-		this.Provider.Query(callback, query);
+		char query[512];
+		db.Format(query, sizeof(query), INSERT_RECORD, prefix, ipAddress, serviceName, result);
+
+		db.Query(callback, query);
+		return true;
 	}
 	
-	public void TryDeleteOldEntries(int cacheLifeTime, SQLQueryCallback callback)
+	public bool TryDeleteOldEntries(int cacheLifeTime, SQLQueryCallback callback)
 	{
 		char prefix[64];
 		this.GetTablePrefix(prefix, sizeof(prefix));
 
+		Database db = this.Provider;
+		if (db == null)
+		{
+			return false;
+		}
+
 		char query[256];
-		this.Provider.Format(query, sizeof(query), DELETE_OLD_RECORDS, prefix, cacheLifeTime);
+		db.Format(query, sizeof(query), DELETE_OLD_RECORDS, prefix, cacheLifeTime);
 		
-		this.Provider.Query(callback, query);
+		db.Query(callback, query);
+		return true;
 	}
 }
 
@@ -134,6 +164,14 @@ public void OnProxyCacheSQLiteTableCreated(Database db, DBResultSet results, con
 	if (results == null)
 	{
 		LogError("<Cache-SQLite> Failed to create cache table: %s", error);
+	}
+}
+
+public void OnProxyCacheSQLiteIndexCreated(Database db, DBResultSet results, const char[] error, any data)
+{
+	if (results == null)
+	{
+		LogError("<Cache-SQLite> Failed to create cache timestamp index: %s", error);
 	}
 }
 
