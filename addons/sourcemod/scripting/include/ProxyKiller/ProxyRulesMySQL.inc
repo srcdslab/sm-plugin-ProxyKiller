@@ -8,7 +8,7 @@
 // =========================================================== //
 
 static char CREATE_TABLE[] =
-"CREATE TABLE `%s_Rules` "
+"CREATE TABLE IF NOT EXISTS `%s_Rules` "
 ..."("
 ..."`Expression` VARCHAR(32) NOT NULL, "
 ..."`Type` TINYINT NOT NULL, "
@@ -80,7 +80,7 @@ methodmap ProxyRulesMySQL < ProxyRules
 		db.Query(OnProxyRulesMySQLTableCreated, query);
 	}
 
-	public void TryGetRules(ProxyUser pUser, ProxyRulesType type, SQLQueryCallback callback)
+	public bool TryGetRules(ProxyUser pUser, ProxyRulesType type, SQLQueryCallback callback)
 	{
 		char steamId2[32];
 		pUser.GetSteamId2(steamId2, sizeof(steamId2));
@@ -91,32 +91,53 @@ methodmap ProxyRulesMySQL < ProxyRules
 		char prefix[64];
 		this.GetTablePrefix(prefix, sizeof(prefix));
 
-		char query[512];
-		this.Provider.Format(query, sizeof(query), SELECT_RECORD, prefix, steamId2, ipAddress, type);
+		Database db = this.Provider;
+		if (db == null)
+		{
+			return false;
+		}
 
-		this.Provider.Query(callback, query, pUser);
+		char query[512];
+		db.Format(query, sizeof(query), SELECT_RECORD, prefix, steamId2, ipAddress, type);
+
+		db.Query(callback, query, pUser);
+		return true;
 	}
 	
-	public void TryPushRule(char[] expression, ProxyRulesType type, SQLQueryCallback callback)
+	public bool TryPushRule(char[] expression, ProxyRulesType type, SQLQueryCallback callback)
 	{
 		char prefix[64];
 		this.GetTablePrefix(prefix, sizeof(prefix));
 
-		char query[512];
-		this.Provider.Format(query, sizeof(query), INSERT_RECORD, prefix, expression, type);
+		Database db = this.Provider;
+		if (db == null)
+		{
+			return false;
+		}
 
-		this.Provider.Query(callback, query);
+		char query[512];
+		db.Format(query, sizeof(query), INSERT_RECORD, prefix, expression, type);
+
+		db.Query(callback, query);
+		return true;
 	}
 	
-	public void TryDeleteRule(char[] expression, ProxyRulesType type, SQLQueryCallback callback)
+	public bool TryDeleteRule(char[] expression, ProxyRulesType type, SQLQueryCallback callback)
 	{
 		char prefix[64];
 		this.GetTablePrefix(prefix, sizeof(prefix));		
 
-		char query[512];
-		this.Provider.Format(query, sizeof(query), DELETE_RECORD, prefix, expression, type);
+		Database db = this.Provider;
+		if (db == null)
+		{
+			return false;
+		}
 
-		this.Provider.Query(callback, query);
+		char query[512];
+		db.Format(query, sizeof(query), DELETE_RECORD, prefix, expression, type);
+
+		db.Query(callback, query);
+		return true;
 	}
 }
 

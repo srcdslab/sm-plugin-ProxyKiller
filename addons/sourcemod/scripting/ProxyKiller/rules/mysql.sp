@@ -4,7 +4,14 @@ public void MySQL_OnRules(Database db, DBResultSet results, const char[] error, 
 {
 	g_Logger.PrintFrame();
 
-	if (Rules_DB_Conn_Lost(results) || strlen(error) > 0 || results == null || !results.HasResults)
+	if (Rules_DB_Conn_Lost(results, error))
+	{
+		g_Logger.ErrorMessage("<Rules-MySQL> Lost connection, retrying client check later - \"%s\"", error);
+		DB_DeferClientCheck(pUser, true);
+		return;
+	}
+
+	if (strlen(error) > 0 || results == null || !results.HasResults)
 	{
 		g_Logger.ErrorMessage("<Rules-MySQL> Uh oh! Encountered a SQL error! - \"%s\"", error);
 		delete pUser;
@@ -38,7 +45,7 @@ public void MySQL_OnRuleGeneric(Database db, DBResultSet results, const char[] e
 {
 	g_Logger.PrintFrame();
 
-	if (Rules_DB_Conn_Lost(results) || strlen(error) > 0)
+	if (Rules_DB_Conn_Lost(results, error) || strlen(error) > 0)
 	{
 		g_Logger.ErrorMessage("<Rules-MySQL> Uh oh! Encountered a SQL error! - \"%s\"", error);
 		return;

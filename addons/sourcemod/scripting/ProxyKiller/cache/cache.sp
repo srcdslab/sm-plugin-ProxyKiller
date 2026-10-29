@@ -59,7 +59,12 @@ ProxyCache CreateCache(int mode)
 void TryGetCache(ProxyUser pUser)
 {
 	Call_OnCheckClient(pUser);
+	QueryCache(pUser);
+}
 
+// Also called again by DB_DeferClientCheck while the cache database is not connected
+void QueryCache(ProxyUser pUser)
+{
 	switch (g_Cache.Mode)
 	{
 		case CacheMode_None:
@@ -68,11 +73,17 @@ void TryGetCache(ProxyUser pUser)
 		}
 		case CacheMode_MySQL:
 		{
-			Cache_MySQL(g_Cache).TryGetCache(pUser, g_Config.Service, MySQL_OnCache);
+			if (!Cache_MySQL(g_Cache).TryGetCache(pUser, g_Config.Service, MySQL_OnCache))
+			{
+				DB_DeferClientCheck(pUser, false);
+			}
 		}
 		case CacheMode_SQLite:
 		{
-			Cache_SQLite(g_Cache).TryGetCache(pUser, g_Config.Service, SQLite_OnCache);
+			if (!Cache_SQLite(g_Cache).TryGetCache(pUser, g_Config.Service, SQLite_OnCache))
+			{
+				DB_DeferClientCheck(pUser, false);
+			}
 		}
 		default:
 		{
@@ -89,11 +100,17 @@ void TryPushCache(ProxyUser pUser, ProxyService service, any result)
 	{
 		case CacheMode_MySQL:
 		{
-			Cache_MySQL(g_Cache).TryPushCache(pUser, service, result, MySQL_OnCached);
+			if (!Cache_MySQL(g_Cache).TryPushCache(pUser, service, result, MySQL_OnCached))
+			{
+				g_Logger.ErrorMessage("<Cache-MySQL> Database not connected, result not cached");
+			}
 		}
 		case CacheMode_SQLite:
 		{
-			Cache_SQLite(g_Cache).TryPushCache(pUser, service, result, SQLite_OnCached);
+			if (!Cache_SQLite(g_Cache).TryPushCache(pUser, service, result, SQLite_OnCached))
+			{
+				g_Logger.ErrorMessage("<Cache-SQLite> Database not connected, result not cached");
+			}
 		}
 		default:
 		{
@@ -102,17 +119,17 @@ void TryPushCache(ProxyUser pUser, ProxyService service, any result)
 	}
 }
 
-public bool Cache_DB_Conn_Lost(DBResultSet results)
+public bool Cache_DB_Conn_Lost(DBResultSet results, const char[] error)
 {
 	switch (g_Cache.Mode)
 	{
 		case CacheMode_MySQL:
 		{
-			return ProxyCacheMySQL_DB_Conn_Lost(results);
+			return ProxyCacheMySQL_DB_Conn_Lost(results, error);
 		}
 		case CacheMode_SQLite:
 		{
-			return ProxyCacheSQLite_DB_Conn_Lost(results);
+			return ProxyCacheSQLite_DB_Conn_Lost(results, error);
 		}
 		default:
 		{
@@ -125,18 +142,16 @@ public bool Cache_DB_Conn_Lost(DBResultSet results)
 
 public Action Timer_DeleteOldCacheEntries(Handle timer)
 {
-	if (view_as<Handle>(g_Cache.Provider) != null)
+	// The methods skip the query while the database is not connected
+	switch (g_Cache.Mode)
 	{
-		switch (g_Cache.Mode)
+		case CacheMode_MySQL:
 		{
-			case CacheMode_MySQL:
-			{
-				Cache_MySQL(g_Cache).TryDeleteOldEntries(gCV_CacheLifetime.IntValue, MySQL_OnOldEntriesDeleted);
-			}
-			case CacheMode_SQLite:
-			{
-				Cache_SQLite(g_Cache).TryDeleteOldEntries(gCV_CacheLifetime.IntValue, SQLite_OnOldEntriesDeleted);
-			}
+			Cache_MySQL(g_Cache).TryDeleteOldEntries(gCV_CacheLifetime.IntValue, MySQL_OnOldEntriesDeleted);
+		}
+		case CacheMode_SQLite:
+		{
+			Cache_SQLite(g_Cache).TryDeleteOldEntries(gCV_CacheLifetime.IntValue, SQLite_OnOldEntriesDeleted);
 		}
 	}
 	return Plugin_Continue;

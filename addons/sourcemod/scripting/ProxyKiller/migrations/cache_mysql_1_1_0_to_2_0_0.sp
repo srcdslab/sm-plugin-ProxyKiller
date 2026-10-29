@@ -34,13 +34,19 @@ public MigrationResult PKMigration_cache_mysql_1_1_0_to_2_0_0()
 		return Result_ProviderMismatch;
 	}
 
+	// Live handle: null while (re)connecting
+	Database provider = ProxyCacheMySQL_DB_GetHandle();
+	if (provider == null)
+	{
+		g_Logger.ErrorMessage("Cannot apply migration, cache database is not connected");
+		return Result_OtherFailure;
+	}
+
 	Transaction txn = new Transaction();
 	ArrayList queries = new ArrayList(ByteCountToCells(512));
 
 	char prefix[64];
 	gCV_DatabaseTablePrefix.GetString(prefix, sizeof(prefix));
-
-	Database provider = g_Cache.Provider;
 
 	for (int i = 0; i < sizeof(Queries); i++)
 	{
@@ -55,7 +61,7 @@ public MigrationResult PKMigration_cache_mysql_1_1_0_to_2_0_0()
 	g_Config.Service.GetName(serviceName, sizeof(serviceName));
 
 	char query[80 + sizeof(serviceName) + sizeof(prefix)];
-	Format(query, sizeof(query), "UPDATE `%s_Cache` SET `ServiceName` = '%s' WHERE `ServiceName` = ''", prefix, serviceName);
+	provider.Format(query, sizeof(query), "UPDATE `%s_Cache` SET `ServiceName` = '%s' WHERE `ServiceName` = ''", prefix, serviceName);
 
 	txn.AddQuery(query);
 	queries.PushString(query);
