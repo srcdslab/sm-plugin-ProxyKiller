@@ -19,8 +19,8 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p addons/sourcemod/scripting/include deps
-          git clone --depth=1 https://github.com/srcdslab/sm-ext-SteamWorks.git deps/sm-ext-steamworks
-          cp -R deps/sm-ext-steamworks/Pawn/include/* addons/sourcemod/scripting/include/
+          git clone --depth=1 https://github.com/alliedmodders/SM-SteamWorks.git deps/sm-ext-steamworks
+          cp -R deps/sm-ext-steamworks/Pawn/includes/* addons/sourcemod/scripting/include/
           git clone --depth=1 https://github.com/clugg/sm-json.git deps/sm-json
           cp -R deps/sm-json/addons/sourcemod/scripting/include/* addons/sourcemod/scripting/include/
 
