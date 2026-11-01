@@ -54,6 +54,7 @@ public Action Command_ApplyMigration(int client, int args)
 {
 	if (args <= 0)
 	{
+		ReplyToCommand(client, "%t", "Apply Migration Usage");
 		return Plugin_Handled;
 	}
 
