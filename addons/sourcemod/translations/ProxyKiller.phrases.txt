@@ -1,0 +1,65 @@
+"Phrases"
+{
+	"Rules Add Usage"
+	{
+		"en"		"Usage: sm_proxykiller_rules_add <expression>"
+		"fr"		"Utilisation : sm_proxykiller_rules_add <expression>"
+		"ru"		"Использование: sm_proxykiller_rules_add <expression>"
+		"es"		"Uso: sm_proxykiller_rules_add <expression>"
+		"de"		"Verwendung: sm_proxykiller_rules_add <expression>"
+		"pt"		"Uso: sm_proxykiller_rules_add <expression>"
+		"chi"		"用法：sm_proxykiller_rules_add <expression>"
+	}
+	"Rules Delete Usage"
+	{
+		"en"		"Usage: sm_proxykiller_rules_delete <expression>"
+		"fr"		"Utilisation : sm_proxykiller_rules_delete <expression>"
+		"ru"		"Использование: sm_proxykiller_rules_delete <expression>"
+		"es"		"Uso: sm_proxykiller_rules_delete <expression>"
+		"de"		"Verwendung: sm_proxykiller_rules_delete <expression>"
+		"pt"		"Uso: sm_proxykiller_rules_delete <expression>"
+		"chi"		"用法：sm_proxykiller_rules_delete <expression>"
+	}
+	"Migration Not Found"
+	{
+		"#format"	"{1:s}"
+		"en"		"Failed to look up migration by name \"{1}\""
+		"fr"		"Impossible de trouver la migration nommée \"{1}\""
+		"ru"		"Не удалось найти миграцию с именем \"{1}\""
+		"es"		"No se pudo encontrar la migración con el nombre \"{1}\""
+		"de"		"Migration mit dem Namen \"{1}\" wurde nicht gefunden"
+		"pt"		"Não foi possível encontrar a migração com o nome \"{1}\""
+		"chi"		"找不到名为“{1}”的迁移"
+	}
+	"Migration Provider Mismatch"
+	{
+		"#format"	"{1:s}"
+		"en"		"Failed to apply migration \"{1}\": providers mismatch"
+		"fr"		"Impossible d'appliquer la migration \"{1}\" : les fournisseurs ne correspondent pas"
+		"ru"		"Не удалось применить миграцию \"{1}\": провайдеры не совпадают"
+		"es"		"No se pudo aplicar la migración \"{1}\": los proveedores no coinciden"
+		"de"		"Migration \"{1}\" konnte nicht angewendet werden: Anbieter stimmen nicht überein"
+		"pt"		"Não foi possível aplicar a migração \"{1}\": os provedores não correspondem"
+		"chi"		"无法应用迁移“{1}”：提供程序不匹配"
+	}
+	"Whitelist Refreshed"
+	{
+		"en"		"Whitelist cache refreshed"
+		"fr"		"Cache de la whitelist actualisé"
+		"ru"		"Кэш белого списка обновлён"
+		"es"		"Caché de la lista blanca actualizada"
+		"de"		"Whitelist-Cache aktualisiert"
+		"pt"		"Cache da whitelist atualizado"
+		"chi"		"白名单缓存已刷新"
+	}
+	"Blacklist Refreshed"
+	{
+		"en"		"Blacklist cache refreshed"
+		"fr"		"Cache de la blacklist actualisé"
+		"ru"		"Кэш чёрного списка обновлён"
+		"es"		"Caché de la lista negra actualizada"
+		"de"		"Blacklist-Cache aktualisiert"
+		"pt"		"Cache da blacklist atualizado"
+		"chi"		"黑名单缓存已刷新"
+	}
+}

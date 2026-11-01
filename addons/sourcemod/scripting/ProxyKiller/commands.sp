@@ -17,7 +17,7 @@ public Action Command_RulesAdd(int client, int args)
 {
 	if (args <= 0)
 	{
-		ReplyToCommand(client, "Usage: sm_proxykiller_rules_add <expression>");
+		ReplyToCommand(client, "%t", "Rules Add Usage");
 		return Plugin_Handled;
 	}
 
@@ -35,7 +35,7 @@ public Action Command_RulesDelete(int client, int args)
 {
 	if (args <= 0)
 	{
-		ReplyToCommand(client, "Usage: sm_proxykiller_rules_delete <expression>");
+		ReplyToCommand(client, "%t", "Rules Delete Usage");
 		return Plugin_Handled;
 	}
 
@@ -66,12 +66,12 @@ public Action Command_ApplyMigration(int client, int args)
 		case Result_LookupFailure:
 		{
 			g_Logger.ErrorMessage("Failed to lookup migration by name \"%s\"", migration);
-			ReplyToCommand(client, "Failed to lookup migration by name \"%s\"", migration);
+			ReplyToCommand(client, "%t", "Migration Not Found", migration);
 		}
 		case Result_ProviderMismatch:
 		{
 			g_Logger.ErrorMessage("Failed to apply migration \"%s\" as providers mismatch", migration);
-			ReplyToCommand(client, "Failed to apply migration \"%s\" as providers mismatch", migration);
+			ReplyToCommand(client, "%t", "Migration Provider Mismatch", migration);
 		}
 	}
 
@@ -81,7 +81,7 @@ public Action Command_ApplyMigration(int client, int args)
 public Action Command_ReloadWhitelist(int client, int args)
 {
 	LoadWhitelist();
-	ReplyToCommand(client, "Whitelist cache refreshed", client);
+	ReplyToCommand(client, "%t", "Whitelist Refreshed");
 	LogAction(client, -1, "[ProxyKiller] \"%L\" has refreshed Whitelist cache.", client);
 	return Plugin_Handled;
 }
@@ -89,7 +89,7 @@ public Action Command_ReloadWhitelist(int client, int args)
 public Action Command_ReloadBlacklist(int client, int args)
 {
 	LoadBlacklist();
-	ReplyToCommand(client, "Blacklist cache refreshed", client);
+	ReplyToCommand(client, "%t", "Blacklist Refreshed");
 	LogAction(client, -1, "[ProxyKiller] \"%L\" has refreshed Blacklist cache.", client);
 	return Plugin_Handled;
 }
