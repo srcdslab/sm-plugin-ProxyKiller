@@ -35,7 +35,7 @@ Please see the [Wiki](https://bitbucket.org/Sikarii/proxykiller/wiki) for a feat
 	*Note: If users are on both the Whitelist and Blacklist, the Blacklist will always be the final outcome.*
 
 ## **Requirements**
-- [SteamWorks](https://forums.alliedmods.net/showthread.php?t=229556)
+- [SteamWorks](https://github.com/alliedmodders/SM-SteamWorks)
 
 ## **Installation**
 
