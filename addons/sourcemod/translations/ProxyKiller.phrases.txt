@@ -20,6 +20,16 @@
 		"pt"		"Uso: sm_proxykiller_rules_delete <expression>"
 		"chi"		"用法：sm_proxykiller_rules_delete <expression>"
 	}
+	"Apply Migration Usage"
+	{
+		"en"		"Usage: sm_proxykiller_apply_migration <migration>"
+		"fr"		"Utilisation : sm_proxykiller_apply_migration <migration>"
+		"ru"		"Использование: sm_proxykiller_apply_migration <migration>"
+		"es"		"Uso: sm_proxykiller_apply_migration <migration>"
+		"de"		"Verwendung: sm_proxykiller_apply_migration <migration>"
+		"pt"		"Uso: sm_proxykiller_apply_migration <migration>"
+		"chi"		"用法：sm_proxykiller_apply_migration <migration>"
+	}
 	"Migration Not Found"
 	{
 		"#format"	"{1:s}"
