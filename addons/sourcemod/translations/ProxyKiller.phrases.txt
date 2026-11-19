@@ -9,6 +9,12 @@
 		"de"		"Verwendung: sm_proxykiller_rules_add <expression>"
 		"pt"		"Uso: sm_proxykiller_rules_add <expression>"
 		"chi"		"用法：sm_proxykiller_rules_add <expression>"
+		"pl"		"Użycie: sm_proxykiller_rules_add <expression>"
+		"tr"		"Kullanım: sm_proxykiller_rules_add <expression>"
+		"it"		"Uso: sm_proxykiller_rules_add <expression>"
+		"ua"		"Використання: sm_proxykiller_rules_add <expression>"
+		"zho"		"用法：sm_proxykiller_rules_add <expression>"
+		"cze"		"Použití: sm_proxykiller_rules_add <expression>"
 	}
 	"Rules Delete Usage"
 	{
@@ -19,6 +25,12 @@
 		"de"		"Verwendung: sm_proxykiller_rules_delete <expression>"
 		"pt"		"Uso: sm_proxykiller_rules_delete <expression>"
 		"chi"		"用法：sm_proxykiller_rules_delete <expression>"
+		"pl"		"Użycie: sm_proxykiller_rules_delete <expression>"
+		"tr"		"Kullanım: sm_proxykiller_rules_delete <expression>"
+		"it"		"Uso: sm_proxykiller_rules_delete <expression>"
+		"ua"		"Використання: sm_proxykiller_rules_delete <expression>"
+		"zho"		"用法：sm_proxykiller_rules_delete <expression>"
+		"cze"		"Použití: sm_proxykiller_rules_delete <expression>"
 	}
 	"Apply Migration Usage"
 	{
@@ -29,6 +41,12 @@
 		"de"		"Verwendung: sm_proxykiller_apply_migration <migration>"
 		"pt"		"Uso: sm_proxykiller_apply_migration <migration>"
 		"chi"		"用法：sm_proxykiller_apply_migration <migration>"
+		"pl"		"Użycie: sm_proxykiller_apply_migration <migration>"
+		"tr"		"Kullanım: sm_proxykiller_apply_migration <migration>"
+		"it"		"Uso: sm_proxykiller_apply_migration <migration>"
+		"ua"		"Використання: sm_proxykiller_apply_migration <migration>"
+		"zho"		"用法：sm_proxykiller_apply_migration <migration>"
+		"cze"		"Použití: sm_proxykiller_apply_migration <migration>"
 	}
 	"Migration Not Found"
 	{
@@ -40,6 +58,12 @@
 		"de"		"Migration mit dem Namen \"{1}\" wurde nicht gefunden"
 		"pt"		"Não foi possível encontrar a migração com o nome \"{1}\""
 		"chi"		"找不到名为“{1}”的迁移"
+		"pl"		"Nie znaleziono migracji o nazwie \"{1}\""
+		"tr"		"\"{1}\" adlı migrasyon bulunamadı"
+		"it"		"Impossibile trovare la migrazione con il nome \"{1}\""
+		"ua"		"Не вдалося знайти міграцію з назвою \"{1}\""
+		"zho"		"找不到名為「{1}」的遷移"
+		"cze"		"Migraci s názvem \"{1}\" se nepodařilo najít"
 	}
 	"Migration Provider Mismatch"
 	{
@@ -51,6 +75,12 @@
 		"de"		"Migration \"{1}\" konnte nicht angewendet werden: Anbieter stimmen nicht überein"
 		"pt"		"Não foi possível aplicar a migração \"{1}\": os provedores não correspondem"
 		"chi"		"无法应用迁移“{1}”：提供程序不匹配"
+		"pl"		"Nie udało się zastosować migracji \"{1}\": dostawcy się nie zgadzają"
+		"tr"		"\"{1}\" migrasyonu uygulanamadı: sağlayıcılar uyuşmuyor"
+		"it"		"Impossibile applicare la migrazione \"{1}\": i provider non corrispondono"
+		"ua"		"Не вдалося застосувати міграцію \"{1}\": провайдери не збігаються"
+		"zho"		"無法套用遷移「{1}」：提供者不相符"
+		"cze"		"Migraci \"{1}\" se nepodařilo použít: poskytovatelé se neshodují"
 	}
 	"Whitelist Refreshed"
 	{
@@ -61,6 +91,12 @@
 		"de"		"Whitelist-Cache aktualisiert"
 		"pt"		"Cache da whitelist atualizado"
 		"chi"		"白名单缓存已刷新"
+		"pl"		"Pamięć podręczna białej listy odświeżona"
+		"tr"		"Beyaz liste önbelleği yenilendi"
+		"it"		"Cache della whitelist aggiornata"
+		"ua"		"Кеш білого списку оновлено"
+		"zho"		"白名單快取已重新整理"
+		"cze"		"Mezipaměť whitelistu byla obnovena"
 	}
 	"Blacklist Refreshed"
 	{
@@ -71,5 +107,11 @@
 		"de"		"Blacklist-Cache aktualisiert"
 		"pt"		"Cache da blacklist atualizado"
 		"chi"		"黑名单缓存已刷新"
+		"pl"		"Pamięć podręczna czarnej listy odświeżona"
+		"tr"		"Kara liste önbelleği yenilendi"
+		"it"		"Cache della blacklist aggiornata"
+		"ua"		"Кеш чорного списку оновлено"
+		"zho"		"黑名單快取已重新整理"
+		"cze"		"Mezipaměť blacklistu byla obnovena"
 	}
 }
